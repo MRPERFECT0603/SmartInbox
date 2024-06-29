@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "email-analyzer-427913",
+  "private_key_id": "33556e9d8c2e35cb4ca35094f0f4b9b83af7ea39",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCYf5ra8KLs/YiW\nQjPTU5qo+onzWhcFqu8cm/RWDBOy0O0Fnrv43brd+ujRTjjN9M+U+Eyc0kdGIMTv\n2xyMHpKTI+5lf4TE/hfALW8mzZjzG3RW+0UIOiSb9avBuuoL7M4kDNYuWrOYgAmC\nCu6KF16M+I1Rz5/ub+h9AC4oTetKIfPlT29pIJXMMRPIUSqaBXY9W8IwSX9ng8wi\nrO/FE2D+Yu50T9lBUH3h90Rbm9M6X+jI47z5ss3FKrIWMBofDvhJDd7nyVCLzhtm\noyjozId6IrsRbQA+vowwHnkE763nbXvS446rmOhzSHKpATgogE+FqHVCk+JOtPAf\nz/ZYVRWvAgMBAAECggEAJcC9dQNKynHvvQcxrlkNulSgD0NX3LrXDFWdlSnTPJsV\neqUz8uXtq6PAvIRpcq9vLnmT+eTi6T0WlCzB8fxlnBCypaT+mQgwmA6HbGtMuK6s\nzBXTnrhKNOQKe+EKrR4YYHtfEMW6nX/hGrUbHcuwSCUGU2EbvlstCrkfNDIqFEVW\ni3XTIzguZAKkILW2kSFQYxUaNnki/BhCzvYWepE5liUMJvusyPYO4KCzKbtByZe6\nsi3LvWmczwP7NJXk9cTiA2o6Tnw415tmULToQdaPZp9+yBOVqVHfe+KEnxG2GI5z\nGGxFh/MML7ZGy4b+dNRJ9CeXjspIJkpcVzoI1PdjfQKBgQDRtylSJXObWal+tFgq\nYIlWc95corfgulvDb798cpTeUHACWR+m3rkZp6awPcFgNJ+EmUdbUeFpbCyvp5bh\nJe0Sa0WldFmR1xRT++ibMm4yuuqMZyZhi03DHGliq/NQoCszpYO9znMEt+rhVfnc\nIa57t1al5XYa6vSCcJOcu6ktjQKBgQC6J7ST6zU5jwyH258zUXJRRz7Ye7Gsu0Iy\nSa+VYL83UqrlamRHG7FTgeatBjPTsUXJemrYhzzJG5fU5tyKj9AMwYLNja8LJero\nKeoicAnJFm3xBl6rsDCLw+Afk6M0almNkNArDQbl89yDq8lnsJf0ceNFBtNeL0WZ\nCvFmlwLrKwKBgQDNzUs1nB85YuIcv2qOG7JrLsYWbnC4jumifzWRMPi6uoFRLJkN\nLyDC9m10IwZ0HPA2Nh16ln348PlhX7uHM6rVGoR8fBOyNTlzuZBpTTIrgpbONiPK\nMeScBnO9KzVZ9/SteE4ypDjndn1/qNnMlxkdu6vCnc4rWEue/k89zkOVuQKBgQCL\n2CIm8Q5l9Bm0wf8h3TCk8IG8vYenPHGpN4PJEwny9I5flAJLDPm0wyRYnQ04HbdQ\neT9k9ItshOcV0GyjRxBDVOf/pU13cX+78yjpwAMJ5minJWLfVZfSl056Sj3TtYUa\n/Uv0229wNjdVTysZUyeEQj46b7s/yQFezEK3EADoSwKBgQCF9A00BXo9ypERhjIc\nvnptgLBWUfxTmYeM1XPOTK1Mo0nJHK0FxaTN7581brJwMfa+iUgam9i/5lHzvP0k\nV9XbYbg9Z/O0At/Pf83WiqSz0Ion6LNmj+L79Ldau0jdrhBjfAvhjwzMtaBnloCB\n3Ob9TQo9BSm9uPBYWJ/3bgfcDA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "vertexaiuser@email-analyzer-427913.iam.gserviceaccount.com",
+  "client_id": "116532242095932823318",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vertexaiuser%40email-analyzer-427913.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

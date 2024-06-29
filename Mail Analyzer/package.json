@@ -1,0 +1,16 @@
+{
+  "name": "mail-analyzer",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vivek",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.3.0",
+    "google-auth-library": "^9.11.0",
+    "googleapis": "^140.0.1"
+  }
+}
