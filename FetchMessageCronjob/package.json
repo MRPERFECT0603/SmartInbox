@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "googleapis": "^140.0.1",
+    "nodejs-base64-converter": "^1.0.5",
     "nodemon": "^3.1.4"
   }
 }
