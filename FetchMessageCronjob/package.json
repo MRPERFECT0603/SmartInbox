@@ -10,8 +10,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "amqplib": "^0.10.4",
+    "cron": "^3.1.7",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "googleapis": "^140.0.1",
+    "node-cron": "^3.0.3",
     "nodejs-base64-converter": "^1.0.5",
     "nodemon": "^3.1.4"
   }
