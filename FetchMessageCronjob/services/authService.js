@@ -1,8 +1,8 @@
 // Import necessary modules
 const { google } = require('googleapis'); // Google API client library
 const fs = require('fs'); // File system module for reading/writing files
-const readline = require('readline'); // Readline module for handling user input via terminal
 const dotenv = require("dotenv"); // dotenv module to load environment variables
+const openURL = require("openurl"); // For automatically opening the authorization URL
 
 // Load environment variables from .env file
 dotenv.config();
@@ -11,94 +11,77 @@ dotenv.config();
 const client_id = process.env.CLIENT_ID; // Google API client ID
 const client_secret = process.env.CLIENT_SECRET; // Google API client secret
 const redirect_uri = process.env.REDIRECT_URI; // Redirect URI for OAuth2 callback
-const SCOPES = process.env.SCOPES; // Scopes define the API access level
+const SCOPES = process.env.SCOPES.split(','); // Scopes define the API access level (split if it's a comma-separated string)
 const TOKEN_PATH = process.env.TOKEN_PATH; // File path to store the token
 
+// Create a new OAuth2 client instance
+const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
 
-// Function to authorize with Google OAuth2
-async function authorize() {
-    // Define the credentials object for OAuth2
-    const credentials = {
-        client_id,
-        client_secret,
-        redirect_uris: [redirect_uri],
-    };
+/**
+ * Handles the OAuth2 callback and processes the authorization code
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ */
+function handleCallback(req, res) {
+    const code = req.query.code; // Get the authorization code from the URL query
 
-    /**
-     * getNewToken - Handles generating a new OAuth2 token
-     * @param {object} oAuth2Client - OAuth2 client object
-     * @param {function} callback - Callback function to handle after getting the token
-     */
-    function getNewToken(oAuth2Client, callback) {
-        // Generate the authentication URL for user consent
-        const authUrl = oAuth2Client.generateAuthUrl({
-            access_type: 'offline', // Ensures the token can be refreshed
-            scope: SCOPES, // API scopes
-        });
+    // Exchange the authorization code for an access token
+    oAuth2Client.getToken(code, (err, token) => {
+        if (err) {
+            console.error('Error retrieving access token', err);
+            return res.status(500).send('Error retrieving access token.');
+        }
 
-        // Log the URL to prompt the user to visit and authorize the app
-        console.log('Authorize this app by visiting this URL:', authUrl);
-
-        // Prompt user for authorization code
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        });
-
-        // Read the authorization code from the terminal
-        rl.question('Enter the code from that page here: ', (code) => {
-            rl.close(); // Close the readline interface after code is entered
-
-            // Exchange the authorization code for an access token
-            oAuth2Client.getToken(code, (err, token) => {
-                if (err) return console.error('Error retrieving access token', err);
-
-                // Set credentials for OAuth2 client
-                oAuth2Client.setCredentials(token);
-
-                // Store the token to the specified file path for future use
-                fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-                    if (err) return console.error(err);
-                    console.log('Token stored to', TOKEN_PATH);
-                });
-
-                // Call the callback with the authorized client
-                callback(oAuth2Client);
-            });
-        });
-    }
-
-    /**
-     * authorizeWithCallback - Manages the authorization process
-     * @param {object} credentials - OAuth2 credentials (client ID, secret, redirect URI)
-     * @param {function} callback - Callback function to execute after authorization
-     */
-    function authorizeWithCallback(credentials, callback) {
-        const { client_secret, client_id, redirect_uris } = credentials;
-
-        // Create a new OAuth2 client instance
-        const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-
-        // Try reading the token file to check if an existing token is available
-        fs.readFile(TOKEN_PATH, (err, token) => {
+        // Set the credentials and store the token for future use
+        oAuth2Client.setCredentials(token);
+        fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
             if (err) {
-                // If token doesn't exist, get a new one by calling getNewToken
-                return getNewToken(oAuth2Client, callback);
+                console.error('Error saving token', err);
+                return res.status(500).send('Error saving token.');
             }
-
-            // If token exists, set it to the OAuth2 client and continue
-            oAuth2Client.setCredentials(JSON.parse(token));
-            callback(oAuth2Client); // Pass the authorized client to the callback
-        });
-    }
-
-    // Return a Promise that resolves with the authorized OAuth2 client
-    return new Promise((resolve, reject) => {
-        authorizeWithCallback(credentials, (oAuth2Client) => {
-            resolve(oAuth2Client); // Resolve the promise with the OAuth2 client
+            console.log('Token stored to', TOKEN_PATH);
+            res.send('Authentication successful! You can close this tab.');
         });
     });
 }
 
-// Export the authorize function for use in other parts of the application
-module.exports = { authorize };
+/**
+ * Generates a new OAuth2 token and prompts the user for authorization
+ * @param {object} oAuth2Client - OAuth2 client object
+ * @param {function} callback - Callback function to execute after the user authorizes
+ */
+function getNewToken(oAuth2Client, callback) {
+    const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: 'offline',
+        scope: SCOPES,
+        prompt: 'select_account',
+    });
+
+    console.log('Authorize this app by visiting this URL:', authUrl);
+    openURL.open(authUrl); // Automatically open the URL in the user's default browser
+
+    // Once the user visits the URL and authorizes, they'll be redirected to your redirect_uri.
+    // The authorization code will be captured in the callback function (see handleCallback).
+}
+
+/**
+ * Authorizes the client using the existing token or initiates the token generation flow
+ */
+async function authorize() {
+    return new Promise((resolve, reject) => {
+        // Check if the token already exists
+        fs.readFile(TOKEN_PATH, (err, token) => {
+            if (err) {
+                // If token does not exist, start the token generation flow
+                return getNewToken(oAuth2Client, resolve);
+            }
+
+            // Use the existing token
+            oAuth2Client.setCredentials(JSON.parse(token));
+            resolve(oAuth2Client); // Resolve with the OAuth2 client
+        });
+    });
+}
+
+// Export the OAuth2 client and the handleCallback function
+module.exports = { oAuth2Client, handleCallback, authorize };

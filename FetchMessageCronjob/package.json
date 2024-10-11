@@ -17,6 +17,8 @@
     "googleapis": "^140.0.1",
     "node-cron": "^3.0.3",
     "nodejs-base64-converter": "^1.0.5",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "open": "^10.1.0",
+    "openurl": "^1.1.1"
   }
 }
