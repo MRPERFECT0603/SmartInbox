@@ -1,6 +1,6 @@
-# MailzyAI
+# SmartInbox
 
-MailzyAI is an innovative AI-powered tool designed to help users manage and organize their Gmail inboxes effortlessly. By leveraging advanced machine learning models and robust task scheduling frameworks, MailzyAI automates email categorization and response, ensuring a clutter-free inbox and efficient communication.
+SmartInbox is an innovative AI-powered tool designed to help users manage and organize their Gmail inboxes effortlessly. By leveraging advanced machine learning models and robust task scheduling frameworks, SmartInbox automates email categorization and response, ensuring a clutter-free inbox and efficient communication.
 
 ## Features
 
