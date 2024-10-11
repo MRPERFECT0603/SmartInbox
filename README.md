@@ -19,8 +19,8 @@ MailzyAI is an innovative AI-powered tool designed to help users manage and orga
 ### Email Processing and Analysis
 
 - **Node.js Service**: The Node.js service retrieves emails from Kafka and forwards them to the analyzer service.
-- **Analyzer Service**: Utilizes Google NLP models to analyze the content of each email, categorizing it into predefined labels such as "Interested," "Not Interested," and "More Information."
-- **BullMQ**: Manages task scheduling and queuing for both the processing and response phases, ensuring efficient and scalable operations.
+- **Analyzer Service**: Utilizes Llama models to analyze the content of each email, categorizing it into predefined labels such as "Interested," "Not Interested," and "More Information."
+- **RabbitMQ**: Manages task scheduling and queuing for both the processing and response phases, ensuring efficient and scalable operations.
 
 ### Automated Email Response
 
@@ -29,9 +29,9 @@ MailzyAI is an innovative AI-powered tool designed to help users manage and orga
 
 ## Technical Stack
 
-- **Languages**: TypeScript, Node.js
-- **AI/ML**: Google NLP models
-- **Task Scheduling**: BullMQ
+- **Languages**: JavaScript, Node.js
+- **AI/ML**: llama 3.2
+- **Task Scheduling**: RabbitMQ
 - **Message Queuing**: Kafka
 - **Email Integration**: Gmail API
 - **Infrastructure**: Cron jobs for scheduled tasks
