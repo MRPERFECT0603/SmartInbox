@@ -1,4 +1,3 @@
-// Import the queuePush function from the queue module
 const { queuePush } = require("../queues/queue");
 
 /**
@@ -9,13 +8,10 @@ const { queuePush } = require("../queues/queue");
  */
 const NewMailFetcher = async (data) => {
 
-    // Define the message queue exchange (where messages are sent to be distributed)
     const exchange = 'MailzyExchange';
 
-    // Define the routing key to ensure the message is delivered to the appropriate queue
     const routingKey = 'NewMessage';
 
-    // Store the email data as the message to be sent to the queue
     const message = data;
 
     // Asynchronously push the email message to the queue using the exchange and routing key
@@ -23,7 +19,5 @@ const NewMailFetcher = async (data) => {
 
 };
 
-/**
- * Export the NewMailFetcher function to make it available for other modules
- */
+
 module.exports = { NewMailFetcher };

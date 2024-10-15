@@ -1,7 +1,4 @@
-// Import necessary modules
 const { google } = require('googleapis'); // Google API client library for accessing Gmail API
-const fs = require('fs'); // File system module for reading/writing files
-const MESSAGE_PATH = 'message.txt'; // Path to store or retrieve message-related data (optional usage)
 
 /**
  * listMessages - Function to list Gmail messages from a user's inbox
@@ -20,16 +17,11 @@ async function listMessages(auth) {
             'labelIds': ['INBOX', 'UNREAD', 'CATEGORY_PERSONAL'], // Optional, filter messages by labels
         });
 
-        // Log the response data to the console for review
         console.log(response.data);
-
-        // Return the list of messages data for further processing or use
         return response.data;
     } catch (err) {
-        // If an error occurs during the API call, log the error details
         console.error(err);
     }
 }
 
-// Export the listMessages function for use in other parts of the application
 module.exports = { listMessages };
