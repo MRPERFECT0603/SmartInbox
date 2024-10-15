@@ -1,5 +1,7 @@
 const { queuePush } = require("../queues/queue");
+const dotenv = require("dotenv");
 
+dotenv.config();
 /**
  * NewMailFetcher - Function to push new email data to the message queue
  * This function takes in email data and pushes it to a specified message queue using the exchange and routing key.
@@ -8,9 +10,9 @@ const { queuePush } = require("../queues/queue");
  */
 const NewMailFetcher = async (data) => {
 
-    const exchange = 'MailzyExchange';
+    const exchange = process.env.EXCHANGE;
 
-    const routingKey = 'NewMessage';
+    const routingKey = process.env.ROUTING_KEY;
 
     const message = data;
 
