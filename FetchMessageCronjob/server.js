@@ -1,13 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const fs = require('fs');
+dotenv.config();
 const PORT = process.env.PORT || 3001; 
 // Import the NewMailFetchJob from the cronjobs directory to fetch new mails periodically
 const { NewMailFetchJob } = require("./cronjobs/newMails");
 const { oAuth2Client, handleCallback } = require("./services/authService");
 
 
-dotenv.config();
 
 const app = express();
 

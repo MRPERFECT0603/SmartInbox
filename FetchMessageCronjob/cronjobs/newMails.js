@@ -19,8 +19,11 @@ const NewMailFetchJob = cron.schedule('* * * * *', () => {
         listMessages(auth).then(data => {
             // If there are messages, send the ID of the first message to the queue
             if (data.messages && data.messages.length > 0) {
-                NewMailFetcher(data.messages[0].id).catch(console.error); 
-                console.log("MESSAGE SEND"); 
+                data.messages.forEach(message => {
+                    NewMailFetcher(message.id) // Send each message's ID to the queue
+                        .catch(console.error); // Catch and log any errors that occur
+                    console.log(`MESSAGE SENT: ${message.id}`); // Log that the message ID has been sent
+                }); 
             } else {
                 console.log("No new messages found."); 
             }
