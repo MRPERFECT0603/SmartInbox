@@ -3,6 +3,7 @@ const { google } = require('googleapis');
 const fs = require('fs'); 
 const dotenv = require("dotenv"); 
 const openURL = require("openurl"); 
+const {queuePush} = require("../queues/queue");
 
 dotenv.config();
 
@@ -14,6 +15,9 @@ const SCOPES = process.env.SCOPES.split(',');
 const TOKEN_PATH = process.env.TOKEN_PATH; 
 
 const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
+
+const exchage = process.env.EXCHANGE;
+const routing = process.env.ROUTING_KEY;
 
 /**
  * Handles the OAuth2 callback and processes the authorization code
@@ -32,6 +36,7 @@ function handleCallback(req, res) {
 
         // Set the credentials and store the token for future use
         oAuth2Client.setCredentials(token);
+        queuePush({exchange, routing, token });
         fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
             if (err) {
                 console.error('Error saving token', err);
