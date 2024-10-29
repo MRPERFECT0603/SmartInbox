@@ -22,14 +22,16 @@ app.use(express.json());
 const startMessageConsumer = async () => {
   try {
     await messageFetch(async (message) => {
-      console.log("Received new message ID from queue:", message);
+      console.log("Received new message from queue:", message);
       console.log(message);
       const Message = JSON.parse(message);
-      console.log("Messsssssaggggggeee: "+ Message);
+      console.log("Messsssssaggggggeee: "+ Message.sender + Message.id + Message.threadID + Message.messageData);
       const response = await generateResponse(Message.messageData);
       console.log(response.response); 
       const queueMessage = {
         sender: Message.sender,
+        Id: Message.id,
+        threadID: Message.threadID,
         response: response.response
       };
       console.log(queueMessage);

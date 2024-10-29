@@ -14,7 +14,7 @@ const NewMailFetcher = async (data) => {
 
     const routingKey = process.env.ROUTING_KEY;
 
-    const message = data;
+    const message = JSON.stringify(data);
 
     // Asynchronously push the email message to the queue using the exchange and routing key
     await queuePush({ exchange, routingKey, message });
