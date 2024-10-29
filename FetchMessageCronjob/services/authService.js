@@ -4,6 +4,7 @@ const fs = require('fs');
 const dotenv = require("dotenv"); 
 const openURL = require("openurl"); 
 
+
 dotenv.config();
 
 // Extract values from environment variables
@@ -14,6 +15,7 @@ const SCOPES = process.env.SCOPES.split(',');
 const TOKEN_PATH = process.env.TOKEN_PATH; 
 
 const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
+
 
 /**
  * Handles the OAuth2 callback and processes the authorization code
