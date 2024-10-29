@@ -1,6 +1,7 @@
 const { authorize } = require("../services/authService");
 const { google } = require('googleapis');
 const nodeBase64 = require('nodejs-base64-converter');
+const {changeLabel} = require("../services/modifyLabel");
 
 /**
  * sendMail - Sends an email using the Gmail API
@@ -8,20 +9,20 @@ const nodeBase64 = require('nodejs-base64-converter');
  * @param {object} auth - The authorization object for Google API
  * @returns {Promise<object|null>} - Returns a promise that resolves with the send result or null if an error occurs
  */
-const sendMail = async (encodedEmail, auth) => {
+const sendMail = async (encodedEmail, threadId ,auth) => {
     try {
         const gmail = google.gmail({ version: 'v1', auth });
         const response = await gmail.users.messages.send({
             userId: "me",
             resource: {
                 raw: encodedEmail,
+                threadId: threadId,
             },
         });
         console.log("Email sent successfully:", response.data);
         return response.data; 
     } catch (err) {
         console.error("Error sending email:", err);
-        return null; 
     }
 };
 
@@ -61,10 +62,13 @@ const MailSender = async (ParsedMessage) => {
             console.log(typeof(ParsedMessage));
             console.log(ParsedMessage.sender);
             console.log(ParsedMessage.response);
+            console.log(ParsedMessage.Id);
             const encodedEmail = encodeMail(ParsedMessage); // Pass the full message
-            const message = await sendMail(encodedEmail, auth); 
+            const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
             if (message) {
                 console.log("SENT SUCCESSFULLY:", message);
+                changeLabel(ParsedMessage.Id);
+                console.log("LABEL CHANGED SUCCESSFULLY!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         } else {
             console.error("Authorization failed.");

@@ -21,10 +21,12 @@ app.use(express.json());
 const startMessageConsumer = async () => {
   try {
     await messageIdFetch(async (messageId) => {
-      console.log("Received new message ID from queue:", messageId);
-      const result = await Mailpreprocessor(messageId); 
+      console.log("Received new message ID  and ThreadID from queue:", messageId);
+      const messageObject = JSON.parse(messageId);
+      const result = await Mailpreprocessor(messageObject); 
       const message = result; 
-      //console.log(message); 
+      console.log("Before PUSHING"+message); 
+      console.log("MESAGEE ME YE HAI"+ message.sender + message.id + message.threadID + message.messageData);
       await queuePush({ exchange, routingKey, message });
     });
   } catch (error) {
