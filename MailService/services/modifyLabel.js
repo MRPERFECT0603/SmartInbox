@@ -1,4 +1,4 @@
-const { authorize } = require("../services/authService");
+const { authorize } = require("./authService");
 const { google } = require('googleapis');
 
 const changeMailLabel = async (messageID, auth) => {

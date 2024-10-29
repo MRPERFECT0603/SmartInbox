@@ -1,7 +1,7 @@
-const { authorize } = require("../services/authService");
+const { authorize } = require("./authService");
 const { google } = require('googleapis');
 const nodeBase64 = require('nodejs-base64-converter');
-const {changeLabel} = require("../services/modifyLabel");
+const {changeLabel} = require("./modifyLabel");
 
 /**
  * sendMail - Sends an email using the Gmail API

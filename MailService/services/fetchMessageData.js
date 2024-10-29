@@ -1,6 +1,6 @@
-const { authorize } = require("../services/authService");
+const { authorize } = require("./authService");
 const { google } = require('googleapis');
-const { preProcessMessage } = require("../services/preprocessor");
+const { preProcessMessage } = require("./preprocessor");
 
 /**
  * fetchMessageDetails - Fetches detailed information about a specific email message
