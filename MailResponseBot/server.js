@@ -23,16 +23,18 @@ const startMessageConsumer = async () => {
   try {
     await messageFetch(async (message) => {
       console.log("Received new message ID from queue:", message);
-      
+      console.log(message);
       const Message = JSON.parse(message);
-      
-      const response = await generateResponse(Message.MessageData);
+      console.log("Messsssssaggggggeee: "+ Message);
+      const response = await generateResponse(Message.messageData);
       console.log(response.response); 
       const queueMessage = {
-        response: response.response,
-        sender: message.sender
+        sender: Message.sender,
+        response: response.response
       };
-      await queuePush({ exchange, routingKey,  message: queueMessage});
+      console.log(queueMessage);
+      const data = JSON.stringify(queueMessage);
+      await queuePush({ exchange, routingKey,  message: data});
     });
   } catch (error) {
     console.error("Error in message consumer:", error); 

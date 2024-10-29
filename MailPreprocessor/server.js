@@ -37,7 +37,11 @@ const startResponseConsumer = async () => {
   try {
     await responseMailFetch(async (responseMessage) => {
       console.log("Received new  Response message from queue:", responseMessage);
-      const result = await MailSender(responseMessage); 
+      const parsedMessage = JSON.parse(JSON.parse(responseMessage));
+      console.log("Parrrssseeeddd Messsagggee :"+ parsedMessage);
+      console.log("ParsedMEssage:-"+typeof(parsedMessage));
+      console.log("responseMessage:-"+typeof(responseMessage));
+      const result = await MailSender(parsedMessage); 
       const message = result; 
       console.log(message); 
     });

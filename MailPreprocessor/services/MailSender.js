@@ -25,22 +25,46 @@ const sendMail = async (encodedEmail, auth) => {
     }
 };
 
-const encodeMail = (responseMessage) => {
-    const encodedMail = nodeBase64.encode(responseMessage);
-    return encodedMail;
-}
+/**
+ * Builds and encodes the full email content for Gmail
+ * @param {object} responseMessage - The message object containing response and sender info
+ * @returns {string} - Base64url-encoded email string
+ */
+const encodeMail = (ParsedMessage) => {
+    // Validate the recipient's email format
+    console.log("EMAIL SENDER NAME:"+ParsedMessage.sender);
+    if (!ParsedMessage.sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(ParsedMessage.sender)) {
+        console.error("Invalid recipient email address.");
+        return null;
+    }
 
-const MailSender = async (responseMessage) => {
+    // Construct the email content
+    const emailContent = 
+        `To: ${ParsedMessage.sender}\r\n` +
+        `Subject: Automated Reply\r\n` +
+        `Content-Type: text/plain; charset=utf-8\r\n\r\n` +
+        `${ParsedMessage.response}`;
+
+    // Encode email in base64url format for Gmail API compatibility
+    const encodedMail = Buffer.from(emailContent, 'utf-8').toString('base64')
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    
+    return encodedMail;
+};
+
+const MailSender = async (ParsedMessage) => {
     try {
-        console.log("Processing Response Message:", responseMessage);
+        console.log("Processing Response Message:", ParsedMessage);
         const auth = await authorize(); 
         if (auth) {
             console.log('Authorized successfully');
-            const encodedEmail = encodeMail(responseMessage);
+            console.log(typeof(ParsedMessage));
+            console.log(ParsedMessage.sender);
+            console.log(ParsedMessage.response);
+            const encodedEmail = encodeMail(ParsedMessage); // Pass the full message
             const message = await sendMail(encodedEmail, auth); 
             if (message) {
-                console.log(message);
-                console.log("SENT SUCCESSFULLY");
+                console.log("SENT SUCCESSFULLY:", message);
             }
         } else {
             console.error("Authorization failed.");
@@ -50,4 +74,5 @@ const MailSender = async (responseMessage) => {
     }
     return null; 
 }
+
 module.exports = { MailSender };
