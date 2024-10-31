@@ -10,25 +10,32 @@ dotenv.config();
  * @param {string} emailContent - The content of the email to which a reply is to be generated
  * @returns {Promise<string>} - Returns a promise that resolves with the generated response from the AI model
  */
-const generateResponse = async (emailContent) => {
+const generateResponse = async (emailContent, userName) => {
     try {
         const url = process.env.OLLAMA_API_KEY; 
 
-        // Construct the AI prompt for the model, instructing it to generate a direct reply
-        const AiPrompt = "Generate a first-person reply to this email, ensuring it is direct and without any additional commentary:" + emailContent;
+        // Construct the AI prompt for the model
+        const AiPrompt = emailContent; // Use the email content directly as defined in the Modelfile
 
-        const response = await axios.post(url, {
-            "model": "vivu", 
-            "prompt": AiPrompt, 
-            "stream": false 
-        });
+        // Create the payload with the user's name
+        const payload = {
+            model: "otter", // Replace with the name of your created model
+            prompt: AiPrompt,
+            Name: userName, // Include user's name as part of the input
+            stream: false,
+            format: "json"
+        };
 
+        // Send the request to the Ollama API
+        const response = await axios.post(url, payload);
+
+        // Return the structured response from the assistant
         return response.data;
     } catch (error) {
         console.error('Error generating response:', error.message);
-
         throw new Error('Failed to generate response');
     }
 };
 
-module.exports = { generateResponse };
+
+module.exports = { generateResponse  };

@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3003;
 
 const { queuePush } = require("./queues/queue"); 
 const { messageFetch } = require("./services/MailResponse"); 
-const { generateResponse } = require("./Controllers/ResponseController");
+const { generateResponse  } = require("./Controllers/ResponseController");
 
 
 const exchange = process.env.EXCHANGE; 
@@ -26,7 +26,7 @@ const startMessageConsumer = async () => {
       console.log(message);
       const Message = JSON.parse(message);
       console.log("Messsssssaggggggeee: "+ Message.sender + Message.id + Message.threadID + Message.messageData);
-      const response = await generateResponse(Message.messageData);
+      const response = await generateResponse(Message.messageData , Message.sender);
       console.log(response.response); 
       const queueMessage = {
         sender: Message.sender,
@@ -44,6 +44,7 @@ const startMessageConsumer = async () => {
 };
 
 startMessageConsumer();
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`); 

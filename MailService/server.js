@@ -5,7 +5,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3002; 
 // Important Imports 
-const { messageIdFetch, responseMailFetch } = require("../MailPreprocessor/services/MessageFetch"); 
+const { messageIdFetch, responseMailFetch } = require("./services/MessageFetch"); 
 const { oAuth2Client, handleCallback } = require("./services/authService");
 const { Mailpreprocessor } = require("./services/fetchMessageData");
 const { queuePush } = require("./queues/queue");

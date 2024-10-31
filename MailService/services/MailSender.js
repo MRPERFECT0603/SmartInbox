@@ -31,20 +31,20 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
  * @param {object} responseMessage - The message object containing response and sender info
  * @returns {string} - Base64url-encoded email string
  */
-const encodeMail = (ParsedMessage) => {
+const encodeMail = (sender, subject , body ) => {
     // Validate the recipient's email format
-    console.log("EMAIL SENDER NAME:"+ParsedMessage.sender);
-    if (!ParsedMessage.sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(ParsedMessage.sender)) {
+    console.log("EMAIL SENDER NAME:"+sender);
+    if (!sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(sender)) {
         console.error("Invalid recipient email address.");
         return null;
     }
 
     // Construct the email content
     const emailContent = 
-        `To: ${ParsedMessage.sender}\r\n` +
-        `Subject: Automated Reply\r\n` +
+        `To: ${sender}\r\n` +
+        `Subject: ${subject}\r\n` +
         `Content-Type: text/plain; charset=utf-8\r\n\r\n` +
-        `${ParsedMessage.response}`;
+        `${body}`;
 
     // Encode email in base64url format for Gmail API compatibility
     const encodedMail = Buffer.from(emailContent, 'utf-8').toString('base64')
@@ -62,8 +62,13 @@ const MailSender = async (ParsedMessage) => {
             console.log(typeof(ParsedMessage));
             console.log(ParsedMessage.sender);
             console.log(ParsedMessage.response);
+            const email = JSON.parse(ParsedMessage.response);
+            const { Subject: subject, Body: body } = email;
+            const sender  = ParsedMessage.sender;
+            console.log("Subject:", subject);
+            console.log("Body:", body);
             console.log(ParsedMessage.Id);
-            const encodedEmail = encodeMail(ParsedMessage); // Pass the full message
+            const encodedEmail = encodeMail(sender, subject , body); // Pass the full message
             const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
             if (message) {
                 console.log("SENT SUCCESSFULLY:", message);
