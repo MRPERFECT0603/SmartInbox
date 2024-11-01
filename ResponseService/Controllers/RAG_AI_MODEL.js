@@ -7,6 +7,7 @@ const { createRetrievalChain } = require("langchain/chains/retrieval");
 const { RecursiveCharacterTextSplitter } = require("langchain/text_splitter");
 const { OllamaEmbeddings } = require("@langchain/ollama");
 const { MemoryVectorStore } = require("langchain/vectorstores/memory");
+const { StructuredOutputParser } = require("langchain/output_parsers");
 const fs = require('fs');
 
 const model = new ChatOllama({
@@ -16,16 +17,58 @@ const model = new ChatOllama({
 
 const loadContext = () => {
     const context = fs.readFileSync('/Users/vivek/Desktop/SmartInBox/ResponseService/context.txt', 'utf-8');
-    console.log(typeof(context));
+    // console.log(typeof(context));
+    console.log("Context Loaded.")
     return context;
 };
 
+
+const sensitiveKeywords = [
+    "bullying", 
+    "ragging", 
+    "need help", 
+    "problems", 
+    "struggling", 
+    "harassment", 
+    "abuse", 
+    "threats", 
+    "isolation", 
+    "neglect", 
+    "anxiety", 
+    "depression", 
+    "crisis", 
+    "trauma", 
+    "conflict", 
+    "discrimination", 
+    "emotional distress", 
+    "suicidal thoughts", 
+    "peer pressure", 
+    "overwhelmed", 
+    "burnout", 
+    "mental health issues", 
+    "substance abuse", 
+    "exclusion", 
+    "violence"
+];
+
 const prompt = ChatPromptTemplate.fromTemplate(
     `
-    You are an email assistant named "Otter", responding on behalf of Vivek. Your role is to reply to emails as if you are Vivek, using his provided context.
+    You are an email assistant named "Otter", responding on behalf of Vivek. Use the provided context to respond in a single, concise reply that directly answers the question.
+
+    If the email contains any sensitive keywords like "${sensitiveKeywords.join(', ')}", respond with a message that invites the sender to meet in person. Format your reply in JSON structure, with these keys:
+
+    {{
+        "subject": "A concise, relevant subject line tailored to the received email.",
+        'greeting": "Dear {sender}",
+        "body": "The main response content that addresses the sender's question",
+        "signature": "Best regards, Vivek Shaurya"
+    }}
 
     Context about Vivek:
     {context}
+
+    Sender's Name:
+    {sender}
 
     Email received:
     {input}
@@ -41,36 +84,42 @@ const setup = async () => {
     });
 
     const doc = loadContext();
-    console.log(doc);
+    // console.log(doc);
 
     const splitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 200,
-        chunkOverlap: 20
+        chunkSize: 100000,
+        chunkOverlap: 0
     });
 
     const splitDocs = (await splitter.splitText(doc)).map(content => new Document({ pageContent: content }));
 
     const embeddings = new OllamaEmbeddings({
         model: "llama3.2:1b",
-        temperature: 0.2
+        temperature: 0.5
     });
 
     const vectorStore = await MemoryVectorStore.fromDocuments(
         splitDocs,
-        embeddings
+        embeddings,
     );
 
+
     const retriever = vectorStore.asRetriever({
-        k: 2,
+        k: 1,
     });
 
+    const output_parsers = new StructuredOutputParser();
+
+    
     const retrievalChain = await createRetrievalChain({
         combineDocsChain: chain,
-        retriever: retriever
+        retriever: retriever,
+        outputParsers: output_parsers,
     });
 
     const response = await retrievalChain.invoke({
-        input: "Good Morning sir, I am new to your course can you please clarify what this course is all about?",
+        sender: "Nemo",
+        input: "Good morning Sir, I want to meet you can you share you free time slot on wednesday?",
     });
 
     console.log(response);
