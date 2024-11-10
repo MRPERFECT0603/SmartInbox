@@ -9,10 +9,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@langchain/community": "^0.3.11",
+    "@langchain/ollama": "^0.1.1",
     "amqplib": "^0.10.4",
     "axios": "^1.7.7",
+    "chromadb": "^1.9.2",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "fs": "^0.0.1-security",
+    "langchain": "^0.3.5",
+    "mongoose": "^8.8.0",
     "nodemon": "^3.1.7"
   }
 }

@@ -2,7 +2,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 
 dotenv.config();
-
 const PORT = process.env.PORT || 3003; 
 
 
@@ -26,13 +25,13 @@ const startMessageConsumer = async () => {
       console.log(message);
       const Message = JSON.parse(message);
       console.log("Messsssssaggggggeee: "+ Message.sender + Message.id + Message.threadID + Message.messageData);
-      const response = await generateResponse(Message.messageData , Message.sender);
-      console.log(response.response); 
+      const response = await generateResponse(Message.sender , Message.messageData);
+      console.log(response.answer); 
       const queueMessage = {
         sender: Message.sender,
         Id: Message.id,
         threadID: Message.threadID,
-        response: response.response
+        response: response.answer
       };
       console.log(queueMessage);
       const data = JSON.stringify(queueMessage);
@@ -42,6 +41,20 @@ const startMessageConsumer = async () => {
     console.error("Error in message consumer:", error); 
   }
 };
+
+const testfunction = async() => {
+      console.log("TEST FUNCTYION START");
+      const userName = "Nemo";
+      const emailContent = "Good morning Sir, I want to meet you. Can you share your free time slot on Wednesday?";
+      console.log("start the response function");
+      const response = await generateResponse(userName , emailContent);
+      console.log("stop the response function");
+      console.log(response); 
+      console.log("TEST FUNTION STOP");
+
+}
+
+// testfunction();
 
 startMessageConsumer();
 
