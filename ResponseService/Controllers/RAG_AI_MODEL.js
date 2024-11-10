@@ -59,7 +59,7 @@ const prompt = ChatPromptTemplate.fromTemplate(
 
     {{
         "subject": "A concise, relevant subject line tailored to the received email.",
-        'greeting": "Dear {sender}",
+        "greeting": "Dear {sender}",
         "body": "The main response content that addresses the sender's question",
         "signature": "Best regards, Vivek Shaurya"
     }}
@@ -77,7 +77,7 @@ const prompt = ChatPromptTemplate.fromTemplate(
     `
 );
 
-const setup = async () => {
+const responseGenerator = async (senderName , senderEmail) => {
     const chain = await createStuffDocumentsChain({
         llm: model,
         prompt,
@@ -118,11 +118,19 @@ const setup = async () => {
     });
 
     const response = await retrievalChain.invoke({
-        sender: "Nemo",
-        input: "Good morning Sir, I want to meet you can you share you free time slot on wednesday?",
+        sender: senderName,
+        input: senderEmail
     });
 
-    console.log(response);
+    return response;
 };
 
-setup().catch(console.error);
+// // Wrap test code in an async IIFE to support top-level await
+// (async () => {
+//     const sender = "Nemo";
+//     const input = "Good morning Sir, I want to meet you. Can you share your free time slot on Wednesday?";
+//     const responseTest = await responseGenerator(sender, input);
+//     console.log(responseTest);
+// })();
+
+module.exports = { responseGenerator }
