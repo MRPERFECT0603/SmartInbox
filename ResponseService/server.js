@@ -26,12 +26,12 @@ const startMessageConsumer = async () => {
       const Message = JSON.parse(message);
       console.log("Messsssssaggggggeee: "+ Message.sender + Message.id + Message.threadID + Message.messageData);
       const response = await generateResponse(Message.sender , Message.messageData);
-      console.log(response.answer); 
+      console.log(response); 
       const queueMessage = {
         sender: Message.sender,
         Id: Message.id,
         threadID: Message.threadID,
-        response: response.answer
+        response: response
       };
       console.log(queueMessage);
       const data = JSON.stringify(queueMessage);

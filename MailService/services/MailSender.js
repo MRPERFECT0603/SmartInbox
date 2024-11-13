@@ -31,7 +31,7 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
  * @param {object} responseMessage - The message object containing response and sender info
  * @returns {string} - Base64url-encoded email string
  */
-const encodeMail = (sender, subject , body ) => {
+const encodeMail = (sender, subject , body ,signature) => {
     // Validate the recipient's email format
     console.log("EMAIL SENDER NAME:"+sender);
     if (!sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(sender)) {
@@ -44,7 +44,7 @@ const encodeMail = (sender, subject , body ) => {
         `To: ${sender}\r\n` +
         `Subject: ${subject}\r\n` +
         `Content-Type: text/plain; charset=utf-8\r\n\r\n` +
-        `${body}`;
+        `${body}\n\n${signature}`;
 
     // Encode email in base64url format for Gmail API compatibility
     const encodedMail = Buffer.from(emailContent, 'utf-8').toString('base64')
@@ -62,13 +62,15 @@ const MailSender = async (ParsedMessage) => {
             console.log(typeof(ParsedMessage));
             console.log(ParsedMessage.sender);
             console.log(ParsedMessage.response);
-            const email = JSON.parse(ParsedMessage.response);
-            const { Subject: subject, Body: body } = email;
+            const email = (ParsedMessage.response);
+            const { subject: subject, body: body , signature: signature , greating: greating} = email;
             const sender  = ParsedMessage.sender;
             console.log("Subject:", subject);
+            console.log("Greating:", greating);
             console.log("Body:", body);
+            console.log("Signature:", signature);
             console.log(ParsedMessage.Id);
-            const encodedEmail = encodeMail(sender, subject , body); // Pass the full message
+            const encodedEmail = encodeMail(sender, subject , body ,signature); // Pass the full message
             const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
             if (message) {
                 console.log("SENT SUCCESSFULLY:", message);

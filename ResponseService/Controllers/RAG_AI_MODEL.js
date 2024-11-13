@@ -9,6 +9,7 @@ const { OllamaEmbeddings } = require("@langchain/ollama");
 const { MemoryVectorStore } = require("langchain/vectorstores/memory");
 const { StructuredOutputParser } = require("langchain/output_parsers");
 const fs = require('fs');
+const {StringOutputParser} = require("@langchain/core/output_parsers");
 
 const model = new ChatOllama({
     model: "llama3.2:1b",
@@ -121,11 +122,15 @@ const responseGenerator = async (senderName , senderEmail) => {
         sender: senderName,
         input: senderEmail
     });
-
-    return response;
+    console.log("unJson answer");
+    console.log(response.answer);
+    const finalAns = (JSON.parse(response.answer));
+    console.log("final Answer");
+    console.log(finalAns);
+    return finalAns;
 };
 
-// // Wrap test code in an async IIFE to support top-level await
+// Wrap test code in an async IIFE to support top-level await
 // (async () => {
 //     const sender = "Nemo";
 //     const input = "Good morning Sir, I want to meet you. Can you share your free time slot on Wednesday?";
@@ -133,4 +138,4 @@ const responseGenerator = async (senderName , senderEmail) => {
 //     console.log(responseTest);
 // })();
 
-module.exports = { responseGenerator }
+module.exports = { responseGenerator }   
