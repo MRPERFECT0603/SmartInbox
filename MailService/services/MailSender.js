@@ -41,10 +41,11 @@ const encodeMail = (sender, subject , body ,signature) => {
 
     // Construct the email content
     const emailContent = 
-        `To: ${sender}\r\n` +
-        `Subject: ${subject}\r\n` +
+        `To: ${sender}\n` +
+        `Subject: ${subject}\n` +
         `Content-Type: text/plain; charset=utf-8\r\n\r\n` +
-        `${body}\n\n${signature}`;
+        `${body}\n\n`+
+        `${signature}`;
 
     // Encode email in base64url format for Gmail API compatibility
     const encodedMail = Buffer.from(emailContent, 'utf-8').toString('base64')
