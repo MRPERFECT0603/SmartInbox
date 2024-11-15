@@ -1,9 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const fs = require("fs");
+const connectdb = require("./Config/dbConfig");
+const cors = require("cors");
 
 dotenv.config();
 const PORT = process.env.PORT || 3003; 
-
+connectdb();
 
 const { queuePush } = require("./queues/queue"); 
 const { messageFetch } = require("./services/MailResponse"); 
@@ -16,6 +19,10 @@ const routingKey = process.env.ROUTING_KEY_PUSH;
 const app = express();
 
 app.use(express.json());
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  credentials: true,
+}));
 
 // Continuous consumer function to listen for new messages from the message queue
 const startMessageConsumer = async () => {
@@ -57,6 +64,11 @@ const testfunction = async() => {
 // testfunction();
 
 startMessageConsumer();
+
+
+// Handle POST request to save context
+app.use("/api", require("./Routes/Response"));
+
 
 
 app.listen(PORT, () => {

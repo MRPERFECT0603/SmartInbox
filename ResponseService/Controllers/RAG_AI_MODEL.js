@@ -10,19 +10,46 @@ const { MemoryVectorStore } = require("langchain/vectorstores/memory");
 const { StructuredOutputParser } = require("langchain/output_parsers");
 const fs = require('fs');
 const {StringOutputParser} = require("@langchain/core/output_parsers");
+const Context = require("../Models/ContextModel");
+
+// const dotenv = require("dotenv");
+// dotenv.config();
+// const connectdb = require("../Config/dbConfig");
+// connectdb();
 
 const model = new ChatOllama({
     model: "llama3.2:1b",
     temperature: 0.5
 });
 
-const loadContext = () => {
-    const context = fs.readFileSync('/Users/vivek/Desktop/SmartInBox/ResponseService/context.txt', 'utf-8');
-    // console.log(typeof(context));
-    console.log("Context Loaded.")
-    return context;
-};
+// const loadContext = () => {
+//     const context = fs.readFileSync('/Users/vivek/Desktop/SmartInBox/ResponseService/context.txt', 'utf-8');
+//     // console.log(typeof(context));
+//     console.log("Context Loaded.")
+//     return context;
+// };
+const loadContext = async (userEmail) => {
+    try {
+        const contextDoc = await Context.findOne({ email: userEmail });
 
+        if (!contextDoc) {
+            throw new Error('Context not found for this sender email');
+        }
+
+        const context = contextDoc.context;
+
+        if (typeof context !== 'string') {
+            throw new Error('Context is not a valid string');
+        }
+
+        console.log("Context Loaded from MongoDB.");
+        console.log("Context content:", context);
+        return context;
+    } catch (error) {
+        console.error('Error loading context:', error);
+        throw error;
+    }
+};
 
 const sensitiveKeywords = [
     "bullying", 
@@ -83,9 +110,10 @@ const responseGenerator = async (senderName , senderEmail) => {
         llm: model,
         prompt,
     });
-
-    const doc = loadContext();
-    // console.log(doc);
+    const user = 'irctcvivek62@gmail.com';
+    const doc = await loadContext(user);
+    console.log(doc);
+    console.log(typeof(doc));
 
     const splitter = new RecursiveCharacterTextSplitter({
         chunkSize: 100000,
