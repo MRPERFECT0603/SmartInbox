@@ -1,0 +1,50 @@
+@keyframes swing {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(5deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    75% {
+      transform: rotate(-5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  .swing-animation {
+    animation: swing 4s ease-in-out infinite;
+    transform-origin: top center;
+  }
+  @keyframes bobbing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  .bobbing-animation {
+    animation: bobbing 2s ease-in-out infinite;
+  }
+
+  @keyframes headTilt {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(5deg); }
+  }
+  
+  .head-tilt-animation {
+    animation: headTilt 1.5s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+
+  @keyframes breathing {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+  
+  .breathing-animation {
+    animation: breathing 3s ease-in-out infinite;
+  }
+
