@@ -25,7 +25,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
         <div>
           <label htmlFor="age" className="block text-sm font-medium text-gray-700">Age</label>
           <input
-            type="number"
+            type="text"
             id="age"
             name="age"
             value={formData.age}
@@ -103,9 +103,8 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
 Page1.propTypes = {
   formData: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    age: PropTypes.number.isRequired,
+    age: PropTypes.string.isRequired,
     occupation: PropTypes.string.isRequired,
-    personality: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     phone: PropTypes.string.isRequired,
     website: PropTypes.string.isRequired,

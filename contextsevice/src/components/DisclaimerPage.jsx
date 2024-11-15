@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 function DisclaimerPage({ handleAccept }) {
   const [accepted, setAccepted] = useState(false);
@@ -12,13 +12,23 @@ function DisclaimerPage({ handleAccept }) {
     <div className=" p-6 bg-white shadow-lg rounded-lg text-center">
       <h2 className="text-2xl font-semibold mb-4">Disclaimer</h2>
       <p className="mb-4">
-        Please read the following disclaimer carefully. By proceeding, you agree to our terms 
-        regarding data collection and usage in this application. Your data will be used to 
-        generate a personalized assistant context.
+        By using this application, you consent to the collection and processing
+        of your data as outlined below. The information you provide will be used
+        solely to generate personalized responses and suggestions within the
+        assistant, enhancing its relevance and functionality.
       </p>
       <p className="mb-6">
-        This information will help create tailored responses and suggestions, improving 
-        your assistant’s functionality. No personal data will be shared with third parties.
+        Your data will be securely stored in our system and protected using
+        industry-standard encryption methods to prevent unauthorized access.
+        This data is accessible only by this application and will not be shared
+        with any third parties. We are committed to maintaining the
+        confidentiality and privacy of your information in accordance with
+        applicable data protection regulations.
+      </p>
+      <p className="mb-6">
+        Please proceed only if you agree to these terms. If you have any
+        concerns about how your data will be used, feel free to contact us for
+        more information.
       </p>
       <label className="flex items-center justify-center space-x-2">
         <input
@@ -33,7 +43,7 @@ function DisclaimerPage({ handleAccept }) {
         onClick={handleAccept}
         disabled={!accepted}
         className={`mt-6 px-4 py-2 font-semibold text-white ${
-          accepted ? 'bg-custom-blue' : 'bg-gray-400 cursor-not-allowed'
+          accepted ? "bg-custom-blue" : "bg-gray-400 cursor-not-allowed"
         } rounded`}
       >
         Proceed

@@ -10,7 +10,6 @@ function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
         <p><strong className="text-gray-600">Name:</strong> {formData.name}</p>
         <p><strong className="text-gray-600">Age:</strong> {formData.age}</p>
         <p><strong className="text-gray-600">Occupation:</strong> {formData.occupation}</p>
-        <p><strong className="text-gray-600">Personality:</strong> {formData.personality}</p>
         <p><strong className="text-gray-600">Email:</strong> {formData.email}</p>
         <p><strong className="text-gray-600">School Phone:</strong> {formData.phone}</p>
         <p><strong className="text-gray-600">School Website:</strong> {formData.website}</p>
@@ -60,7 +59,6 @@ ReviewPage.propTypes = {
     name: PropTypes.string.isRequired,
     age: PropTypes.string.isRequired,
     occupation: PropTypes.string.isRequired,
-    personality: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     phone: PropTypes.string.isRequired,
     website: PropTypes.string.isRequired,

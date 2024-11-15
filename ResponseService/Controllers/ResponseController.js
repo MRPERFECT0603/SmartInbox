@@ -1,7 +1,8 @@
 
-const axios = require("axios"); 
 const dotenv = require("dotenv"); 
 const {responseGenerator} = require("../Controllers/RAG_AI_MODEL");
+const Context = require("../Models/ContextModel");
+
 dotenv.config();
 
 /**
@@ -51,4 +52,29 @@ const generateResponse = async (userName, emailContent) => {
     }
 };
 
-module.exports = { generateResponse  };
+const saveContext = async (req, res) => {
+    const { context, name, emailId } = req.body; // Extract data from the request body
+  
+    if (!context || !name || !emailId) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+  
+    // Save the context data to MongoDB
+    try {
+      const newContext = new Context({
+        name,
+        email: emailId,
+        context, // Save the context text
+      });
+  
+      await newContext.save(); // Save to MongoDB
+  
+      res.status(200).json({ message: "Context saved successfully" });
+    } catch (error) {
+      console.error("Error saving context:", error);
+      res.status(500).json({ message: "Failed to save context" });
+    }
+};
+
+
+module.exports = { generateResponse , saveContext };
