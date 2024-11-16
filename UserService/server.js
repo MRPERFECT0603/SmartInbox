@@ -5,8 +5,7 @@ dotenv.config();
 const connectdb = require("./Config/dbConfig");
 const PORT = process.env.PORT || 3001; 
 // Import the NewMailFetchJob from the cronjobs directory to fetch new mails periodically
-const { NewMailFetchJob } = require("./cronjobs/newMails");
-const { oAuth2Client, handleCallback } = require("./services/authService");
+const { oAuth2Client, handleCallback } = require("./Controllers/authController");
 connectdb();
 
 
@@ -19,8 +18,7 @@ app.use(cors({
 // Middleware to parse incoming JSON requests, making the request body available as req.body
 app.use(express.json());
 
-// Start the cron job for fetching new mails; this job will run at specified intervals
-NewMailFetchJob.start();
+
 
 // Route to handle OAuth2 callback
 // Callback route for Google OAuth2

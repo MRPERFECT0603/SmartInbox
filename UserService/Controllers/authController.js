@@ -88,7 +88,6 @@ function getNewToken(oAuth2Client, callback) {
  * Authorizes the client using the existing token or initiates the token generation flow
  */
 async function authorize(req, res) {
-    return new Promise(async (resolve, reject) => {
     try {
         const userContext = await Context.findOne({ email: emailId });
         
@@ -111,13 +110,36 @@ async function authorize(req, res) {
 
         // Token exists, set credentials
         oAuth2Client.setCredentials(JSON.parse(userContext.token));
-        resolve(oAuth2Client);
+        res.status(200).send('Token already exists, authorization successful.');
     } catch (error) {
         console.error('Error fetching token from MongoDB:', error);
         res.status(500).send('Error during authorization.');
     }
-    });
 }
 
 
-module.exports = { oAuth2Client, handleCallback, authorize };
+const saveContext = async (req, res) => {
+    const { context, name, emailId } = req.body; // Extract data from the request body
+
+    if (!context || !name || !emailId) {
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Save the context data to MongoDB
+    try {
+        const newContext = new Context({
+            name,
+            email: emailId,
+            context, // Save the context text
+        });
+
+        await newContext.save(); // Save to MongoDB
+
+        res.status(200).json({ message: "Context saved successfully" });
+    } catch (error) {
+        console.error("Error saving context:", error);
+        res.status(500).json({ message: "Failed to save context" });
+    }
+};
+
+module.exports = { oAuth2Client, handleCallback, authorize, saveContext };

@@ -158,7 +158,6 @@ const responseGenerator = async (senderName , senderEmail) => {
     return finalAns;
 };
 
-// Wrap test code in an async IIFE to support top-level await
 // (async () => {
 //     const sender = "Nemo";
 //     const input = "Good morning Sir, I want to meet you. Can you share your free time slot on Wednesday?";

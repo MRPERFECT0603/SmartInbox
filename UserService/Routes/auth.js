@@ -1,10 +1,11 @@
+
 const express = require("express"); 
-const { generateResponse , saveContext } = require("../Controllers/ResponseController"); 
+const { authorize , saveContext } = require("../Controllers/authController");
 
 
 const router = express.Router();
 
-// router.post("/", generateResponse);
+router.post("/auth" , authorize );
 router.post("/saveContext" , saveContext );
 
 module.exports = router;

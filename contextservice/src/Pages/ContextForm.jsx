@@ -14,8 +14,11 @@ import Otter4 from "../assets/otter4.png";
 import Otter5 from "../assets/otterpeaking.png";
 
 import "../App.css";
+import { useNavigate } from 'react-router-dom';
+
 
 function ContextForm() {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0); // 0 for disclaimer page
   const [formData, setFormData] = useState({
     name: "",
@@ -91,7 +94,7 @@ function ContextForm() {
   
     // Send the data to the backend using Axios
     try {
-      const response = await axios.post("http://localhost:8102/api/saveContext", data, {
+      const response = await axios.post("http://localhost:8100/api/saveContext", data, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -112,9 +115,9 @@ function ContextForm() {
     setCurrentPage(1); // Move to the first form page after disclaimer acceptance
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
-  };
+  // const closeModal = () => {
+  //   setIsModalOpen(false); // Close the modal
+  // };
 
 
   return (
@@ -240,7 +243,7 @@ function ContextForm() {
                 Your context has been saved. You can now proceed to use it in your application.
               </p>
               <button
-                onClick={closeModal}
+                 onClick={() => navigate('/setuppage')}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
                 Close

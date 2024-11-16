@@ -1,26 +1,20 @@
 {
-  "name": "cronjob",
+  "name": "userservice",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Vivek",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "amqplib": "^0.10.4",
     "cors": "^2.8.5",
-    "cron": "^3.1.7",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "googleapis": "^140.0.1",
+    "express": "^4.21.1",
+    "googleapis": "^144.0.0",
     "mongoose": "^8.8.1",
-    "node-cron": "^3.0.3",
-    "nodejs-base64-converter": "^1.0.5",
-    "nodemon": "^3.1.4",
-    "open": "^10.1.0",
+    "nodemon": "^3.1.7",
     "openurl": "^1.1.1"
   }
 }
