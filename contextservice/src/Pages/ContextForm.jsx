@@ -19,7 +19,9 @@ import { useNavigate } from 'react-router-dom';
 
 function ContextForm() {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(0); // 0 for disclaimer page
+  // State to manage the current page of the multi-page form
+  const [currentPage, setCurrentPage] = useState(0); 
+  // State to store all form data input by the user
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -36,7 +38,8 @@ function ContextForm() {
     grading: "",
     importantDates: "",
   });
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  // State to manage the modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
 
   const handleFormDataChange = (newData) => {
@@ -45,16 +48,16 @@ function ContextForm() {
 
   const handleNextPage = () => {
     if (currentPage === 4) {
-      setCurrentPage(5); // Go to the review page after Page4
+      setCurrentPage(5); 
     } else {
-      setCurrentPage((prev) => Math.min(prev + 1, 5)); // Allow navigation to the review page
+      setCurrentPage((prev) => Math.min(prev + 1, 5));
     }
   };
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 0));
   };
-
+  // Function to generate the context text from the form data
   const generateContextText = () => {
     const contextText = `
       Personal Information:
@@ -115,9 +118,6 @@ function ContextForm() {
     setCurrentPage(1); // Move to the first form page after disclaimer acceptance
   };
 
-  // const closeModal = () => {
-  //   setIsModalOpen(false); // Close the modal
-  // };
 
 
   return (
@@ -235,18 +235,18 @@ function ContextForm() {
          {/* Modal */}
          {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-1/2 flex flex-col">
               <h2 className="text-2xl font-semibold mb-4 text-green-600">
                 🎉 Context Saved Successfully!
               </h2>
               <p className="text-gray-700 mb-6">
-                Your context has been saved. You can now proceed to use it in your application.
+                Your context has been saved. You can now proceed to Grant Gmail Access.
               </p>
               <button
                  onClick={() => navigate('/setuppage')}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
-                Close
+                Proceed to Grant Access
               </button>
             </div>
           </div>

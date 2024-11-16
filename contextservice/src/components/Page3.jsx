@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
 
+
+
+/**
+ * Page3 Component
+ * Renders the Third page of a multi-step form for collecting Class Policies and FAQS.
+ */
 function Page3({ formData, handleNextPage, handlePrevPage, handleFormDataChange }) {
   const handleChange = (e) => {
     handleFormDataChange({ [e.target.name]: e.target.value });
@@ -8,8 +14,8 @@ function Page3({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 3: Class Policies and FAQs</h2>
-      
       <div className="space-y-6">
+        {/* Attendence Policy Input Field */}
         <div>
           <label htmlFor="attendance" className="block text-sm font-medium text-gray-700">Attendance Policy</label>
           <textarea
@@ -22,7 +28,7 @@ function Page3({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
             placeholder="Enter the attendance policy"
           />
         </div>
-
+        {/* Late Assignment Input Field */}
         <div>
           <label htmlFor="lateAssignments" className="block text-sm font-medium text-gray-700">Late Assignment Policy</label>
           <textarea
@@ -35,7 +41,7 @@ function Page3({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
             placeholder="Enter the late assignment policy"
           />
         </div>
-
+        {/* FAQS Input Field */}
         <div>
           <label htmlFor="faqs" className="block text-sm font-medium text-gray-700">FAQs</label>
           <textarea

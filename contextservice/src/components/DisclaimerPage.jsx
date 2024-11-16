@@ -1,6 +1,15 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 
+/**
+ * DisclaimerPage Component
+ * This component displays a disclaimer message to the user, informing them 
+ * about the application's data usage policies and requiring their consent 
+ * before proceeding.
+ *
+ * Props:
+ * - handleAccept: A function passed as a prop that gets called when the user accepts the terms.
+ */
 function DisclaimerPage({ handleAccept }) {
   const [accepted, setAccepted] = useState(false);
 
@@ -9,7 +18,7 @@ function DisclaimerPage({ handleAccept }) {
   };
 
   return (
-    <div className=" p-6 bg-white shadow-lg rounded-lg text-center">
+    <div className="p-6 bg-white shadow-lg rounded-lg text-center">
       <h2 className="text-2xl font-semibold mb-4">Disclaimer</h2>
       <p className="mb-4">
         By using this application, you consent to the collection and processing
@@ -41,7 +50,7 @@ function DisclaimerPage({ handleAccept }) {
       </label>
       <button
         onClick={handleAccept}
-        disabled={!accepted}
+        disabled={!accepted} // Disable button if terms are not accepted
         className={`mt-6 px-4 py-2 font-semibold text-white ${
           accepted ? "bg-custom-blue" : "bg-gray-400 cursor-not-allowed"
         } rounded`}
@@ -53,7 +62,7 @@ function DisclaimerPage({ handleAccept }) {
 }
 
 DisclaimerPage.propTypes = {
-  handleAccept: PropTypes.func.isRequired,
+  handleAccept: PropTypes.func.isRequired, 
 };
 
 export default DisclaimerPage;

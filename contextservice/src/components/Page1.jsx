@@ -1,5 +1,9 @@
 import PropTypes from 'prop-types';
 
+/**
+ * Page1 Component
+ * Renders the first page of a multi-step form for collecting personal information.
+ */
 function Page1({ formData, handleNextPage, handleFormDataChange }) {
   const handleChange = (e) => {
     handleFormDataChange({ [e.target.name]: e.target.value });
@@ -9,6 +13,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 1: Personal Information</h2>
       <div className="space-y-4">
+        {/* Name Input Field */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
           <input
@@ -22,6 +27,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
           />
         </div>
 
+        {/* Age Input Field */}
         <div>
           <label htmlFor="age" className="block text-sm font-medium text-gray-700">Age</label>
           <input
@@ -35,6 +41,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
           />
         </div>
 
+        {/* Occupation Input Field */}
         <div>
           <label htmlFor="occupation" className="block text-sm font-medium text-gray-700">Occupation</label>
           <input
@@ -48,6 +55,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
           />
         </div>
 
+        {/* Email Input Field */}
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
           <input
@@ -61,6 +69,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
           />
         </div>
 
+        {/* Phone Input Field */}
         <div>
           <label htmlFor="phone" className="block text-sm font-medium text-gray-700">School Phone</label>
           <input
@@ -74,6 +83,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
           />
         </div>
 
+        {/* Website Input Field */}
         <div>
           <label htmlFor="website" className="block text-sm font-medium text-gray-700">School Website</label>
           <input
@@ -86,7 +96,8 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
             placeholder="Enter your school website"
           />
         </div>
-        
+
+        {/* Next Button */}
         <div className="mt-6">
           <button
             onClick={handleNextPage}
@@ -102,15 +113,15 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
 
 Page1.propTypes = {
   formData: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    age: PropTypes.string.isRequired,
-    occupation: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
-    website: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,      
+    age: PropTypes.string.isRequired,        
+    occupation: PropTypes.string.isRequired, 
+    email: PropTypes.string.isRequired,      
+    phone: PropTypes.string.isRequired,      
+    website: PropTypes.string.isRequired,    
   }).isRequired,
-  handleNextPage: PropTypes.func.isRequired,
-  handleFormDataChange: PropTypes.func.isRequired,
+  handleNextPage: PropTypes.func.isRequired,      
+  handleFormDataChange: PropTypes.func.isRequired 
 };
 
 export default Page1;

@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
 
+
+
+/**
+ * Page4 Component
+ * Renders the fourth page of a multi-step form for collecting Grading and Imposrtant Dates
+ */
 function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage }) {
   const handleChange = (e) => {
     handleFormDataChange({ [e.target.name]: e.target.value });
@@ -8,8 +14,8 @@ function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 4: Grading and Important Dates</h2>
-      
       <div className="space-y-6">
+        {/* Grading Breakdown Input Field */}
         <div>
           <label htmlFor="grading" className="block text-sm font-medium text-gray-700">Grading Breakdown</label>
           <textarea
@@ -22,7 +28,7 @@ function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage 
             placeholder="Enter grading breakdown"
           />
         </div>
-
+        {/* Impportant Dates Input Field */}
         <div>
           <label htmlFor="importantDates" className="block text-sm font-medium text-gray-700">Important Dates</label>
           <textarea
@@ -35,7 +41,6 @@ function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage 
             placeholder="Enter important dates"
           />
         </div>
-
         <div className="flex justify-between mt-6">
           <button
             onClick={handlePrevPage}

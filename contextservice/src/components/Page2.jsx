@@ -1,5 +1,10 @@
 import PropTypes from 'prop-types';
 
+
+/**
+ * Page2 Component
+ * Renders the Second page of a multi-step form for collecting Courses and Schedule.
+ */
 function Page2({ formData, handleNextPage, handlePrevPage, handleFormDataChange }) {
   const handleChange = (e) => {
     handleFormDataChange({ [e.target.name]: e.target.value });
@@ -8,8 +13,8 @@ function Page2({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 2: Courses and Schedule</h2>
-      
       <div className="space-y-6">
+        {/* Course Taught Input Field */}
         <div>
           <label htmlFor="courses" className="block text-sm font-medium text-gray-700">Courses Taught</label>
           <textarea
@@ -22,7 +27,7 @@ function Page2({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
             placeholder="Enter the courses you teach"
           />
         </div>
-
+        {/* Schedule Input Field */}
         <div>
           <label htmlFor="schedule" className="block text-sm font-medium text-gray-700">Schedule</label>
           <textarea
@@ -35,7 +40,7 @@ function Page2({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
             placeholder="Enter your weekly schedule"
           />
         </div>
-
+        {/* Course Objective Input Field */}
         <div>
           <label htmlFor="objectives" className="block text-sm font-medium text-gray-700">Course Objectives</label>
           <textarea

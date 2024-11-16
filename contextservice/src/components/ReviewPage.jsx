@@ -1,5 +1,10 @@
 import PropTypes from 'prop-types';
 
+
+/**
+ * Review Datra Component
+ * Renders the final page of a multi-step form for reviewing all the data the user has submitted.
+ */
 function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
   return (
     <div className="h-screen flex flex-col bg-gray-100 max-h-[calc(100vh-200px)]">
@@ -57,14 +62,13 @@ function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
           onClick={handleSubmit}
           className="bg-blue-500 text-white rounded-md px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          Submit and Download
+          Submit and Save
         </button>
       </footer>
     </div>
   );
 }
 
-// Prop validation using PropTypes
 ReviewPage.propTypes = {
   formData: PropTypes.shape({
     name: PropTypes.string.isRequired,

@@ -1,56 +1,95 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Otter5 from "../assets/otterpeaking.png";
 
 const AuthPage = () => {
-  const [step, setStep] = useState(1); // Step 1: Authentication, Step 2: Navigate to form
+  const [step, setStep] = useState(1); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   // Handle Gmail Authentication
   const handleGmailAuth = async () => {
     try {
-      const response = await axios.post('http://localhost:8100/api/auth'); // Your backend auth endpoint
-        console.log(response);
-        setIsAuthenticated(true);  // Update the state to trigger re-render
-        setStep(2);  // Move to step 2 on successful authentication
+      const response = await axios.post("http://localhost:8100/api/auth");
+      console.log(response);
+      setIsAuthenticated(true); 
+      setStep(2); 
     } catch (error) {
-      console.error('Error during Gmail authentication:', error);
+      console.error("Error during Gmail authentication:", error);
     }
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
-      <div className="text-center p-8">
-        <h1 className="text-2xl font-bold mb-4">Authenticate to Continue</h1>
+    <div>
+      <Header />
+      <div className="flex flex-col justify-center items-center min-h-screen bg-custom-lightblue pb-32">
+        <div className="max-w-lg mx-auto p-8 bg-white shadow-lg rounded-lg">
+          <h1 className="text-2xl font-bold mb-4 text-center text-gray-800">
+            Authenticate to Continue
+          </h1>
 
-        {/* Step 1: Gmail Authentication */}
-        {step === 1 && !isAuthenticated && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Step 1: Authorize Gmail Access</h2>
-            <p className="mb-4">To proceed, you need to grant access to your Gmail account.</p>
-            <button
-              className="bg-blue-500 text-white px-6 py-2 rounded-md"
-              onClick={handleGmailAuth}
-            >
-              Grant Gmail Access
-            </button>
-          </div>
-        )}
+          {/* Step 1: Gmail Authentication */}
+          {step === 1 && !isAuthenticated && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Step 1 : Authorize Gmail Access
+              </h2>
+              <p className="text-gray-700 mb-4">
+                To proceed, you need to grant access to your Gmail account.
+              </p>
+              <button
+                className="w-full py-2 px-6 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                onClick={handleGmailAuth}
+              >
+                Grant Gmail Access
+              </button>
+            </div>
+          )}
 
-        {/* Step 2: Go to the Form */}
-        {step === 2 && isAuthenticated && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Step 2: Go to Your DashBoard</h2>
-            <p className="mb-4">You have successfully authenticated. Now, go to Your Dashboard</p>
-            <button
-              className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition"
-              onClick={() => navigate('/DashBoard')} // Navigate to the form page
-            >
-              Go to the Form
-            </button>
-          </div>
+          {/* Step 2: Go to the Form */}
+          {step === 2 && isAuthenticated && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Step 2: Go to Your DashBoard
+              </h2>
+              <p className="text-gray-700 mb-4">
+                You have successfully authenticated. Now, go to Your Dashboard.
+              </p>
+              <button
+                className="w-full py-2 px-6 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                onClick={() => navigate("/DashBoard")} 
+              >
+                Go to the Dashboard
+              </button>
+            </div>
+          )}
+          {step === 1 && (
+          <img
+            src={Otter5}
+            alt="Otter Peaking"
+            className="w-40 h-100 "
+            style={{
+              position: "absolute",
+              top: "21%",
+              right: "32%",
+            }}
+          />
         )}
+          {step === 2 && (
+          <img
+            src={Otter5}
+            alt="Otter Peaking"
+            className="w-40 h-100 "
+            style={{
+              position: "absolute",
+              top: "19%",
+              right: "32%",
+            }}
+          />
+        )}
+        </div>
       </div>
     </div>
   );
