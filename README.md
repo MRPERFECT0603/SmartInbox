@@ -30,7 +30,7 @@ SmartInbox is an innovative AI-powered tool designed to help users manage and or
 ## Technical Stack
 
 - **Languages**: JavaScript, Node.js
-- **AI/ML**: llama 3.2
+- **AI/ML**: llama 3.2:1b
 - **Task Scheduling**: RabbitMQ
 - **Message Queuing**: Kafka
 - **Email Integration**: Gmail API

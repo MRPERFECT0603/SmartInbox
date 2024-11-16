@@ -1,26 +1,38 @@
 
-// Import necessary modules
+/**
+ * Handles OAuth2 authentication, token management, and context saving.
+ * This controller facilitates interaction with the Google OAuth2 API, manages user authentication tokens,
+ * and provides functionality to save user context data to MongoDB.
+ * 
+ * Features:
+ * - `handleCallback`: Processes the OAuth2 callback and saves tokens to MongoDB.
+ * - `getNewToken`: Generates an authorization URL and initiates user authorization for new tokens.
+ * - `authorize`: Authorizes the user by using an existing token or initiating the token generation flow.
+ * - `saveContext`: Saves user context data (e.g., name, email, and context) to MongoDB.
+ */
+
+
 const { google } = require('googleapis');
-const fs = require('fs');
 const dotenv = require("dotenv");
 const openURL = require("openurl");
 const Context = require("../Models/ContextModel");
 
 dotenv.config();
 const emailId = 'irctcvivek62@gmail.com';
-// Extract values from environment variables
+
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.REDIRECT_URI;
 const SCOPES = process.env.SCOPES.split(',');
-const TOKEN_PATH = process.env.TOKEN_PATH;
 
 const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
 
 /**
- * Handles the OAuth2 callback and processes the authorization code
- * @param {object} req - Express request object
- * @param {object} res - Express response object
+ * Processes the OAuth2 callback and saves the authentication token to MongoDB.
+ * Emits a `tokensSaved` event upon completion.
+ * 
+ * @param {object} req - Express request object containing the authorization code.
+ * @param {object} res - Express response object for sending the result of the operation.
  */
 async function handleCallback(req, res) {
     try {
@@ -31,7 +43,6 @@ async function handleCallback(req, res) {
 
         const { tokens } = await oAuth2Client.getToken(code);
 
-        // Set the credentials with the received token
         oAuth2Client.setCredentials(tokens);
 
         // Save the token to MongoDB
@@ -41,7 +52,7 @@ async function handleCallback(req, res) {
 
         const result = await Context.findOneAndUpdate(filter, update, {
             new: true,
-            upsert: true, // This creates the document if it doesn't exist
+            upsert: true, 
         });
 
         console.log('Token saved to database:', result);
@@ -61,9 +72,11 @@ async function handleCallback(req, res) {
 }
 
 /**
- * Generates a new OAuth2 token and prompts the user for authorization
- * @param {object} oAuth2Client - OAuth2 client object
- * @param {function} callback - Callback function to execute after the user authorizes
+ * Generates a new OAuth2 token and prompts the user for authorization via a browser.
+ * Listens for token save completion and executes the provided callback.
+ * 
+ * @param {object} oAuth2Client - OAuth2 client object used for authorization.
+ * @param {function} callback - Callback function to execute after user authorization.
  */
 function getNewToken(oAuth2Client, callback) {
     const authUrl = oAuth2Client.generateAuthUrl({
@@ -80,12 +93,16 @@ function getNewToken(oAuth2Client, callback) {
         if (error) {
             return callback(error);
         }
-        callback(null, true); // Signal token saved
+        callback(null, true); 
     });
 }
 
 /**
- * Authorizes the client using the existing token or initiates the token generation flow
+ * Authorizes the client using the existing token or initiates the token generation flow.
+ * Saves the token to MongoDB if a new one is generated.
+ * 
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object for sending the result of the authorization process.
  */
 async function authorize(req, res) {
     try {
@@ -98,7 +115,7 @@ async function authorize(req, res) {
                     if (callbackError) {
                         return reject(callbackError);
                     }
-                    resolve(tokenSaved); // Resolve when token is saved
+                    resolve(tokenSaved);
                 });
             })
             .then(() => res.status(200).send('Authorization completed, token saved.'))
@@ -118,9 +135,14 @@ async function authorize(req, res) {
 }
 
 
+/**
+ * Saves user context data (name, email, and context text) to MongoDB.
+ * 
+ * @param {object} req - Express request object containing the context data.
+ * @param {object} res - Express response object for sending the result of the operation.
+ */
 const saveContext = async (req, res) => {
-    const { context, name, emailId } = req.body; // Extract data from the request body
-
+    const { context, name, emailId } = req.body; 
     if (!context || !name || !emailId) {
         return res.status(400).json({ message: "Missing required fields" });
     }
@@ -130,10 +152,10 @@ const saveContext = async (req, res) => {
         const newContext = new Context({
             name,
             email: emailId,
-            context, // Save the context text
+            context, 
         });
 
-        await newContext.save(); // Save to MongoDB
+        await newContext.save(); 
 
         res.status(200).json({ message: "Context saved successfully" });
     } catch (error) {
