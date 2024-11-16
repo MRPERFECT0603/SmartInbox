@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ContextForm from "./pages/ContextForm";
-import LandingPage from "./pages/LandingPage";
+import ContextForm from "./Pages/ContextForm";
+import Steppage from "./Pages/Steppage";
+import LandingPage from "./Pages/LandingPage";
 
 function App() {
   return(
@@ -8,6 +9,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/contextform" element={<ContextForm />} />
+      <Route path="/setuppage" element={<Steppage />} />
     </Routes>
   </Router>
   );

@@ -66,8 +66,6 @@ const testfunction = async() => {
 startMessageConsumer();
 
 
-// Handle POST request to save context
-app.use("/api", require("./Routes/Response"));
 
 
 
