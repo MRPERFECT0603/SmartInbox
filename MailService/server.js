@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectdb = require("./Config/dbConfig");
+const { Increment } = require("./services/metricsServices");
 
 dotenv.config();
 connectdb();
@@ -24,10 +25,12 @@ const startMessageConsumer = async () => {
   try {
     await messageIdFetch(async (messageId) => {
       console.log("Recieved New MailId from the Exchange:-", messageId);
+      Increment('mailService.mailIdPulled');
       const messageObject = JSON.parse(messageId);
       const result = await Mailpreprocessor(messageObject); 
       const message = result; 
       await queuePush({ exchange, routingKey, message });
+      Increment('mailService.mailsPushed');
       console.log("Message Pushed to the Exchange:-"+ message.sender + " "+ message.id + " "+ message.threadID +" "+ message.messageData );
     });
   } catch (error) {
@@ -40,6 +43,7 @@ const startResponseConsumer = async () => {
   try {
     await responseMailFetch(async (responseMessage) => {
       console.log("Received new Response message from Exchange:", responseMessage);
+      Increment('mailService.responsePulled');
       const parsedMessage = JSON.parse(JSON.parse(responseMessage));
       const result = await MailSender(parsedMessage); 
       const message = result; 

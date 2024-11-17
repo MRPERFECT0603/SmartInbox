@@ -1,5 +1,7 @@
 const { authorize } = require("./authService");
 const { google } = require('googleapis');
+const { Increment } = require("../services/metricsServices");
+
 
 /**
  * Modifies the labels of a specific Gmail message.
@@ -54,6 +56,7 @@ const changeLabel = async (messageID) => {
             const message = await changeMailLabel(messageID, auth); 
             if (message) {
                 console.log("Changed SUCCESSFULLY:", message);
+                Increment('mailService.labelsChanged');
             }
         } else {
             console.error("Authorization failed.");

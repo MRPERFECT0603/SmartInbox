@@ -1,6 +1,8 @@
 const { authorize } = require("./authService");
 const { google } = require('googleapis');
 const { preProcessMessage } = require("./preprocessor");
+const { Increment } = require("../services/metricsServices");
+
 
 /**
  * fetchMessageDetails - Fetches detailed information about a specific email message
@@ -51,9 +53,11 @@ const Mailpreprocessor = async (messageId) => {
             const message = await fetchMessageDetails(messageId.id, auth); 
             if (message) {
                 // console.log(message);
+                Increment('mailService.mailsFetched');
                 const sender = getSenderEmail(message.payload.headers); 
                 // console.log(sender);
                 const messageData = preProcessMessage(message); 
+                Increment('mailService.mailsPreprocessed');
                 // console.log("Processed message data:", messageData);
                 const threadID = message.threadId;
                 const id = message.id;
