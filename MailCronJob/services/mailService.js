@@ -13,8 +13,8 @@ async function listMessages(auth) {
         
         // Call the Gmail API to list messages with specific label filters (INBOX, UNREAD, CATEGORY_PERSONAL)
         const response = await gmail.users.messages.list({
-            'userId': 'me', // 'me' refers to the authenticated user, or use a specific user ID
-            'labelIds': ['INBOX', 'UNREAD', 'CATEGORY_PERSONAL'], // Optional, filter messages by labels
+            'userId': 'me', 
+            'labelIds': ['INBOX', 'UNREAD', 'CATEGORY_PERSONAL'], 
         });
 
         console.log(response.data);

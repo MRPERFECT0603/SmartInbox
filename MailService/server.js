@@ -1,7 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const connectdb = require("./Config/dbConfig");
 
 dotenv.config();
+connectdb();
 
 const PORT = process.env.PORT || 3002; 
 // Important Imports 

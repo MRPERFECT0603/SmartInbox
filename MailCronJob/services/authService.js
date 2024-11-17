@@ -1,5 +1,4 @@
 
-// Import necessary modules
 const { google } = require('googleapis');
 const fs = require('fs');
 const dotenv = require("dotenv");
@@ -7,13 +6,12 @@ const openURL = require("openurl");
 const Context = require("../Models/ContextModel");
 
 dotenv.config();
-const emailId = 'irctcvivek62@gmail.com';
+
 // Extract values from environment variables
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.REDIRECT_URI;
 const SCOPES = process.env.SCOPES.split(',');
-const TOKEN_PATH = process.env.TOKEN_PATH;
 
 const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uri);
 
@@ -90,7 +88,7 @@ function getNewToken(oAuth2Client, callback) {
 async function authorize(req, res) {
     return new Promise(async (resolve, reject) => {
     try {
-        const userContext = await Context.findOne({ email: emailId });
+        const userContext = await Context.findOne({ email: 'irctcvivek62@gmail.com' });
         
         if (!userContext || userContext.token === " ") {
             // No token, initiate the new token generation flow

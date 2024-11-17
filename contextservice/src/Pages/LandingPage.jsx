@@ -4,7 +4,7 @@ function LandingPage() {
   return (
     <div>
         <Header />
-      <div className="p-6 bg-white shadow-lg rounded-lg text-center">
+      <div className="flex flex-col p-6 bg-custom-lightblue shadow-lg rounded-lg text-center h-screen items-center justify-center">
         {/* Hero Section */}
         <header className="mb-6">
           <h1 className="text-4xl font-bold text-blue-600 mb-2">

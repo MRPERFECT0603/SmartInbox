@@ -14,15 +14,15 @@ const NewMailFetchJob = cron.schedule('* * * * *', () => {
 
     // Authorize the user and handle the returned authentication object
     authorize().then(auth => {
-        console.log('Authorized successfully'); 
-        // List messages using the authorized client
+        console.log('Authorized successfully');
+        console.log("Listing New MessageId Started"); 
         listMessages(auth).then(data => {
-            // If there are messages, send the ID of the first message to the queue
             if (data.messages && data.messages.length > 0) {
                 data.messages.forEach(message => {
-                    NewMailFetcher(message) // Send each message's ID to the queue
-                        .catch(console.error); // Catch and log any errors that occur
-                    console.log(`MESSAGE SENT: ${message}`); // Log that the message ID has been sent
+                    NewMailFetcher(message)
+                        .catch(console.error); 
+                    console.log(`MESSAGE SENT: ${message}`); 
+                    console.log("Listing New MessageId Ended"); 
                 }); 
             } else {
                 console.log("No new messages found."); 
