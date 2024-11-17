@@ -18,7 +18,7 @@ function DisclaimerPage({ handleAccept }) {
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg text-center">
+    <div className="p-6  bg-white shadow-lg rounded-lg text-center">
       <h2 className="text-2xl font-semibold mb-4">Disclaimer</h2>
       <p className="mb-4">
         By using this application, you consent to the collection and processing
