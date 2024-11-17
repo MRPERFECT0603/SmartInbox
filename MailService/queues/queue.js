@@ -29,7 +29,7 @@ const queueConnection = async ({ exchange, routingKey }) => {
 const queuePush = async ({ exchange, routingKey, message }) => {
     const { connection, channel , queue } = await queueConnection({ exchange, routingKey });
     channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
-    console.log(` [x] Sent '${message}'`);
+    // console.log(` [x] Sent '${message}'`);
     setTimeout(() => {
         connection.close(); // Close the connection to the RabbitMQ server
     }, 500);
@@ -46,7 +46,7 @@ const queuePull = async ({ exchange, routingKey } , onMessage) => {
     const { connection, channel, queue } = await queueConnection({ exchange, routingKey });
     channel.consume(queue.queue , (msg) => {
         const messageId = msg.content.toString();
-        console.log(` [x] Received messageId: ${messageId}`);
+        // console.log(` [x] Received messageId: ${messageId}`);
         channel.ack(msg);
         if (onMessage) onMessage(messageId);
     }, { noAck: false });

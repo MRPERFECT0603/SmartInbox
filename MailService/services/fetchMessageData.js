@@ -50,15 +50,15 @@ const Mailpreprocessor = async (messageId) => {
             console.log('Authorized successfully');
             const message = await fetchMessageDetails(messageId.id, auth); 
             if (message) {
-                console.log(message);
+                // console.log(message);
                 const sender = getSenderEmail(message.payload.headers); 
-                console.log(sender);
+                // console.log(sender);
                 const messageData = preProcessMessage(message); 
-                console.log("Processed message data:", messageData);
+                // console.log("Processed message data:", messageData);
                 const threadID = message.threadId;
                 const id = message.id;
-                console.log(threadID);
-                console.log(id);
+                // console.log(threadID);
+                // console.log(id);
                 return { sender, id ,threadID , messageData }; 
             }
         } else {

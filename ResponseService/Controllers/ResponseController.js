@@ -71,7 +71,7 @@ const generateResponse = async (userName, emailContent) => {
     try {
         
         const response = await responseGenerator(userName , emailContent);
-        console.log(response);
+        // console.log(response);
         return response;
     } catch (error) {
         console.error('Error generating response:', error.message);

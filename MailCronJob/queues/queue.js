@@ -29,7 +29,7 @@ const queueConnection = async ({ exchange, routingKey }) => {
 const queuePush = async ({ exchange, routingKey, message }) => {
     const { connection, channel } = await queueConnection({ exchange, routingKey });
     channel.publish(exchange, routingKey, Buffer.from(message));
-    console.log(` [x] Sent '${message}'`);
+    // console.log(` [x] Sent '${message}'`);
     setTimeout(() => {
         connection.close(); // Close the connection to the RabbitMQ server
     }, 500);

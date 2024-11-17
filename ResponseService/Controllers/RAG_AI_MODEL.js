@@ -229,11 +229,11 @@ const responseGenerator = async (senderName , senderEmail) => {
         sender: senderName,
         input: senderEmail
     });
-    console.log("unJson answer");
-    console.log(response.answer);
+    // console.log("unJson answer");
+    // console.log(response.answer);
     const finalAns = (JSON.parse(response.answer));
-    console.log("final Answer");
-    console.log(finalAns);
+    // console.log("final Answer");
+    // console.log(finalAns);
     return finalAns;
 };
 /*

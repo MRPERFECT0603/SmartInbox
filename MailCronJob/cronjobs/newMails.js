@@ -21,11 +21,11 @@ const NewMailFetchJob = cron.schedule('* * * * *', () => {
                 data.messages.forEach(message => {
                     NewMailFetcher(message)
                         .catch(console.error); 
-                    console.log(`MESSAGE SENT: ${message}`); 
+                    console.log(`MESSAGE SENT from the MailCronJob to the MailzyExchange: ${message}`); 
                     console.log("Listing New MessageId Ended"); 
                 }); 
             } else {
-                console.log("No new messages found."); 
+                console.log("NO New Message in the Inbox found."); 
             }
         });
     });

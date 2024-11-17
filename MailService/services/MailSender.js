@@ -19,7 +19,7 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
                 threadId: threadId,
             },
         });
-        console.log("Email sent successfully:", response.data);
+        // console.log("Email sent successfully:", response.data);
         return response.data; 
     } catch (err) {
         console.error("Error sending email:", err);
@@ -33,7 +33,7 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
  */
 const encodeMail = (sender, subject , body ,signature) => {
     // Validate the recipient's email format
-    console.log("EMAIL SENDER NAME:"+sender);
+    // console.log("EMAIL SENDER NAME:"+sender);
     if (!sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(sender)) {
         console.error("Invalid recipient email address.");
         return null;
@@ -60,29 +60,28 @@ const MailSender = async (ParsedMessage) => {
         const auth = await authorize(); 
         if (auth) {
             console.log('Authorized successfully');
-            console.log(typeof(ParsedMessage));
-            console.log(ParsedMessage.sender);
-            console.log(ParsedMessage.response);
+            // console.log(typeof(ParsedMessage));
+            // console.log(ParsedMessage.sender);
+            // console.log(ParsedMessage.response);
             const email = (ParsedMessage.response);
             const { subject: subject, body: body , signature: signature , greating: greating} = email;
             const sender  = ParsedMessage.sender;
-            console.log("Subject:", subject);
-            console.log("Greating:", greating);
-            console.log("Body:", body);
-            console.log("Signature:", signature);
-            console.log(ParsedMessage.Id);
+            // console.log("Subject:", subject);
+            // console.log("Greating:", greating);
+            // console.log("Body:", body);
+            // console.log("Signature:", signature);
+            // console.log(ParsedMessage.Id);
             const encodedEmail = encodeMail(sender, subject , body ,signature); // Pass the full message
             const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
             if (message) {
                 console.log("SENT SUCCESSFULLY:", message);
                 changeLabel(ParsedMessage.Id);
-                console.log("LABEL CHANGED SUCCESSFULLY!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         } else {
             console.error("Authorization failed.");
         }
     } catch (error) {
-        console.error("Error in Mailpreprocessor:", error);
+        console.error("Error in MailSender:", error);
     }
     return null; 
 }

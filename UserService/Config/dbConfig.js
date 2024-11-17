@@ -18,9 +18,9 @@ const mongoose = require("mongoose");
 const connectdb = async () => {
     try {
         const connect = await mongoose.connect(process.env.CONNECTION_STRING);
-        console.log("DataBase Connected:", connect.connection.host, connect.connection.name);
+        console.log("DataBase Connected with the User Service with :-", connect.connection.host, connect.connection.name);
     } catch (err) {
-        console.error("Error connecting to the database:", err);
+        console.error("Error connecting to the database in the User Service", err);
         process.exit(1);
     }
 };

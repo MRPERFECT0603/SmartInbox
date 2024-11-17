@@ -25,7 +25,7 @@ const changeMailLabel = async (messageID, auth) => {
                 removeLabelIds: ["UNREAD"]// Array of label IDs to remove
             }
         });
-        console.log(" CHanged successfully:", response.data);
+        // console.log(" CHanged successfully:", response.data);
         return response.data; 
     } catch (err) {
         console.error("Error sending email:", err);
@@ -47,7 +47,7 @@ const changeMailLabel = async (messageID, auth) => {
  */
 const changeLabel = async (messageID) => {
     try {
-        console.log("Processing Response Message:", messageID);
+        console.log("Processing Response Message to change label:", messageID);
         const auth = await authorize(); 
         if (auth) {
             console.log('Authorized successfully');
@@ -59,7 +59,7 @@ const changeLabel = async (messageID) => {
             console.error("Authorization failed.");
         }
     } catch (error) {
-        console.error("Error in Mailpreprocessor:", error);
+        console.error("Error in Label Modification:", error);
     }
     return null; 
 }

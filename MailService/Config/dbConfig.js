@@ -18,10 +18,10 @@ const mongoose = require("mongoose");
 const connectdb = async () => {
     try {
         const connect = await mongoose.connect(process.env.CONNECTION_STRING);
-        console.log("DataBase Connected:", connect.connection.host, connect.connection.name);
+        console.log("DataBase Connected with the Mail Service with :-", connect.connection.host, connect.connection.name);
     }
     catch (err) {
-        console.log(err);
+        console.error("Error connecting to the database in the Mail Service", err);
         process.exit(1);
     }
 

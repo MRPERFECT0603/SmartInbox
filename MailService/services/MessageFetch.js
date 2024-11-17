@@ -9,7 +9,7 @@ const messageIdFetch = async (onMessage) => {
     const routingKey = process.env.ROUTING_KEY_PULL_NEW_MAIL;
 
     queuePull({ exchange, routingKey }, (messageId) => {
-        console.log("MessageId:", messageId); 
+        // console.log("MessageId:", messageId);
         if (onMessage) onMessage(messageId); 
     });
 };

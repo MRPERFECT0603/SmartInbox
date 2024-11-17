@@ -5,14 +5,14 @@ const connectdb = require("./Config/dbConfig");
 dotenv.config();
 connectdb();
 
-const PORT = process.env.PORT || 3002; 
 // Important Imports 
 const { messageIdFetch, responseMailFetch } = require("./services/MessageFetch"); 
-const { oAuth2Client, handleCallback } = require("./services/authService");
+const { handleCallback } = require("./services/authService");
 const { Mailpreprocessor } = require("./services/fetchMessageData");
 const { queuePush } = require("./queues/queue");
 const { MailSender } = require("./services/MailSender");
 
+const PORT = process.env.PORT || 3002; 
 const exchange = process.env.EXCHANGE; 
 const routingKey = process.env.ROUTING_KEY_PUSH_NEW_MAIL; 
 const app = express();
@@ -23,13 +23,12 @@ app.use(express.json());
 const startMessageConsumer = async () => {
   try {
     await messageIdFetch(async (messageId) => {
-      console.log("Received new message ID  and ThreadID from queue:", messageId);
+      console.log("Recieved New MailId from the Exchange:-", messageId);
       const messageObject = JSON.parse(messageId);
       const result = await Mailpreprocessor(messageObject); 
       const message = result; 
-      console.log("Before PUSHING"+message); 
-      console.log("MESAGEE ME YE HAI"+ message.sender + message.id + message.threadID + message.messageData);
       await queuePush({ exchange, routingKey, message });
+      console.log("Message Pushed to the Exchange:-"+ message.sender + " "+ message.id + " "+ message.threadID +" "+ message.messageData );
     });
   } catch (error) {
     console.error("Error in message consumer:", error); 
@@ -40,14 +39,11 @@ const startMessageConsumer = async () => {
 const startResponseConsumer = async () => {
   try {
     await responseMailFetch(async (responseMessage) => {
-      console.log("Received new  Response message from queue:", responseMessage);
+      console.log("Received new Response message from Exchange:", responseMessage);
       const parsedMessage = JSON.parse(JSON.parse(responseMessage));
-      console.log("Parrrssseeeddd Messsagggee :"+ parsedMessage);
-      console.log("ParsedMEssage:-"+typeof(parsedMessage));
-      console.log("responseMessage:-"+typeof(responseMessage));
       const result = await MailSender(parsedMessage); 
       const message = result; 
-      console.log(message); 
+      // console.log(message); 
     });
   } catch (error) {
     console.error("Error in message Sending:", error); 

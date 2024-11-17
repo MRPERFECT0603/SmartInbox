@@ -55,12 +55,53 @@ async function handleCallback(req, res) {
             upsert: true, 
         });
 
-        console.log('Token saved to database:', result);
+        console.log('Access Token saved in the database for the user', result);
 
         // Emit an event indicating tokens are saved
         oAuth2Client.emit('tokensSaved', null);
 
-        res.status(200).send('Access Granted');
+        res.status(200).send(`
+            <html>
+              <head>
+                <style>
+                  body {
+                    font-family: 'Inter', sans-serif;
+                    background-color: #CADCFC;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                  }
+                  .message-container {
+                    background-color: #f9fafb;
+                    padding: 2rem;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    text-align: center;
+                    max-width: 500px;
+                    width: 100%;
+                  }
+                  .message {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    color: #00246B; 
+                  }
+                  .close-message {
+                    margin-top: 1rem;
+                    font-size: 0.875rem;
+                    color: #1A3A6B;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="message-container">
+                  <div class="message">Access Granted. Now you can close this tab.</div>
+                  <div class="close-message">Thank you for using our service!</div>
+                </div>
+              </body>
+            </html>
+          `);
     } catch (error) {
         console.error('Error handling callback:', error);
 
