@@ -1,37 +1,38 @@
 # SmartInbox
 
-SmartInbox is an innovative AI-powered tool designed to help users manage and organize their Gmail inboxes effortlessly. By leveraging advanced machine learning models and robust task scheduling frameworks, SmartInbox automates email categorization and response, ensuring a clutter-free inbox and efficient communication.
+SmartInbox is an AI-powered tool I've developed to efficiently manage and organize my Gmail inbox. It leverages my custom OLAMA model, built on the Retrieval-Augmented Generation (RAG) approach, for response generation and contextual analysis. Using RabbitMQ for task scheduling, SmartInbox automates email categorization, response generation, and inbox management, ensuring a streamlined and effective communication process.
 
 ## Features
 
-- **Automated Email Categorization**: Uses Google NLP to understand the context of incoming emails and automatically categorize them into meaningful labels.
-- **AI-Powered Replies**: Generates and sends automated responses based on the email content, saving users time and effort.
-- **Inbox Organization**: Helps users maintain an organized and clutter-free inbox by categorizing and labeling emails.
-- **Scalable and Efficient**: Utilizes Kafka for message queuing and BullMQ for task scheduling, ensuring the system can handle large volumes of emails efficiently.
+- **Custom Email Categorization**: My OLAMA model uses RAG to retrieve contextually relevant information and analyze incoming emails. It categorizes emails into meaningful labels based on this analysis, making inbox management easier and more accurate.
+- **AI-Powered Replies**: With RAG-based OLAMA, the model generates responses by retrieving context from external sources and combining it with email content, allowing for highly relevant, accurate, and context-aware replies.
+- **Inbox Organization**: SmartInbox automatically organizes emails by categorizing them, applying labels, and archiving them based on the RAG model’s categorization.
+- **Scalable and Efficient**: RabbitMQ handles task scheduling and ensures reliable processing, enabling the system to scale efficiently and handle high email volumes without issues.
 
 ## Architecture Overview
 
 ### Email Fetching
 
-- **Cron Job**: A scheduled cron job fetches new emails from the user's Gmail account at regular intervals.
-- **Kafka**: The fetched emails are sent to Kafka, ensuring reliable message queuing and delivery to the processing pipeline.
+- **Cron Job**: A cron job runs on a scheduled basis to fetch new emails from my Gmail account at set intervals.
+- **RabbitMQ**: Once the emails are fetched, they are sent to RabbitMQ, which ensures reliable queuing and processing.
 
 ### Email Processing and Analysis
 
-- **Node.js Service**: The Node.js service retrieves emails from Kafka and forwards them to the analyzer service.
-- **Analyzer Service**: Utilizes Llama models to analyze the content of each email, categorizing it into predefined labels such as "Interested," "Not Interested," and "More Information."
-- **RabbitMQ**: Manages task scheduling and queuing for both the processing and response phases, ensuring efficient and scalable operations.
+- **Node.js Service**: The Node.js service retrieves emails from RabbitMQ and sends them to my OLAMA model for processing.
+- **OLAMA Model with RAG**: The model uses the Retrieval-Augmented Generation approach to retrieve context from external sources, combining it with the email content to generate accurate responses and categorize emails. The retrieval process ensures that responses are contextually relevant and precise.
+- **RabbitMQ**: RabbitMQ manages task scheduling for both the email processing and response generation phases, ensuring smooth and efficient operations.
 
 ### Automated Email Response
 
-- Based on the analysis, the service generates contextually appropriate replies using AI and sends them to the original sender.
-- **Gmail API**: The replies are sent using the Gmail API, and the corresponding labels are updated to reflect the categorization.
+- Based on the analysis and context retrieval, the OLAMA model generates responses that are sent back to the sender through the Gmail API.
+- **Gmail API**: The replies are sent through the Gmail API, and I update the email labels accordingly (e.g., "Interested," "Not Interested").
+- **Inbox Management**: Emails are categorized, labeled, and organized automatically based on their content and relevance, allowing for easy tracking and follow-up.
 
 ## Technical Stack
 
 - **Languages**: JavaScript, Node.js
-- **AI/ML**: llama 3.2:1b
+- **AI/ML**: OLAMA model built on a Retrieval-Augmented Generation (RAG) framework (for NLP-based categorization and response generation)
 - **Task Scheduling**: RabbitMQ
-- **Message Queuing**: Kafka
+- **Message Queuing**: RabbitMQ (for handling email message queues)
 - **Email Integration**: Gmail API
 - **Infrastructure**: Cron jobs for scheduled tasks
