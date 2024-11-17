@@ -2,6 +2,8 @@ const { authorize } = require("./authService");
 const { google } = require('googleapis');
 const nodeBase64 = require('nodejs-base64-converter');
 const {changeLabel} = require("./modifyLabel");
+const { Increment } = require("../services/metricsServices");
+
 
 /**
  * sendMail - Sends an email using the Gmail API
@@ -31,7 +33,7 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
  * @param {object} responseMessage - The message object containing response and sender info
  * @returns {string} - Base64url-encoded email string
  */
-const encodeMail = (sender, subject , body ,signature) => {
+const encodeMail = (sender, subject , body ,signature, greating) => {
     // Validate the recipient's email format
     // console.log("EMAIL SENDER NAME:"+sender);
     if (!sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(sender)) {
@@ -44,6 +46,7 @@ const encodeMail = (sender, subject , body ,signature) => {
         `To: ${sender}\n` +
         `Subject: ${subject}\n` +
         `Content-Type: text/plain; charset=utf-8\r\n\r\n` +
+        `${greating}\n`+
         `${body}\n\n`+
         `${signature}`;
 
@@ -71,10 +74,11 @@ const MailSender = async (ParsedMessage) => {
             // console.log("Body:", body);
             // console.log("Signature:", signature);
             // console.log(ParsedMessage.Id);
-            const encodedEmail = encodeMail(sender, subject , body ,signature); // Pass the full message
+            const encodedEmail = encodeMail(sender, subject , body ,signature, greating); // Pass the full message
             const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
             if (message) {
                 console.log("SENT SUCCESSFULLY:", message);
+                Increment('mailService.responseSent');
                 changeLabel(ParsedMessage.Id);
             }
         } else {

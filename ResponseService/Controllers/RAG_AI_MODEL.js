@@ -129,7 +129,8 @@ const prompt = ChatPromptTemplate.fromTemplate(
     You are an email assistant named "Otter", responding on behalf of Vivek. Use the provided context to respond in a single, concise reply that directly answers the question.
 
     If the email contains any sensitive keywords like "${sensitiveKeywords.join(', ')}", respond with a message that invites the sender to meet in person. Format your reply in JSON structure, with these keys:
-
+    
+    Strictly ensure your output adheres to this JSON structure:
     {{
         "subject": "A concise, relevant subject line tailored to the received email.",
         "greeting": "Dear {sender}",
@@ -229,11 +230,11 @@ const responseGenerator = async (senderName , senderEmail) => {
         sender: senderName,
         input: senderEmail
     });
-    // console.log("unJson answer");
-    // console.log(response.answer);
+    console.log("unJson answer");
+    console.log(response.answer);
     const finalAns = (JSON.parse(response.answer));
-    // console.log("final Answer");
-    // console.log(finalAns);
+    console.log("final Answer");
+    console.log(finalAns);
     return finalAns;
 };
 /*
