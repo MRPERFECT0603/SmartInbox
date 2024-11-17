@@ -7,14 +7,14 @@ const ContextSchema = mongoose.Schema(
         },
         email: {
             type: String,
-            unique: true, // Ensure email is unique for each context
+            unique: true, 
         },
         context: {
             type: String,
         },
         token: {
             type: String,
-            default: " " // Store the token as a stringified JSON
+            default: " " 
         },
     },
     {

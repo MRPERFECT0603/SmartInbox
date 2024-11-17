@@ -1,3 +1,12 @@
+
+
+/*
+    This is a temporary model which is in progress in this i am trying to generate embediing of the context in Vector form 
+    and save it in ChromaDB to be dirctly used by my model as Context
+
+*/
+
+
 const { ChatOllama } = require("@langchain/ollama");
 const { ChatPromptTemplate } = require("@langchain/core/prompts");
 const { Document } = require("@langchain/core/documents");

@@ -49,6 +49,18 @@ const startMessageConsumer = async () => {
   }
 };
 
+
+/**
+ * Test function to demonstrate and validate the response generation process.
+ *
+ * This function provides a controlled environment to test the `generateResponse` 
+ * function. It simulates a scenario where a user sends an email and logs the generated 
+ * response for debugging purposes.
+ *
+ * @async
+ * @function testfunction
+ * @returns {Promise<void>} Logs the start and end of the test, along with the generated response.
+========================>>>>>>>
 const testfunction = async() => {
       console.log("TEST FUNCTYION START");
       const userName = "Nemo";
@@ -60,8 +72,9 @@ const testfunction = async() => {
       console.log("TEST FUNTION STOP");
 
 }
-
-// testfunction();
+testfunction();
+=======================<<<<<<<<
+*/
 
 startMessageConsumer();
 
