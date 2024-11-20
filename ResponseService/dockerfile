@@ -1,0 +1,13 @@
+# Build backend server (node)
+FROM node:23-alpine
+
+# Working directory be app
+WORKDIR /app
+
+COPY  . .
+
+RUN npm install 
+
+EXPOSE 8104
+
+CMD ["node","server.js"]

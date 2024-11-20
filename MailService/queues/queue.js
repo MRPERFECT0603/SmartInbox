@@ -9,7 +9,7 @@ const amqp = require('amqplib');
  * @returns {Promise<object>} - Returns a promise that resolves with an object containing the connection and channel
  */
 const queueConnection = async ({ exchange, routingKey }) => {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://admin:admin123@10.102.248.217:5672');
     const channel = await connection.createChannel();
     await channel.assertExchange(exchange, 'direct', { durable: true });
     const queue = await channel.assertQueue(routingKey, { exclusive: false });

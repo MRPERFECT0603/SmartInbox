@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from 'axios';
 import DisclaimerPage from "../components/DisclaimerPage";
 import Page1 from "../components/Page1";
 import Page2 from "../components/Page2";
@@ -15,7 +14,7 @@ import Otter5 from "../assets/otterpeaking.png";
 
 import "../App.css";
 import { useNavigate } from 'react-router-dom';
-
+import {contextRequest} from "../../axios";
 
 function ContextForm() {
   const navigate = useNavigate();
@@ -97,7 +96,7 @@ function ContextForm() {
   
     // Send the data to the backend using Axios
     try {
-      const response = await axios.post("http://localhost:8100/api/saveContext", data, {
+      const response = await contextRequest.post("/saveContext", data, {
         headers: {
           "Content-Type": "application/json",
         },

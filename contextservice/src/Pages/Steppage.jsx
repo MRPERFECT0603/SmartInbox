@@ -1,8 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Otter5 from "../assets/otterpeaking.png";
+import {contextRequest} from "../../axios";
 
 const AuthPage = () => {
   const [step, setStep] = useState(1); 
@@ -12,7 +12,7 @@ const AuthPage = () => {
   // Handle Gmail Authentication
   const handleGmailAuth = async () => {
     try {
-      const response = await axios.post("http://localhost:8100/api/auth");
+      const response = await contextRequest.post("/auth");
       console.log(response);
       setIsAuthenticated(true); 
       setStep(2); 

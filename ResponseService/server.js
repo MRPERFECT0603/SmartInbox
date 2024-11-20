@@ -5,7 +5,7 @@ const connectdb = require("./Config/dbConfig");
 const cors = require("cors");
 
 dotenv.config();
-const PORT = process.env.PORT || 3003; 
+const PORT = process.env.PORT || 8104; 
 connectdb();
 
 const { queuePush } = require("./queues/queue"); 

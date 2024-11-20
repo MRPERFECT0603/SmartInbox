@@ -13,7 +13,7 @@ const { Mailpreprocessor } = require("./services/fetchMessageData");
 const { queuePush } = require("./queues/queue");
 const { MailSender } = require("./services/MailSender");
 
-const PORT = process.env.PORT || 3002; 
+const PORT = process.env.PORT || 8103; 
 const exchange = process.env.EXCHANGE; 
 const routingKey = process.env.ROUTING_KEY_PUSH_NEW_MAIL; 
 const app = express();
