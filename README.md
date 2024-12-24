@@ -29,6 +29,9 @@ SmartInbox is an AI-powered tool I've developed to efficiently manage and organi
 - **Gmail API**: The replies are sent through the Gmail API, and I update the email labels accordingly (e.g., "Interested," "Not Interested").
 - **Inbox Management**: Emails are categorized, labeled, and organized automatically based on their content and relevance, allowing for easy tracking and follow-up.
 
+![RAG Model](Documentation/rag.jpg)
+  
+
 ## Technical Stack
 
 - **Languages**: JavaScript, Node.js
