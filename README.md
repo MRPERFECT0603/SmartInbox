@@ -10,7 +10,7 @@ SmartInbox is an AI-powered tool I've developed to efficiently manage and organi
 - **Scalable and Efficient**: RabbitMQ handles task scheduling and ensures reliable processing, enabling the system to scale efficiently and handle high email volumes without issues.
 
 ## Architecture Overview
-![Orchestration](Documentations/Orchestration.jpg)
+![Orchestration](Documentation/Orchestration.jpg)
 
 ### Email Fetching
 
