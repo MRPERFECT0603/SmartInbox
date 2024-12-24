@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailservice-deployment
+  namespace: smartinbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      mylabel: mailservice
+  template:
+    metadata:
+      labels:
+        mylabel: mailservice
+    spec:
+      containers:
+        - name: mailservice-container
+          image: vivekshaurya/smartinbox-mailservice
+          env:
+            - name: CONNECTION_STRING
+              value: mongodb+srv://adminUser:vivekisadmin@smartinbox.5mlqx.mongodb.net/SmartInbox?retryWrites=true&w=majority&appName=SmartInbox
+            - name: CLIENT_ID
+              value: 12217672920-ab5bcdk8j2lf1vpt5346na765skmvb09.apps.googleusercontent.com
+            - name: CLIENT_SECRET
+              value: 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
+            - name: REDIRECT_URI
+              value: http://localhost:8100/callback     
+            - name: SCOPES
+              value: https://mail.google.com/
+            - name: PORT
+              value: '8101' 
+            - name: EXCHANGE
+              value: MailzyExchange
+            - name: ROUTING_KEY_PULL_NEW_MAIL
+              value: NewMessage
+            - name: ROUTING_KEY_PUSH_NEW_MAIL
+              value: ProcessedMessage
+            - name: ROUTING_KEY_PULL_MAIL_RESPONE
+              value: ResponseMessage
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"

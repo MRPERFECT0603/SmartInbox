@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otter
+  template:
+    metadata:
+      labels:
+        app: otter
+    spec:
+      containers:
+        - name: otter
+          image: vivekshaurya/ollama-api
+          ports:
+            - containerPort: 11434

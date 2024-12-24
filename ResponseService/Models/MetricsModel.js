@@ -35,7 +35,6 @@ const MetricsSchema = mongoose.Schema(
     }
 );
 
-// Automatically update `updatedAt` on save
 MetricsSchema.pre('save', function (next) {
     this.updatedAt = Date.now();
     next();

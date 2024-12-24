@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: responseservice-deployment
+  namespace: smartinbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      mylabel: responseservice
+  template:
+    metadata:
+      labels:
+        mylabel: responseservice
+    spec:
+      containers:
+        - name: responseservice-container
+          image: vivekshaurya/smartinbox-responseservice
+          env:
+            - name: CONNECTION_STRING
+              value: mongodb+srv://adminUser:vivekisadmin@smartinbox.5mlqx.mongodb.net/SmartInbox?retryWrites=true&w=majority&appName=SmartInbox
+            - name: PORT
+              value: '8102' 
+            - name: EXCHANGE
+              value: MailzyExchange
+            - name: ROUTING_KEY_PULL
+              value: ProcessedMessage
+            - name: ROUTING_KEY_PUSH
+              value: ResponseMessage
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"

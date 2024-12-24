@@ -9,7 +9,7 @@ const amqp = require('amqplib');
  * @returns {Promise<object>} - Returns a promise that resolves with an object containing the connection and channel
  */
 const queueConnection = async ({ exchange, routingKey }) => {
-    const connection = await amqp.connect('amqp://admin:admin123@10.102.248.217:5672');
+    const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
     await channel.assertExchange(exchange, 'direct', { durable: true });
     const queue = await channel.assertQueue(routingKey, { exclusive: false });
@@ -29,9 +29,8 @@ const queueConnection = async ({ exchange, routingKey }) => {
 const queuePush = async ({ exchange, routingKey, message }) => {
     const { connection, channel , queue } = await queueConnection({ exchange, routingKey });
     channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
-    // console.log(` [x] Sent '${message}'`);
     setTimeout(() => {
-        connection.close(); // Close the connection to the RabbitMQ server
+        connection.close(); 
     }, 500);
 };
 /**
@@ -46,7 +45,6 @@ const queuePull = async ({ exchange, routingKey } , onMessage) => {
     const { connection, channel, queue } = await queueConnection({ exchange, routingKey });
     channel.consume(queue.queue , (msg) => {
         const messageId = msg.content.toString();
-        // console.log(` [x] Received messageId: ${messageId}`);
         channel.ack(msg);
         if (onMessage) onMessage(messageId);
     }, { noAck: false });

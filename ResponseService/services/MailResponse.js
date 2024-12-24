@@ -9,7 +9,6 @@ const messageFetch = async (onMessage) => {
     const routingKey = process.env.ROUTING_KEY_PULL;
 
     queuePull({ exchange, routingKey }, (message) => {
-        // console.log("PULLED Message", message); 
         if (onMessage) onMessage(message); 
     });
 };

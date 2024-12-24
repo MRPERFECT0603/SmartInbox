@@ -21,7 +21,6 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
                 threadId: threadId,
             },
         });
-        // console.log("Email sent successfully:", response.data);
         return response.data; 
     } catch (err) {
         console.error("Error sending email:", err);
@@ -34,14 +33,11 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
  * @returns {string} - Base64url-encoded email string
  */
 const encodeMail = (sender, subject , body ,signature, greating) => {
-    // Validate the recipient's email format
-    // console.log("EMAIL SENDER NAME:"+sender);
     if (!sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(sender)) {
         console.error("Invalid recipient email address.");
         return null;
     }
 
-    // Construct the email content
     const emailContent = 
         `To: ${sender}\n` +
         `Subject: ${subject}\n` +
@@ -63,18 +59,10 @@ const MailSender = async (ParsedMessage) => {
         const auth = await authorize(); 
         if (auth) {
             console.log('Authorized successfully');
-            // console.log(typeof(ParsedMessage));
-            // console.log(ParsedMessage.sender);
-            // console.log(ParsedMessage.response);
             const email = (ParsedMessage.response);
             const { subject: subject, body: body , signature: signature , greating: greating} = email;
             const sender  = ParsedMessage.sender;
-            // console.log("Subject:", subject);
-            // console.log("Greating:", greating);
-            // console.log("Body:", body);
-            // console.log("Signature:", signature);
-            // console.log(ParsedMessage.Id);
-            const encodedEmail = encodeMail(sender, subject , body ,signature, greating); // Pass the full message
+            const encodedEmail = encodeMail(sender, subject , body ,signature, greating); 
             const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
             if (message) {
                 console.log("SENT SUCCESSFULLY:", message);

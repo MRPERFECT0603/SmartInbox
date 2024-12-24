@@ -7,7 +7,6 @@ const Context = require("../Models/ContextModel");
 
 dotenv.config();
 
-// Extract values from environment variables
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.REDIRECT_URI;
@@ -44,29 +43,25 @@ async function handleCallback(req, res) {
 
         const { tokens } = await oAuth2Client.getToken(code);
 
-        // Set the credentials with the received token
         oAuth2Client.setCredentials(tokens);
 
-        // Save the token to MongoDB
         const savedToken = JSON.stringify(tokens);
         const filter = { email: 'irctcvivek62@gmail.com' };
         const update = { token: savedToken };
 
         const result = await Context.findOneAndUpdate(filter, update, {
             new: true,
-            upsert: true, // This creates the document if it doesn't exist
+            upsert: true, 
         });
 
         console.log('Token saved to database:', result);
 
-        // Emit an event indicating tokens are saved
         oAuth2Client.emit('tokensSaved', null);
 
         res.status(200).send('Access Granted');
     } catch (error) {
         console.error('Error handling callback:', error);
 
-        // Emit an event indicating error during token save
         oAuth2Client.emit('tokensSaved', error);
 
         res.status(500).send('An error occurred during authentication.');
@@ -100,12 +95,11 @@ function getNewToken(oAuth2Client, callback) {
     console.log('Authorize this app by visiting this URL:', authUrl);
     openURL.open(authUrl);
 
-    // Listen for token save completion in handleCallback
     oAuth2Client.once('tokensSaved', (error) => {
         if (error) {
             return callback(error);
         }
-        callback(null, true); // Signal token saved
+        callback(null, true); 
     });
 }
 /**
@@ -129,13 +123,12 @@ async function authorize(req, res) {
         const userContext = await Context.findOne({ email: 'irctcvivek62@gmail.com' });
         
         if (!userContext || userContext.token === " ") {
-            // No token, initiate the new token generation flow
             return new Promise((resolve, reject) => {
                 getNewToken(oAuth2Client, async (callbackError, tokenSaved) => {
                     if (callbackError) {
                         return reject(callbackError);
                     }
-                    resolve(tokenSaved); // Resolve when token is saved
+                    resolve(tokenSaved); 
                 });
             })
             .then(() => res.status(200).send('Authorization completed, token saved.'))
@@ -145,7 +138,6 @@ async function authorize(req, res) {
             });
         }
 
-        // Token exists, set credentials
         oAuth2Client.setCredentials(JSON.parse(userContext.token));
         resolve(oAuth2Client);
     } catch (error) {

@@ -31,19 +31,15 @@ const startMessageConsumer = async () => {
     await messageFetch(async (message) => {
       Increment('responseService.mailsPulled');
       console.log("Received new message from Exchange:", message);
-      // console.log(message);
       const Message = JSON.parse(message);
-      // console.log("Messsssssaggggggeee: "+ Message.sender + Message.id + Message.threadID + Message.messageData);
       const response = await generateResponse(Message.sender , Message.messageData);
       Increment('responseService.responseGenerated');
-      // console.log(response); 
       const queueMessage = {
         sender: Message.sender,
         Id: Message.id,
         threadID: Message.threadID,
         response: response
       };
-      // console.log(queueMessage);
       const data = JSON.stringify(queueMessage);
       await queuePush({ exchange, routingKey,  message: data});
       console.log("Response Mail sent to the exchange:\n" + data);

@@ -1,7 +1,5 @@
-# Build backend server (node)
-FROM node:16-alpine
+FROM node:23-alpine
 
-# Working directory be app
 WORKDIR /app
 
 COPY  . .

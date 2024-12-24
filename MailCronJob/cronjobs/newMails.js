@@ -14,7 +14,6 @@ const { Increment } = require("../services/metricsServices");
 const NewMailFetchJob = cron.schedule('* * * * *', () => {
     console.log('Cron job running every  minute'); 
 
-    // Authorize the user and handle the returned authentication object
     authorize().then(auth => {
         console.log('Authorized successfully');
         console.log("Listing New MessageId Started"); 

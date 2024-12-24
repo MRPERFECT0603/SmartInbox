@@ -45,7 +45,6 @@ async function handleCallback(req, res) {
 
         oAuth2Client.setCredentials(tokens);
 
-        // Save the token to MongoDB
         const savedToken = JSON.stringify(tokens);
         const filter = { email: 'irctcvivek62@gmail.com' };
         const update = { token: savedToken };
@@ -57,7 +56,6 @@ async function handleCallback(req, res) {
 
         console.log('Access Token saved in the database for the user', result);
 
-        // Emit an event indicating tokens are saved
         oAuth2Client.emit('tokensSaved', null);
 
         res.status(200).send(`
@@ -105,7 +103,6 @@ async function handleCallback(req, res) {
     } catch (error) {
         console.error('Error handling callback:', error);
 
-        // Emit an event indicating error during token save
         oAuth2Client.emit('tokensSaved', error);
 
         res.status(500).send('An error occurred during authentication.');
@@ -165,8 +162,6 @@ async function authorize(req, res) {
                 res.status(500).send('Authorization failed.');
             });
         }
-
-        // Token exists, set credentials
         oAuth2Client.setCredentials(JSON.parse(userContext.token));
         res.status(200).send('Token already exists, authorization successful.');
     } catch (error) {

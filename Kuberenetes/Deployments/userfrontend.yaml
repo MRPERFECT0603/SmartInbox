@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      mylabel: user-frontend
+  template:
+    metadata:
+      labels:
+        mylabel: user-frontend
+    spec:
+      containers:
+        - name: user-frontend-container
+          image: vivekshaurya/smartinbox-frontend
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"

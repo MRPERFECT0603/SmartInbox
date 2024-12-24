@@ -6,7 +6,6 @@ const { Increment } = require("./services/metricsServices");
 dotenv.config();
 connectdb();
 
-// Important Imports 
 const { messageIdFetch, responseMailFetch } = require("./services/MessageFetch"); 
 const { handleCallback } = require("./services/authService");
 const { Mailpreprocessor } = require("./services/fetchMessageData");
@@ -47,7 +46,6 @@ const startResponseConsumer = async () => {
       const parsedMessage = JSON.parse(JSON.parse(responseMessage));
       const result = await MailSender(parsedMessage); 
       const message = result; 
-      // console.log(message); 
     });
   } catch (error) {
     console.error("Error in message Sending:", error); 
@@ -57,7 +55,6 @@ const startResponseConsumer = async () => {
 startMessageConsumer();
 startResponseConsumer();
 
-// Route to handle OAuth2 callback
 app.get('/callback', handleCallback);
 
 app.listen(PORT, () => {

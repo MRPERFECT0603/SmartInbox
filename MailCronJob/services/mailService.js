@@ -1,4 +1,4 @@
-const { google } = require('googleapis'); // Google API client library for accessing Gmail API
+const { google } = require('googleapis'); 
 
 /**
  * listMessages - Function to list Gmail messages from a user's inbox
@@ -8,10 +8,8 @@ const { google } = require('googleapis'); // Google API client library for acces
  */
 async function listMessages(auth) {
     try {
-        // Initialize the Gmail API with the authenticated client and version
         const gmail = google.gmail({ version: 'v1', auth });
         
-        // Call the Gmail API to list messages with specific label filters (INBOX, UNREAD, CATEGORY_PERSONAL)
         const response = await gmail.users.messages.list({
             'userId': 'me', 
             'labelIds': ['INBOX', 'UNREAD', 'CATEGORY_PERSONAL'], 

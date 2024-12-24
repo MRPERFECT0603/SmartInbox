@@ -16,7 +16,7 @@ const Context = require("../Models/ContextModel");
 const model = new ChatOllama({
     model: "llama3.2:1b",
     temperature: 0.5,
-    baseUrl: "http://192.168.65.3:30007"
+    // baseUrl: "http://192.168.65.3:30007"
 });
 
 /*
@@ -206,7 +206,7 @@ const responseGenerator = async (senderName , senderEmail) => {
     const embeddings = new OllamaEmbeddings({
         model: "llama3.2:1b",
         temperature: 0.5,
-        baseUrl: "http://192.168.65.3:30007"
+        // baseUrl: "http://192.168.65.3:30007"
     });
 
     const vectorStore = await MemoryVectorStore.fromDocuments(

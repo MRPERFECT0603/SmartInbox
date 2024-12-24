@@ -24,8 +24,7 @@ const preProcessMessage = (message) => {
     }
 
     if (messageData) {
-        const decodedData = nodeBase64.decode(messageData); // Decode the base64 encoded data
-
+        const decodedData = nodeBase64.decode(messageData);
         // Clean the decoded content
         const cleanedContent = decodedData.split('\n')
             .map(line => line.trim())     

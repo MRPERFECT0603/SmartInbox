@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userservice-deployment
+  namespace: smartinbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      mylabel: userservice
+  template:
+    metadata:
+      labels:
+        mylabel: userservice
+    spec:
+      containers:
+        - name: userservice-container
+          image: vivekshaurya/smartinbox-userservice
+          env:
+            - name: CONNECTION_STRING
+              value: mongodb+srv://adminUser:vivekisadmin@smartinbox.5mlqx.mongodb.net/SmartInbox?retryWrites=true&w=majority&appName=SmartInbox
+            - name: CLIENT_ID
+              value: 12217672920-ab5bcdk8j2lf1vpt5346na765skmvb09.apps.googleusercontent.com
+            - name: CLIENT_SECRET
+              value: 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
+            - name: REDIRECT_URI
+              value: http://localhost:8100/callback     
+            - name: SCOPES
+              value: https://mail.google.com/
+            - name: PORT
+              value: '8100' 
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"

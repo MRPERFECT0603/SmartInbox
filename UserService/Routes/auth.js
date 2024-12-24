@@ -11,16 +11,8 @@ const express = require("express");
 const { authorize, saveContext } = require("../Controllers/authController");
 const router = express.Router();
 
-/**
- * POST `/auth`
- * Handles user authentication requests.
- */
 router.post("/auth", authorize);
 
-/**
- * POST `/saveContext`
- * Handles requests to save user context (e.g., contacts or additional user data).
- */
 router.post("/saveContext", saveContext);
 
 

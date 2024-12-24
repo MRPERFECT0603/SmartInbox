@@ -32,9 +32,8 @@ const fetchMessageDetails = async (messageId, auth) => {
 const getSenderEmail = (headers) => {
     const fromHeader = headers.find(header => header.name.toLowerCase() === 'from');
     if (fromHeader) {
-        // Use a regular expression to extract the email address from the value
         const emailMatch = fromHeader.value.match(/<([^>]+)>/);
-        return emailMatch ? emailMatch[1] : fromHeader.value; // Return the email address or the entire value if no angle brackets
+        return emailMatch ? emailMatch[1] : fromHeader.value; 
     }
     return null;
 };
@@ -52,17 +51,12 @@ const Mailpreprocessor = async (messageId) => {
             console.log('Authorized successfully');
             const message = await fetchMessageDetails(messageId.id, auth); 
             if (message) {
-                // console.log(message);
                 Increment('mailService.mailsFetched');
                 const sender = getSenderEmail(message.payload.headers); 
-                // console.log(sender);
                 const messageData = preProcessMessage(message); 
                 Increment('mailService.mailsPreprocessed');
-                // console.log("Processed message data:", messageData);
                 const threadID = message.threadId;
                 const id = message.id;
-                // console.log(threadID);
-                // console.log(id);
                 return { sender, id ,threadID , messageData }; 
             }
         } else {

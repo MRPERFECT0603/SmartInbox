@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailcronjob-service
+  namespace: smartinbox
+spec:
+  type: NodePort
+  selector:
+    mylabel: mailcronjob
+  ports:
+    - protocol: TCP
+      nodePort: 30002
+      port: 8102
+      targetPort: 8102

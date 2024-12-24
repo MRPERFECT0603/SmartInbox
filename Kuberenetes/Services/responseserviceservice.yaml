@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: responseservice-service
+  namespace: smartinbox
+spec:
+  type: NodePort
+  selector:
+    mylabel: responseservice
+  ports:
+    - protocol: TCP
+      nodePort: 30004
+      port: 8104
+      targetPort: 8104
