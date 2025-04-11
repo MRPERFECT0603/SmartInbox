@@ -117,7 +117,7 @@ function LandingPage() {
             Ready to Transform Your Email Experience?
           </h2>
           <Link
-            to="/signup"
+            to="/contextform"
             className="bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700"
           >
             Sign Up Now
