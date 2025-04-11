@@ -11,20 +11,20 @@ const express = require("express");
 const dotenv = require("dotenv"); 
 const cors = require("cors"); 
 dotenv.config(); 
-const connectdb = require("./Config/dbConfig"); 
+// const connectdb = require("./Config/dbConfig"); 
 
 // Import configuration and controllers
 const { oAuth2Client, handleCallback } = require("./Controllers/authController");
 
 
-connectdb(); 
+// connectdb(); 
 
 
 const app = express(); 
 const PORT = process.env.PORT || 8101; 
 
 app.use(cors({
-    origin: ["http://localhost:5173" , "http://localhost:30000"],
+    origin: ["http://localhost:5173" , "http://localhost:30000" , "https://smartinbox.netlify.app"],
     credentials: true, 
 }));
 app.use(express.json());

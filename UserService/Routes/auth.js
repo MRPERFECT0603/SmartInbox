@@ -8,7 +8,8 @@
  */
 
 const express = require("express"); 
-const { authorize, saveContext } = require("../Controllers/authController");
+const { authorize } = require("../Controllers/authController");
+const { saveContext } = require("../Controllers/saveContext");
 const router = express.Router();
 
 router.post("/auth", authorize);
