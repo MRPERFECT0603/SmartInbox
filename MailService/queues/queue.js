@@ -26,9 +26,10 @@ const queueConnection = async ({ exchange, routingKey }) => {
  * @param {string} params.message - The message content to be sent
  * @returns {Promise<void>} - This function returns a promise since it involves asynchronous operations
  */
-const queuePush = async ({ exchange, routingKey, message }) => {
+const queuePush = async ({ exchange, routingKey, MailServiceMessage }) => {
     const { connection, channel , queue } = await queueConnection({ exchange, routingKey });
-    channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(message)));
+    // console.log("Vivek"+MailServiceMessage);
+    channel.publish(exchange, routingKey, Buffer.from(MailServiceMessage));
     setTimeout(() => {
         connection.close(); 
     }, 500);
@@ -44,9 +45,9 @@ const queuePush = async ({ exchange, routingKey, message }) => {
 const queuePull = async ({ exchange, routingKey } , onMessage) => {
     const { connection, channel, queue } = await queueConnection({ exchange, routingKey });
     channel.consume(queue.queue , (msg) => {
-        const messageId = msg.content.toString();
+        const message = msg.content.toString();
         channel.ack(msg);
-        if (onMessage) onMessage(messageId);
+        if (onMessage) onMessage(message);
     }, { noAck: false });
 };
 

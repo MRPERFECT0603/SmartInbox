@@ -1,6 +1,6 @@
 
 const dotenv = require("dotenv"); 
-const {responseGenerator} = require("../Controllers/RAG_AI_MODEL");
+const {responseGenerator} = require("../services/Groq");
 const Context = require("../Models/ContextModel");
 
 dotenv.config();

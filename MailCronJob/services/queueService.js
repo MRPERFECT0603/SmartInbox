@@ -8,7 +8,7 @@ dotenv.config();
  * @param {object} data - The email data to be sent to the queue
  * @returns {Promise<void>} - This function returns a promise since queuePush is asynchronous
  */
-const NewMailFetcher = async (data) => {
+const NewMailIdQueuePusher = async (data) => {
 
     const exchange = process.env.EXCHANGE;
 
@@ -21,4 +21,4 @@ const NewMailFetcher = async (data) => {
 };
 
 
-module.exports = { NewMailFetcher };
+module.exports = { NewMailIdQueuePusher };

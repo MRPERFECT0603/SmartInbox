@@ -44,6 +44,7 @@ async function handleCallback(req, res) {
         }
         const { tokens } = await oAuth2Client.getToken(code);
 
+        // console.log(tokens);
         oAuth2Client.setCredentials(tokens);
 
         const savedToken = JSON.stringify(tokens);
@@ -122,7 +123,7 @@ function getNewToken(oAuth2Client, email , callback) {
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: SCOPES,
-        prompt: 'select_account',
+        prompt: 'consent',
         state 
     });
 

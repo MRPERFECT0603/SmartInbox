@@ -7,7 +7,7 @@ const { MemoryVectorStore } = require("langchain/vectorstores/memory");
 const Context = require("../Models/ContextModel");
 
 const groq = new Groq({
-  apiKey: "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"
+  apiKey: process.env.GROQ_API_KEY
 });
 
 const sensitiveKeywords = [
@@ -197,12 +197,12 @@ Respond as Vivek:
 
 // ────────────────────────────
 // 🧪 Test Runner (Remove in prod)
-(async () => {
-  const sender = "Nemo";
-  const input = "I am in trouble, Please Help me!!  ";
-  const response = await responseGenerator(sender, input);
-  console.log("🟢 Final Answer:\n", response);
-})();
+// (async () => {
+//   const sender = "Nemo";
+//   const input = "I am in trouble, Please Help me!!  ";
+//   const response = await responseGenerator(sender, input);
+//   console.log("🟢 Final Answer:\n", response);
+// })();
 
 
 

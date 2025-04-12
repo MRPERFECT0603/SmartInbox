@@ -43,13 +43,15 @@ const getSenderEmail = (headers) => {
  * @param {string} messageId - The ID of the message to process
  * @returns {Promise<object|null>} - Returns a promise that resolves with an object containing the sender's email and processed message data, or null if an error occurs
  */
-const Mailpreprocessor = async (messageId) => {
+const Mailpreprocessor = async (messageObject) => {
     try {
-        console.log("Processing message ID:", messageId);
-        const auth = await authorize(); 
+        console.log("Processing message ID:", messageObject);
+        const email = messageObject.email;
+        const auth = await authorize(email); 
         if (auth) {
             console.log('Authorized successfully');
-            const message = await fetchMessageDetails(messageId.id, auth); 
+            console.log(messageObject.id);
+            const message = await fetchMessageDetails(messageObject.id, auth); 
             if (message) {
                 Increment('mailService.mailsFetched');
                 const sender = getSenderEmail(message.payload.headers); 

@@ -19,18 +19,24 @@ const app = express();
 
 app.use(express.json());
 
-// Continuous consumer function to listen for new message IDs
+// Continuous consumer function to listen for new Mail IDs
 const startMessageConsumer = async () => {
   try {
-    await messageIdFetch(async (messageId) => {
-      console.log("Recieved New MailId from the Exchange:-", messageId);
+    await messageIdFetch(async (message) => {
+      console.log("Recieved New MailId from the Exchange:-", message);
       Increment('mailService.mailIdPulled');
-      const messageObject = JSON.parse(messageId);
-      const result = await Mailpreprocessor(messageObject); 
-      const message = result; 
-      await queuePush({ exchange, routingKey, message });
+      const messageObject = JSON.parse(message);
+      // console.log(messageObject);
+      let result = await Mailpreprocessor(messageObject); 
+      // console.log("Shaurya"+ JSON.stringify(result));
+      result = {
+        ...result,
+        userEmail: messageObject.email,
+      }
+      const MailServiceMessage = JSON.stringify(result);
+      await queuePush({ exchange, routingKey, MailServiceMessage });
       Increment('mailService.mailsPushed');
-      console.log("Message Pushed to the Exchange:-"+ message.sender + " "+ message.id + " "+ message.threadID +" "+ message.messageData );
+      console.log("Message Pushed to the Exchange:-"+ MailServiceMessage);
     });
   } catch (error) {
     console.error("Error in message consumer:", error); 
