@@ -16,8 +16,12 @@ const ContextSchema = mongoose.Schema(
         },
         token: {
             type: String, 
-            default: " ", 
+            default: " " 
         },
+        previousEmail: {
+            type: [String],
+            default: []
+        }
     },
     {
         timestamps: true, 

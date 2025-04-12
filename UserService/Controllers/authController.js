@@ -18,7 +18,7 @@ const openURL = require("openurl");
 const Context = require("../Models/ContextModel");
 
 dotenv.config();
-const emailId = 'irctcvivek62@gmail.com';
+// const emailId = 'irctcvivek62@gmail.com';
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
@@ -37,16 +37,17 @@ const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_u
 async function handleCallback(req, res) {
     try {
         const code = req.query.code;
-        if (!code) {
-            return res.status(400).send('Authorization code is missing.');
-        }
+        const email = decodeURIComponent(req.query.state);
 
+        if (!code || !email) {
+          return res.status(400).send('Authorization code or email is missing.');
+        }
         const { tokens } = await oAuth2Client.getToken(code);
 
         oAuth2Client.setCredentials(tokens);
 
         const savedToken = JSON.stringify(tokens);
-        const filter = { email: 'irctcvivek62@gmail.com' };
+        const filter = { email };
         const update = { token: savedToken };
 
         const result = await Context.findOneAndUpdate(filter, update, {
@@ -116,11 +117,13 @@ async function handleCallback(req, res) {
  * @param {object} oAuth2Client - OAuth2 client object used for authorization.
  * @param {function} callback - Callback function to execute after user authorization.
  */
-function getNewToken(oAuth2Client, callback) {
+function getNewToken(oAuth2Client, email , callback) {
+    const state = encodeURIComponent(email);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: SCOPES,
         prompt: 'select_account',
+        state 
     });
 
     console.log('Authorize this app by visiting this URL:', authUrl);
@@ -143,13 +146,14 @@ function getNewToken(oAuth2Client, callback) {
  * @param {object} res - Express response object for sending the result of the authorization process.
  */
 async function authorize(req, res) {
+    const { email } = req.body;
     try {
-        const userContext = await Context.findOne({ email: emailId });
+        const userContext = await Context.findOne({ email });
         
         if (!userContext || userContext.token === " ") {
             // No token, initiate the new token generation flow
             return new Promise((resolve, reject) => {
-                getNewToken(oAuth2Client, async (callbackError, tokenSaved) => {
+                getNewToken(oAuth2Client, email, async (callbackError, tokenSaved) => {
                     if (callbackError) {
                         return reject(callbackError);
                     }

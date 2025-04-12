@@ -11,13 +11,13 @@ const express = require("express");
 const dotenv = require("dotenv"); 
 const cors = require("cors"); 
 dotenv.config(); 
-// const connectdb = require("./Config/dbConfig"); 
+const connectdb = require("./Config/dbConfig"); 
 
 // Import configuration and controllers
 const { oAuth2Client, handleCallback } = require("./Controllers/authController");
 
 
-// connectdb(); 
+connectdb(); 
 
 
 const app = express(); 

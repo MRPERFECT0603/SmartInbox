@@ -22,16 +22,17 @@ const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_u
 async function handleCallback(req, res) {
     try {
         const code = req.query.code;
-        if (!code) {
-            return res.status(400).send('Authorization code is missing.');
-        }
+        const email = decodeURIComponent(req.query.state);
+        if (!code || !email) {
+            return res.status(400).send('Authorization code or email is missing.');
+          }
 
         const { tokens } = await oAuth2Client.getToken(code);
 
         oAuth2Client.setCredentials(tokens);
 
         const savedToken = JSON.stringify(tokens);
-        const filter = { email: 'irctcvivek62@gmail.com' };
+        const filter = { email };
         const update = { token: savedToken };
 
         const result = await Context.findOneAndUpdate(filter, update, {
@@ -58,11 +59,13 @@ async function handleCallback(req, res) {
  * @param {object} oAuth2Client - OAuth2 client object
  * @param {function} callback - Callback function to execute after the user authorizes
  */
-function getNewToken(oAuth2Client, callback) {
+function getNewToken(oAuth2Client, email, callback) {
+    const state = encodeURIComponent(email);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: SCOPES,
         prompt: 'select_account',
+        state
     });
 
     console.log('Authorize this app by visiting this URL:', authUrl);
@@ -79,14 +82,14 @@ function getNewToken(oAuth2Client, callback) {
 /**
  * Authorizes the client using the existing token or initiates the token generation flow
  */
-async function authorize(req, res) {
+async function authorize(email) {
     return new Promise(async (resolve, reject) => {
     try {
-        const userContext = await Context.findOne({ email: 'irctcvivek62@gmail.com' });
+        const userContext = await Context.findOne({ email });
         
         if (!userContext || userContext.token === " ") {
             return new Promise((resolve, reject) => {
-                getNewToken(oAuth2Client, async (callbackError, tokenSaved) => {
+                getNewToken(oAuth2Client, email, async (callbackError, tokenSaved) => {
                     if (callbackError) {
                         return reject(callbackError);
                     }

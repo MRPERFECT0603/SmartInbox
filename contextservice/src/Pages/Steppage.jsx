@@ -3,16 +3,21 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Otter5 from "../assets/otterpeaking.png";
 import {contextRequest} from "../../axios";
+import { useLocation } from 'react-router-dom';
 
 const AuthPage = () => {
   const [step, setStep] = useState(1); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const email = location.state?.email;
+  
   // Handle Gmail Authentication
   const handleGmailAuth = async () => {
     try {
-      const response = await contextRequest.post("/auth");
+      const response = await contextRequest.post("/auth", {
+        email
+      });
       console.log(response);
       setIsAuthenticated(true); 
       setStep(2); 

@@ -242,7 +242,7 @@ function ContextForm() {
                 Your context has been saved. You can now proceed to Grant Gmail Access.
               </p>
               <button
-                 onClick={() => navigate('/setuppage')}
+                 onClick={() => navigate('/setuppage', { state: { email: formData.email } })}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
                 Proceed to Grant Access

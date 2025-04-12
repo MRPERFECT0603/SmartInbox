@@ -1,24 +1,30 @@
+
+
 const mongoose = require("mongoose");
 
 const ContextSchema = mongoose.Schema(
     {
         name: {
-            type: String,
+            type: String, 
         },
         email: {
-            type: String,
+            type: String, 
             unique: true, 
         },
         context: {
             type: String,
         },
         token: {
-            type: String,
+            type: String, 
             default: " " 
         },
+        previousEmail: {
+            type: [String],
+            default: []
+        }
     },
     {
-        timestamps: true,
+        timestamps: true, 
     }
 );
 
