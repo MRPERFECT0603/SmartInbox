@@ -40,89 +40,36 @@ const loadContext = async (userEmail) => {
   }
 };
 
+const loadEmailHistory = async (userEmail) => {
+  try {
+    const contextDoc = await Context.findOne({ email: userEmail });
 
-// const fs = require('fs');
-// const path = require('../../ResponseService');
+    if (!contextDoc) {
+      throw new Error('Context not found for this sender email');
+    }
 
-// const loadContext = async () => {
-//   try {
-//     const filePath = path.join(__dirname, '../context.txt');
-//     const context = fs.readFileSync(filePath, 'utf-8');
+    const emailHistoryArray = contextDoc.previousEmail;
 
-//     if (!context || typeof context !== 'string') {
-//       throw new Error('Context is empty or invalid');
-//     }
+    if (!Array.isArray(emailHistoryArray)) {
+      throw new Error('Previous email history is not a valid array');
+    }
 
-//     console.log("✅ Context Loaded from context.txt");
-//     return context;
-//   } catch (error) {
-//     console.error('❌ Error loading context from file:', error.message);
-//     throw error;
-//   }
-// };
+    const fullEmailHistory = emailHistoryArray.join('\n\n'); 
 
-const responseGenerator = async (senderName, emailText) => {
-  const user = 'irctcvivek62@gmail.com';
-  const rawContext = await loadContext(user);
-  //   const rawContext = `	1.	Personal Information
-	// 	 	Name: Vivek Shaurya
-	// 	 	Age: 21
-	// 	 	Occupation: Teacher specializing in Computer Science
-	// 	 	Personality: Described as a “Sigma Male”
-	// 2.	Contact Information
-	// 	 	Email: vivekshaurya62@gmail.com
-	// 	 	School Phone: (123) 456-7890
-	// 	 	School Website: www.jiit.ac.in
-	// 3. Course Taught: “Introduction to Web Technology” (CSE1803C22), “Data Structures and Algorithms” (CSE1502D21), “Operating Systems” (CSE2104B23), “Database Management Systems” (CSE2205C24), “Introduction to Artificial Intelligence” (CSE2401A25), “Computer Networks” (CSE2606B26)
-	// 	 	Duration: One semester (15 weeks)
-	// 	 	Schedule:
-	// 	 	Introduction to Web Technology: Mondays and Wednesdays, 10:00 AM - 11:30 AM, Room G9
-	// 	 	Data Structures and Algorithms: Tuesdays and Thursdays, 9:00 AM - 10:00 AM, Room B12
-	// 	 	Operating Systems: Tuesdays, 11:00 AM - 12:00 PM; Thursdays, 9:00 AM - 10:00 AM, Room C5
-	// 	 	Database Management Systems: Thursdays, 1:00 PM - 3:00 PM (Lab), Room D3
-	// 	 	Introduction to Artificial Intelligence: Fridays, 11:30 AM - 12:30 PM, Room E1
-	// 	 	Computer Networks: Mondays, 9:00 AM - 10:00 AM; Fridays, 10:00 AM - 11:00 AM, Room F2
-	// 	 	Objectives:
-	// 	 	Introduction to Web Technology: This course introduces fundamental concepts and technologies for web development. It covers the structure, presentation, and behavior of web pages, providing a foundation in both client-side and server-side development.
-	// 	 	Data Structures and Algorithms: This course provides an in-depth understanding of data structures and algorithms, covering topics such as arrays, stacks, queues, linked lists, trees, graphs, and sorting algorithms, emphasizing problem-solving and algorithmic thinking.
-	// 	 	Operating Systems: This course explores the fundamental concepts of operating systems, including process management, memory management, file systems, and I/O operations. It provides a comprehensive overview of how operating systems work and their role in managing computer hardware and software resources.
-	// 	 	Database Management Systems: This course covers the principles of database systems, focusing on database design, SQL, and relational databases. It includes practical lab sessions where students gain hands-on experience in creating and managing databases, emphasizing data integrity and security.
-	// 	 	Introduction to Artificial Intelligence: This course introduces the fundamental concepts of artificial intelligence, including search algorithms, knowledge representation, machine learning, and problem-solving techniques. It provides an overview of AI applications and ethical considerations in the field.
-	// 	 	Computer Networks: This course covers the essentials of computer networks, including network models, protocols, IP addressing, and network security. It aims to provide students with a foundational understanding of how networks operate and communicate in different environments.
-	// 4.	Class Policies
-	// 	 	Attendance: Regular attendance is required. Inform Vivek if unable to attend.
-	// 	 	Late Assignments: 10% penalty per day unless prior arrangements are made.
-	// 5.	Frequently Asked Questions (FAQs)
-	// 	 	Contact: Best reached via email or school messaging platform
-	// 	 	Class Materials: Available on the school’s LMS under “Course Materials”
-	// 	 	Missed Classes: Check LMS for notes and recorded lectures or ask a classmate
-	// 6.	Important Dates
-	// 	 	Midterm Exam: March 15, 2024
-	// 	 	Final Exam: May 10, 2024
-	// 	 	Project Deadline: April 20, 2024
-	// 7.	Grading Breakdown
-	// 	 	Assignments: 25%
-	// 	 	Midterm Exam: 20%
-	// 	 	Midterm Exam: 20%
-	// 	 	Final Exam: 35%
-	// 8.	Available Resources
-	// 	 	Office Hours: Monday to Friday, From 9AM to 5PM
-	// 	 	Recommended Textbooks: “WEB-TECH Mastery” by Vivek & NEMO
-	// 	 	Online Resources: NEMO CLASSES, JUSTYOUTUBE
-	// 9.	Classroom Guidelines
-	// 	 	Respect and Inclusion: All opinions should be respected.
-	// 	 	Participation: Actively encouraged and counts toward the overall grade
-	// 	 	Electronics: Should be silenced and stored away during class
-	// 10.	Weekly Timetable For Lectures (Daily Available Hours 9AM to 5PM, except the Lecture Hours)
-	// 		Lecture Hours:
-	// 	 	Monday: [Data Structures, 9:00 AM - 10:00 AM, Room G1] , [Web Development Lab, 10:30 AM - 12:30 PM, Room FF4]
-	// 	 	Tuesday: [Operating Systems, 9:00 AM - 10:00 AM, Room FF4], [Introduction to AI, 11:00 AM - 12:00 PM, Room G1]
-	// 	 	Wednesday: [Computer Networks, 10:00 AM - 11:00 AM, Room FF9], [Data Structures, 11:30 AM - 12:30 PM, Room LT2]
-	// 	 	Thursday: [Operating Systems, 9:00 AM - 10:00 AM, Room G1], [Database Management Lab, 1:00 PM - 3:00 PM, Room LT2]
-	// 	 	Friday: [Computer Networks, 10:00 AM - 11:00 AM, Room LT2], [Introduction to AI, 11:30 AM - 12:30 PM, Room FF4]
-	// `;
+    console.log("Email History Loaded from MongoDB.");
+    return fullEmailHistory;
+  } catch (error) {
+    console.error('Error loading email history:', error);
+    throw error;
+  }
+};
 
-  // Split context into documents
+const responseGenerator = async (userEmail, senderName,  senderEmail , emailContent) => {
+  // console.log("ResponseGenerator" + userEmail + senderEmail + senderName + emailContent);
+  const rawContext = await loadContext(userEmail);
+  const rawEmailHistory = await loadEmailHistory(userEmail);
+
+  // Split context into documents for vector embeddings
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 100000,
     chunkOverlap: 0,
@@ -132,43 +79,120 @@ const responseGenerator = async (senderName, emailText) => {
     content => new Document({ pageContent: content })
   );
 
-  // Local Ollama for embeddings
   const embeddings = new OllamaEmbeddings({
     model: "llama3.2:1b",
     temperature: 0.5,
-    baseUrl: "http://localhost:11434"
+    baseUrl: "http://localhost:11434",
   });
 
   const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings);
   const retriever = vectorStore.asRetriever({ k: 1 });
 
-  const retrievedDocs = await retriever.getRelevantDocuments(emailText);
+  const retrievedDocs = await retriever.getRelevantDocuments(emailContent);
   const contextChunk = retrievedDocs.map(doc => doc.pageContent).join("\n\n");
 
-  // Construct prompt
-  const promptText = `
-You are an email assistant named "Otter", responding on behalf of Vivek. Use the provided context to respond in a single, concise reply that directly answers the question.
+  const combinedContext = `
+    User context info: ${contextChunk}
 
-If the email contains any sensitive keywords like "${sensitiveKeywords.join(', ')}", respond with a message that invites the sender to meet in person.
+    Recent email history: ${rawEmailHistory}
+  `;
 
-Strictly format your response in this JSON structure:
-{
-  "subject": "A concise, relevant subject line tailored to the received email.",
-  "greeting": "Dear ${senderName}",
-  "body": "The main response content that addresses the sender's question",
-  "signature": "Best regards, Vivek Shaurya"
-}
+const promptText = `
+    You are an intelligent email assistant named "Otter", replying on behalf of ${userEmail}.
+    Use both the **User Context** and the **Email History** to generate a thoughtful and consistent response.
+---
 
-Context:
-${contextChunk}
+###  CONTEXTUAL RULES
 
-Email received:
-${emailText}
+1. **Strict Thread Isolation:** Only use context from the current thread with **${senderName}**. 
+   - Do **NOT** reference discussions, decisions, or meetings from other senders or unrelated threads.
+   - If you're unsure whether something was mentioned in this thread, **assume it wasn't**.
 
-Respond as Vivek:
+2. **Email History First:** Always read the **entire conversation history** with ${senderName} before responding. Identify:
+   - Pending requests
+   - Commitments or confirmations
+   - Proposed times or topics
+
+3. **Maintain Conversational Flow:**
+   - Match tone and formality from previous replies.
+   - If a prior question was ignored, politely acknowledge and address it.
+   - If the sender is following up, reflect that awareness ("Thanks for the reminder", etc.).
+
+---
+
+###  PRIVACY & DATA HANDLING
+
+4. **Zero Leakage Policy:** 
+   - Do **NOT** share or imply any personal details (e.g., full name, calendar, contacts, files, phone numbers, locations).
+   - Do **NOT** mention or forward information from other users, even indirectly.
+
+5. **No Hallucinations:**
+   - Do not guess, assume, or fabricate any facts.
+   - If information is missing or unclear, respond with:
+     > “I’ll follow up on that and get back to you.”
+     or
+     > “Let me confirm that for you and respond shortly.”
+
+6. **Sensitive Topics Handling:**
+   - If the email contains any sensitive keywords like "${sensitiveKeywords.join(', ')}", **avoid digital discussion**.
+   - Respond with:
+     > “Given the nature of this topic, I suggest we discuss this in person or via a secure channel.”
+
+---
+
+###  SCHEDULING & MEETINGS
+
+7. **No Double-Booking:**
+   - Before confirming any meeting time, scan the thread and history for conflicts.
+   - If a time has already been committed, suggest an alternative.
+
+8. **Be Time-Zone Aware:**
+   - If time zones are mentioned, reflect them accurately.
+   - If uncertain, confirm the sender's time zone instead of assuming.
+
+---
+
+###  WRITING STYLE & TONE
+
+9. **Be Clear, Concise, and Polite:**
+   - Do not over-explain. Stay on point.
+   - Use simple, professional language.
+   - Use contractions sparingly depending on tone.
+
+10. **Defer when Needed:**
+    - It’s okay to not know. It’s **not** okay to mislead.
+    - Show ownership: “I'll check with Vivek and follow up soon.”
+
+---
+    Your response must be valid JSON in the following format:
+    {
+      "subject": "A short, relevant subject for this email.",
+      "greeting": "Dear ${senderName},",
+      "body": "Main reply that addresses the question or request.",
+      "signature": "Best regards,\\nOtter"
+    }
+
+    ---
+
+    ### ABSOLUTE NO-GOs
+    
+    - Never invent meeting times or decisions.
+    - Never forward, leak, or imply information about unrelated people or emails.
+    - Never mention “I’m an AI” or refer to yourself as a bot or model.
+    - Never speculate or make up responses.
+    
+    ---
+
+    User Context and History:
+    ${combinedContext}
+
+    New Incoming Email:
+    ${emailContent}
+
+    Now write a response as Vivek:
 `;
 
-  // Final response from Groq
+  // 🧠 Call Groq to generate response
   const chatCompletion = await groq.chat.completions.create({
     messages: [
       {
@@ -176,7 +200,7 @@ Respond as Vivek:
         content: promptText,
       },
     ],
-    model: "llama-3.3-70b-versatile", 
+    model: "llama-3.3-70b-versatile",
     temperature: 0.7,
     max_tokens: 1024,
     top_p: 1,
@@ -188,7 +212,7 @@ Respond as Vivek:
   try {
     finalAnswer = JSON.parse(content);
   } catch (e) {
-    console.error("❌ Error parsing JSON from Groq:", content);
+    console.error("❌ Failed to parse JSON:", content);
     throw e;
   }
 

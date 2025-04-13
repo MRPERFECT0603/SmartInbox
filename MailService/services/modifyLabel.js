@@ -47,10 +47,11 @@ const changeMailLabel = async (messageID, auth) => {
  * @param {string} messageID - The unique ID of the Gmail message to modify.
  * @returns {Promise<null>} Always returns `null` after processing.
  */
-const changeLabel = async (messageID) => {
+const changeLabel = async (email, messageID) => {
+    console.log(email);
     try {
         console.log("Processing Response Message to change label:", messageID);
-        const auth = await authorize(); 
+        const auth = await authorize(email); 
         if (auth) {
             console.log('Authorized successfully');
             const message = await changeMailLabel(messageID, auth); 

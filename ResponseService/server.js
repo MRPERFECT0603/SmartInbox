@@ -10,7 +10,7 @@ connectdb();
 
 const { queuePush } = require("./queues/queue"); 
 const { messageFetch } = require("./services/MailResponse"); 
-const { generateResponse  } = require("./Controllers/ResponseController");
+const { generateResponse , saveEmailHistory } = require("./Controllers/ResponseController");
 const { Increment } = require("./services/metricsServices");
 
 
@@ -32,14 +32,23 @@ const startMessageConsumer = async () => {
       Increment('responseService.mailsPulled');
       console.log("Received new message from Exchange:", message);
       const Message = JSON.parse(message);
-      const response = await generateResponse(Message.sender , Message.messageData);
+      const response = await generateResponse(Message.userEmail , Message.senderName , Message.senderEmail , Message.messageData);
       Increment('responseService.responseGenerated');
+      console.log("Response"+response);
       const queueMessage = {
-        sender: Message.sender,
+        userEmail: Message.userEmail,
+        sender: Message.senderEmail,
         Id: Message.id,
         threadID: Message.threadID,
         response: response
       };
+      const EmailHistory = {
+        userEmail: Message.userEmail,
+        sender: Message.senderName,
+        messageData: Message.messageData,
+        response: response
+      }
+      saveEmailHistory(EmailHistory);
       const data = JSON.stringify(queueMessage);
       await queuePush({ exchange, routingKey,  message: data});
       console.log("Response Mail sent to the exchange:\n" + data);

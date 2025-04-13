@@ -99,7 +99,6 @@ async function authorize(email) {
             .then(() => res.status(200).send('Authorization completed, token saved.'))
             .catch(error => {
                 console.error('Error during authorization:', error);
-                res.status(500).send('Authorization failed.');
             });
         }
 
@@ -107,7 +106,6 @@ async function authorize(email) {
         resolve(oAuth2Client);
     } catch (error) {
         console.error('Error fetching token from MongoDB:', error);
-        res.status(500).send('Error during authorization.');
     }
     });
 }

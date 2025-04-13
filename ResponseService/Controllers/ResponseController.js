@@ -67,10 +67,10 @@ dotenv.config();
  * 2. Logs the response to the console for debugging purposes.
  * 3. If an error occurs during the generation process, logs the error message and rethrows a new error.
  */
-const generateResponse = async (userName, emailContent) => {
+const generateResponse = async (userEmail , senderName, senderEmail, emailContent) => {
     try {
         
-        const response = await responseGenerator(userName , emailContent);
+        const response = await responseGenerator(userEmail , senderName , senderEmail , emailContent);
         // console.log(response);
         return response;
     } catch (error) {
@@ -111,28 +111,25 @@ const generateResponse = async (userName, emailContent) => {
  * 4. Handles database errors by logging the issue and responding with a 500 status.
  */
 
-const saveContext = async (req, res) => {
-    const { context, name, emailId } = req.body; // Extract data from the request body
-  
-    if (!context || !name || !emailId) {
-      return res.status(400).json({ message: "Missing required fields" });
+
+const saveEmailHistory = async (EmailHistory) => {
+  try {
+    const combinedString = `From: ${EmailHistory.sender} | Message: ${EmailHistory.messageData} | Response: ${JSON.stringify(EmailHistory.response)}`;
+
+    const updatedContext = await Context.findOneAndUpdate(
+      { email: EmailHistory.userEmail },
+      { $push: { previousEmail: combinedString } },
+      { new: true }
+    );
+
+    if (!updatedContext) {
+      console.log("User context not found.");
+    } else {
+      console.log("Email history added to context.");
     }
-  
-    try {
-      const newContext = new Context({
-        name,
-        email: emailId,
-        context,
-      });
-  
-      await newContext.save(); 
-  
-      res.status(200).json({ message: "Context saved successfully" });
-    } catch (error) {
-      console.error("Error saving context:", error);
-      res.status(500).json({ message: "Failed to save context" });
-    }
+  } catch (error) {
+    console.error("Error updating previousEmail:", error);
+  }
 };
 
-
-module.exports = { generateResponse , saveContext };
+module.exports = { saveEmailHistory , generateResponse };

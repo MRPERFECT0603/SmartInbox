@@ -29,15 +29,25 @@ const fetchMessageDetails = async (messageId, auth) => {
  * @param {Array<object>} headers - The headers of the email message
  * @returns {string|null} - Returns the sender's email address or null if not found
  */
-const getSenderEmail = (headers) => {
+
+const getSenderDetails = (headers) => {
     const fromHeader = headers.find(header => header.name.toLowerCase() === 'from');
     if (fromHeader) {
-        const emailMatch = fromHeader.value.match(/<([^>]+)>/);
-        return emailMatch ? emailMatch[1] : fromHeader.value; 
-    }
-    return null;
-};
+        const fromValue = fromHeader.value.trim();
+        console.log("HELLOOOOO " + fromValue);
 
+        // Check if the value contains angle brackets
+        if (fromValue.includes('<') && fromValue.includes('>')) {
+            const namePart = fromValue.split('<')[0].trim().replace(/^"|"$/g, '');
+            const emailPart = fromValue.split('<')[1].split('>')[0].trim();
+            return { name: namePart, email: emailPart };
+        } else {
+            // If there's no name, just return the email as both
+            return { name: fromValue, email: fromValue };
+        }
+    }
+    return { name: null, email: null };
+};
 /**
  * Mailpreprocessor - Processes an email message by fetching its details and pre-processing the data
  * @param {string} messageId - The ID of the message to process
@@ -54,12 +64,13 @@ const Mailpreprocessor = async (messageObject) => {
             const message = await fetchMessageDetails(messageObject.id, auth); 
             if (message) {
                 Increment('mailService.mailsFetched');
-                const sender = getSenderEmail(message.payload.headers); 
+                const { name: senderName, email: senderEmail }= getSenderDetails(message.payload.headers); 
+                console.log(senderName , senderEmail);
                 const messageData = preProcessMessage(message); 
                 Increment('mailService.mailsPreprocessed');
                 const threadID = message.threadId;
                 const id = message.id;
-                return { sender, id ,threadID , messageData }; 
+                return { senderName, senderEmail, id ,threadID , messageData }; 
             }
         } else {
             console.error("Authorization failed.");

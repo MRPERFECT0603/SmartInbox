@@ -32,7 +32,9 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
  * @param {object} responseMessage - The message object containing response and sender info
  * @returns {string} - Base64url-encoded email string
  */
-const encodeMail = (sender, subject , body ,signature, greating) => {
+const encodeMail = (sender, subject , body ,signature, greeting) => {
+    // console.log("Vivek" +sender , subject , body ,signature, greeting );
+
     if (!sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(sender)) {
         console.error("Invalid recipient email address.");
         return null;
@@ -42,7 +44,7 @@ const encodeMail = (sender, subject , body ,signature, greating) => {
         `To: ${sender}\n` +
         `Subject: ${subject}\n` +
         `Content-Type: text/plain; charset=utf-8\r\n\r\n` +
-        `${greating}\n`+
+        `${greeting}\n`+
         `${body}\n\n`+
         `${signature}`;
 
@@ -56,18 +58,18 @@ const encodeMail = (sender, subject , body ,signature, greating) => {
 const MailSender = async (ParsedMessage) => {
     try {
         console.log("Processing Response Message:", ParsedMessage);
-        const auth = await authorize(); 
+        const auth = await authorize(ParsedMessage.userEmail); 
         if (auth) {
             console.log('Authorized successfully');
             const email = (ParsedMessage.response);
-            const { subject: subject, body: body , signature: signature , greating: greating} = email;
+            const { subject: subject, body: body , signature: signature , greeting: greeting} = email;
             const sender  = ParsedMessage.sender;
-            const encodedEmail = encodeMail(sender, subject , body ,signature, greating); 
+            const encodedEmail = encodeMail(sender, subject , body ,signature, greeting); 
             const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
             if (message) {
                 console.log("SENT SUCCESSFULLY:", message);
                 Increment('mailService.responseSent');
-                changeLabel(ParsedMessage.Id);
+                changeLabel(ParsedMessage.userEmail , ParsedMessage.Id);
             }
         } else {
             console.error("Authorization failed.");
