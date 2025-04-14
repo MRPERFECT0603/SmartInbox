@@ -3,57 +3,79 @@ import { useState } from "react";
 
 /**
  * DisclaimerPage Component
- * This component displays a disclaimer message to the user, informing them 
- * about the application's data usage policies and requiring their consent 
- * before proceeding.
- *
- * Props:
- * - handleAccept: A function passed as a prop that gets called when the user accepts the terms.
+ * Displays a disclaimer with user consent checkpoints before proceeding.
  */
 function DisclaimerPage({ handleAccept }) {
-  const [accepted, setAccepted] = useState(false);
+  const [checkpoints, setCheckpoints] = useState({
+    dataUsage: false,
+    dataSecurity: false,
+    userConsent: false,
+  });
 
-  const handleCheckboxChange = () => {
-    setAccepted(!accepted);
+  const handleCheckboxChange = (checkpoint) => {
+    setCheckpoints((prev) => ({ ...prev, [checkpoint]: !prev[checkpoint] }));
   };
 
+  const allChecked = Object.values(checkpoints).every(Boolean);
+
   return (
-    <div className="p-6  bg-white shadow-lg rounded-lg text-center">
-      <h2 className="text-2xl font-semibold mb-4">Disclaimer</h2>
-      <p className="mb-4">
-        By using this application, you consent to the collection and processing
-        of your data as outlined below. The information you provide will be used
-        solely to generate personalized responses and suggestions within the
-        assistant, enhancing its relevance and functionality.
+    <div className="bg-white p-6 rounded-2xl shadow-xl max-w-2xl mx-auto mt-10">
+      <h1 className="text-3xl font-bold text-center mb-4 text-gray-800">
+        Disclaimer
+      </h1>
+      <p className="text-gray-600 mb-6 text-sm leading-relaxed text-justify">
+        Before using this application, please read the following carefully. By agreeing,
+        you consent to our practices concerning data usage and privacy. Your information is
+        collected only to improve your experience and will never be shared externally. We ensure
+        your data is encrypted and stored securely in accordance with standard data protection regulations.
       </p>
-      <p className="mb-6">
-        Your data will be securely stored in our system and protected using
-        industry-standard encryption methods to prevent unauthorized access.
-        This data is accessible only by this application and will not be shared
-        with any third parties. We are committed to maintaining the
-        confidentiality and privacy of your information in accordance with
-        applicable data protection regulations.
-      </p>
-      <p className="mb-6">
-        Please proceed only if you agree to these terms. If you have any
-        concerns about how your data will be used, feel free to contact us for
-        more information.
-      </p>
-      <label className="flex items-center justify-center space-x-2">
-        <input
-          type="checkbox"
-          checked={accepted}
-          onChange={handleCheckboxChange}
-          className="form-checkbox"
-        />
-        <span>I accept the terms and conditions.</span>
-      </label>
+
+      <div className="space-y-4 mb-6">
+        <label className="flex items-start space-x-3">
+          <input
+            type="checkbox"
+            checked={checkpoints.dataUsage}
+            onChange={() => handleCheckboxChange("dataUsage")}
+            className="mt-1 h-5 w-5 text-custom-blue rounded focus:ring-custom-blue"
+          />
+          <span className="text-gray-700 text-sm">
+            I understand that my data is used to generate personalized responses.
+          </span>
+        </label>
+
+        <label className="flex items-start space-x-3">
+          <input
+            type="checkbox"
+            checked={checkpoints.dataSecurity}
+            onChange={() => handleCheckboxChange("dataSecurity")}
+            className="mt-1 h-5 w-5 text-custom-blue rounded focus:ring-custom-blue"
+          />
+          <span className="text-gray-700 text-sm">
+            I acknowledge that my data will be stored securely and not shared with third parties.
+          </span>
+        </label>
+
+        <label className="flex items-start space-x-3">
+          <input
+            type="checkbox"
+            checked={checkpoints.userConsent}
+            onChange={() => handleCheckboxChange("userConsent")}
+            className="mt-1 h-5 w-5 text-custom-blue rounded focus:ring-custom-blue"
+          />
+          <span className="text-gray-700 text-sm">
+            I consent to the application&apos;s data usage policies.
+          </span>
+        </label>
+      </div>
+
       <button
         onClick={handleAccept}
-        disabled={!accepted} // Disable button if terms are not accepted
-        className={`mt-6 px-4 py-2 font-semibold text-white ${
-          accepted ? "bg-custom-blue" : "bg-gray-400 cursor-not-allowed"
-        } rounded`}
+        disabled={!allChecked}
+        className={`w-full py-2.5 text-white font-semibold rounded-xl transition-all ${
+          allChecked
+            ? "bg-custom-blue hover:bg-blue-600"
+            : "bg-gray-300 cursor-not-allowed"
+        }`}
       >
         Proceed
       </button>
@@ -62,7 +84,7 @@ function DisclaimerPage({ handleAccept }) {
 }
 
 DisclaimerPage.propTypes = {
-  handleAccept: PropTypes.func.isRequired, 
+  handleAccept: PropTypes.func.isRequired,
 };
 
 export default DisclaimerPage;

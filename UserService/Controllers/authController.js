@@ -147,34 +147,36 @@ function getNewToken(oAuth2Client, email , callback) {
  * @param {object} res - Express response object for sending the result of the authorization process.
  */
 async function authorize(req, res) {
-    const { email } = req.body;
-    try {
-        const userContext = await Context.findOne({ email });
-        
-        if (!userContext || userContext.token === " ") {
-            // No token, initiate the new token generation flow
-            return new Promise((resolve, reject) => {
-                getNewToken(oAuth2Client, email, async (callbackError, tokenSaved) => {
-                    if (callbackError) {
-                        return reject(callbackError);
-                    }
-                    resolve(tokenSaved);
-                });
-            })
-            .then(() => res.status(200).send('Authorization completed, token saved.'))
-            .catch(error => {
-                console.error('Error during authorization:', error);
-                res.status(500).send('Authorization failed.');
-            });
-        }
-        oAuth2Client.setCredentials(JSON.parse(userContext.token));
-        res.status(200).send('Token already exists, authorization successful.');
-    } catch (error) {
-        console.error('Error fetching token from MongoDB:', error);
-        res.status(500).send('Error during authorization.');
-    }
+  const { email } = req.body;
+  try {
+      const userContext = await Context.findOne({ email });
+
+      if (!userContext || !userContext.token || userContext.token.trim() === "") {
+          return new Promise((resolve, reject) => {
+              getNewToken(oAuth2Client, email, async (callbackError, tokenSaved) => {
+                  if (callbackError) return reject(callbackError);
+                  resolve(tokenSaved);
+              });
+          })
+          .then(() => res.status(200).send('Authorization completed, token saved.'))
+          .catch(error => {
+              console.error('Error during authorization:', error);
+              res.status(500).send('Authorization failed.');
+          });
+      }
+
+      try {
+          const parsedToken = JSON.parse(userContext.token);
+          oAuth2Client.setCredentials(parsedToken);
+          res.status(200).send('Token already exists, authorization successful.');
+      } catch (parseError) {
+          console.error('Failed to parse token JSON:', parseError);
+          return res.status(400).send('Stored token is corrupted. Please re-authenticate.');
+      }
+  } catch (error) {
+      console.error('Error fetching token from MongoDB:', error);
+      res.status(500).send('Error during authorization.');
+  }
 }
-
-
 
 module.exports = { oAuth2Client, handleCallback, authorize };

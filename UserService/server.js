@@ -36,6 +36,7 @@ app.use(express.json());
  */
 app.get('/callback', handleCallback); 
 app.use("/api", require("./Routes/auth")); 
+app.use("/api", require("./Routes/dashboard")); 
 
 
 app.listen(PORT, () => {

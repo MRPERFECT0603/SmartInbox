@@ -24,7 +24,7 @@ function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage 
             value={formData.grading}
             onChange={handleChange}
             rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             placeholder="Enter grading breakdown"
           />
         </div>
@@ -37,20 +37,20 @@ function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage 
             value={formData.importantDates}
             onChange={handleChange}
             rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             placeholder="Enter important dates"
           />
         </div>
         <div className="flex justify-between mt-6">
           <button
             onClick={handlePrevPage}
-            className="py-2 px-4 bg-gray-500 text-white font-semibold rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="py-2 px-4 bg-gray-500 text-white font-semibold rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
             Previous
           </button>
           <button
             onClick={handleNextPage}
-            className="py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
             Next
           </button>

@@ -16,7 +16,12 @@ const NewMailFetchJob = cron.schedule('* * * * *', async () => {
     console.log('Cron running for all users');
   
     const users = await Context.find({ token: { $ne: " " } });
-    // console.log(users);
+    console.log(users);
+
+    if (!users || users.length === 0) {
+      console.warn("🚫 No users found with valid tokens. Skipping mail fetch job.");
+      return;
+    }
 
     for (const user of users) {
       try {

@@ -82,7 +82,8 @@ const responseGenerator = async (userEmail, senderName,  senderEmail , emailCont
   const embeddings = new OllamaEmbeddings({
     model: "llama3.2:1b",
     temperature: 0.5,
-    baseUrl: "http://localhost:11434",
+    // baseUrl: "http://localhost:11434",
+    baseUrl: "https://neatly-fluent-kid.ngrok-free.app",
   });
 
   const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings);
@@ -210,7 +211,14 @@ const promptText = `
 
   let finalAnswer;
   try {
-    finalAnswer = JSON.parse(content);
+    // Clean triple backticks and possible "json" hint
+    const cleaned = content
+      .replace(/^```json\s*/i, '')   // remove starting ```json
+      .replace(/^```/, '')           // just in case it's only ```
+      .replace(/```$/, '')           // remove ending ```
+      .trim();
+  
+    finalAnswer = JSON.parse(cleaned);
   } catch (e) {
     console.error("❌ Failed to parse JSON:", content);
     throw e;

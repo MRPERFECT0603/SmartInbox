@@ -8,13 +8,15 @@
  */
 
 const express = require("express"); 
-const { authorize }= require("../Controllers/authController");
-const { saveContext, login } = require("../Controllers/saveContext");
+const { emailHistory , deleteToken } = require("../Controllers/saveContext");
+const {summarizeConversations} = require("../Controllers/SummarizeController");
+const { getDashboardStats } = require("../Controllers/dashboardcontroller");
 const router = express.Router();
 
-router.post("/auth", authorize);
-router.post("/login", login);
-router.post("/saveContext", saveContext);
+router.get("/contextData/:email", emailHistory);
+router.get("/summarize/:email", summarizeConversations);
+router.get("/dashBoardMetrics", getDashboardStats);
+router.delete("/token/:email", deleteToken);
 
 
 module.exports = router;

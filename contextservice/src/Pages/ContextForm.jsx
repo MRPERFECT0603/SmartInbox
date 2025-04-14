@@ -8,9 +8,6 @@ import ReviewPage from "../components/ReviewPage";
 import Header from "../components/Header";
 import Otter from "../assets/otterhng.png";
 import Otter2 from "../assets/otter2.png";
-import Otter3 from "../assets/otter3.png";
-import Otter4 from "../assets/otter4.png";
-import Otter5 from "../assets/otterpeaking.png";
 
 import "../App.css";
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +23,7 @@ function ContextForm() {
     age: "",
     occupation: "",
     email: "",
-    phone: "",
+    password: "",
     website: "",
     courses: "",
     schedule: "",
@@ -64,8 +61,7 @@ function ContextForm() {
       Age: ${formData.age}
       Occupation: ${formData.occupation}
       Email: ${formData.email}
-      School Phone: ${formData.phone}
-      School Website: ${formData.website}
+      Website: ${formData.website}
       
       Courses and Schedule:
       Courses Taught: ${formData.courses}
@@ -91,7 +87,8 @@ function ContextForm() {
     // Create an object with the contextText to send as JSON
     const data = { context: contextText ,
       name: formData.name,
-      emailId: formData.email      
+      emailId: formData.email,     
+      password: formData.password
     };
   
     // Send the data to the backend using Axios
@@ -174,63 +171,16 @@ function ContextForm() {
             />
           </div>
         )}
-        {currentPage === 1 && (
-          <img
-            src={Otter2}
-            alt="Standing Otter"
-            className="w-64 h-100 bobbing-animation"
-            style={{
-              position: "absolute",
-              top: "60%",
-              right: "10%",
-            }}
-          />
-        )}
-        {currentPage === 2 && (
-          <img
-            src={Otter3}
-            alt="Standing Otter with box"
-            className="w-64 h-100 breathing-animation "
-            style={{
-              position: "absolute",
-              top: "60%",
-              right: "75%",
-            }}
-          />
-        )}
-        {currentPage === 3 && (
-          <img
-            src={Otter4}
-            alt="Standing Otter with box"
-            className="w-64 h-100 breathing-animation "
-            style={{
-              position: "absolute",
-              top: "60%",
-              right: "75%",
-            }}
-          />
-        )}
-        {currentPage === 4 && (
-          <div className="flex justify-start -mb-36">
-            <img
-              src={Otter}
-              alt="Hanging Otter"
-              className="w-40 swing-animation"
-            />
-          </div>
-        )}
-        {currentPage === 5 && (
-          <img
-            src={Otter5}
-            alt="Otter Peaking"
-            className="w-40 h-100  "
-            style={{
-              position: "absolute",
-              top: "-2%",
-              right: "27%",
-            }}
-          />
-        )}
+        <img
+      src={Otter2}
+      alt="Standing Otter"
+      className="w-64 h-100 bobbing-animation"
+      style={{
+        position: "absolute",
+        top: "60%",
+        right: "10%",
+      }}
+    />
          {/* Modal */}
          {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">

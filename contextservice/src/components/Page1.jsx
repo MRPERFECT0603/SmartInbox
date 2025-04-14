@@ -10,7 +10,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg ">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 1: Personal Information</h2>
       <div className="space-y-4">
         {/* Name Input Field */}
@@ -22,7 +22,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             placeholder="Enter your name"
           />
         </div>
@@ -36,7 +36,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
             name="age"
             value={formData.age}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             placeholder="Enter your age"
           />
         </div>
@@ -50,7 +50,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
             name="occupation"
             value={formData.occupation}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             placeholder="Enter your occupation"
           />
         </div>
@@ -64,36 +64,36 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             placeholder="Enter your email"
           />
         </div>
 
         {/* Phone Input Field */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">School Phone</label>
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Password</label>
           <input
             type="text"
-            id="phone"
-            name="phone"
-            value={formData.phone}
+            id="password"
+            name="password"
+            value={formData.password}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Enter your school phone"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+            placeholder="Enter your Password"
           />
         </div>
 
         {/* Website Input Field */}
         <div>
-          <label htmlFor="website" className="block text-sm font-medium text-gray-700">School Website</label>
+          <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website</label>
           <input
             type="text"
             id="website"
             name="website"
             value={formData.website}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Enter your school website"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+            placeholder="Enter your website"
           />
         </div>
 
@@ -101,7 +101,7 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
         <div className="mt-6">
           <button
             onClick={handleNextPage}
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
             Next
           </button>
@@ -117,7 +117,7 @@ Page1.propTypes = {
     age: PropTypes.string.isRequired,        
     occupation: PropTypes.string.isRequired, 
     email: PropTypes.string.isRequired,      
-    phone: PropTypes.string.isRequired,      
+    password: PropTypes.string.isRequired,      
     website: PropTypes.string.isRequired,    
   }).isRequired,
   handleNextPage: PropTypes.func.isRequired,      

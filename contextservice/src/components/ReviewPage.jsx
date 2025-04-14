@@ -22,8 +22,8 @@ function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
           <p><strong className="text-gray-600">Age:</strong> {formData.age}</p>
           <p><strong className="text-gray-600">Occupation:</strong> {formData.occupation}</p>
           <p><strong className="text-gray-600">Email:</strong> {formData.email}</p>
-          <p><strong className="text-gray-600">School Phone:</strong> {formData.phone}</p>
-          <p><strong className="text-gray-600">School Website:</strong> {formData.website}</p>
+          <p><strong className="text-gray-600">Password:</strong> {formData.password}</p>
+          <p><strong className="text-gray-600">Website:</strong> {formData.website}</p>
         </div>
 
         {/* Courses and Schedule */}
@@ -54,13 +54,13 @@ function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
       <footer className="bg-white shadow-inner p-4 flex justify-between">
         <button
           onClick={handlePrevPage}
-          className="bg-gray-500 text-white rounded-md px-6 py-2 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="bg-gray-500 text-white rounded-md px-6 py-2 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
         >
           Previous
         </button>
         <button
           onClick={handleSubmit}
-          className="bg-blue-500 text-white rounded-md px-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="bg-blue-600 text-white rounded-md px-6 py-2 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
         >
           Submit and Save
         </button>
@@ -75,7 +75,7 @@ ReviewPage.propTypes = {
     age: PropTypes.string.isRequired,
     occupation: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
     website: PropTypes.string.isRequired,
     courses: PropTypes.string.isRequired,
     schedule: PropTypes.string.isRequired,

@@ -96,7 +96,7 @@ async function authorize(email) {
                     resolve(tokenSaved); 
                 });
             })
-            .then(() => res.status(200).send('Authorization completed, token saved.'))
+            .then(() => console.log('Authorization completed, token saved.'))
             .catch(error => {
                 console.error('Error during authorization:', error);
             });

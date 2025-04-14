@@ -11,6 +11,9 @@ const ContextSchema = mongoose.Schema(
             type: String, 
             unique: true, 
         },
+        password: {
+            type: String, 
+        },
         context: {
             type: String,
         },
