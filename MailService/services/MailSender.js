@@ -1,7 +1,7 @@
 const { authorize } = require("./authService");
 const { google } = require('googleapis');
 const nodeBase64 = require('nodejs-base64-converter');
-const {changeLabel} = require("./modifyLabel");
+const { changeLabel } = require("./modifyLabel");
 const { Increment } = require("../services/metricsServices");
 
 
@@ -11,7 +11,7 @@ const { Increment } = require("../services/metricsServices");
  * @param {object} auth - The authorization object for Google API
  * @returns {Promise<object|null>} - Returns a promise that resolves with the send result or null if an error occurs
  */
-const sendMail = async (encodedEmail, threadId ,auth) => {
+const sendMail = async (encodedEmail, threadId, auth) => {
     try {
         const gmail = google.gmail({ version: 'v1', auth });
         const response = await gmail.users.messages.send({
@@ -21,9 +21,27 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
                 threadId: threadId,
             },
         });
-        return response.data; 
-    } catch (err) {
-        console.error("Error sending email:", err);
+        console.log(JSON.stringify({
+            level: "info",
+            service: "mail-service",
+            event: "email_sent",
+            message: "Email successfully sent via Gmail API",
+            threadId,
+            timestamp: new Date().toISOString()
+        }));
+        return response.data;
+    } catch (error) {
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-service",
+            event: "email_send_error",
+            message: "Failed to send email via Gmail API",
+            threadId,
+            error: error.message,
+            stack: error.stack,
+            timestamp: new Date().toISOString()
+        }));
+        return null;
     }
 };
 
@@ -32,52 +50,88 @@ const sendMail = async (encodedEmail, threadId ,auth) => {
  * @param {object} responseMessage - The message object containing response and sender info
  * @returns {string} - Base64url-encoded email string
  */
-const encodeMail = (sender, subject , body ,signature, greeting) => {
-    // console.log("Vivek" +sender , subject , body ,signature, greeting );
+const encodeMail = (sender, subject, body, signature, greeting) => {
+
 
     if (!sender || !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(sender)) {
-        console.error("Invalid recipient email address.");
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-service",
+            event: "invalid_email_format",
+            message: "Recipient email is invalid",
+            email: sender,
+            timestamp: new Date().toISOString()
+        }));
         return null;
     }
 
-    const emailContent = 
+    const emailContent =
         `To: ${sender}\n` +
         `Subject: ${subject}\n` +
         `Content-Type: text/plain; charset=utf-8\r\n\r\n` +
-        `${greeting}\n`+
-        `${body}\n\n`+
+        `${greeting}\n` +
+        `${body}\n\n` +
         `${signature}`;
 
-    // Encode email in base64url format for Gmail API compatibility
     const encodedMail = Buffer.from(emailContent, 'utf-8').toString('base64')
         .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    
+
     return encodedMail;
 };
 
 const MailSender = async (ParsedMessage) => {
     try {
-        console.log("Processing Response Message:", ParsedMessage);
-        const auth = await authorize(ParsedMessage.userEmail); 
+        const auth = await authorize(ParsedMessage.userEmail);
         if (auth) {
-            console.log('Authorized successfully');
+            console.log(JSON.stringify({
+                level: "info",
+                service: "mail-service",
+                event: "gmail_authorized",
+                message: "Successfully authorized Gmail access",
+                userEmail: ParsedMessage.userEmail,
+                timestamp: new Date().toISOString()
+            }));
             const email = (ParsedMessage.response);
-            const { subject: subject, body: body , signature: signature , greeting: greeting} = email;
-            const sender  = ParsedMessage.sender;
-            const encodedEmail = encodeMail(sender, subject , body ,signature, greeting); 
-            const message = await sendMail(encodedEmail, ParsedMessage.threadID ,auth); 
+            const { subject: subject, body: body, signature: signature, greeting: greeting } = email;
+            const sender = ParsedMessage.sender;
+            const encodedEmail = encodeMail(sender, subject, body, signature, greeting);
+            const message = await sendMail(encodedEmail, ParsedMessage.threadID, auth);
             if (message) {
-                console.log("SENT SUCCESSFULLY:", message);
+                console.log(JSON.stringify({
+                    level: "info",
+                    service: "mail-service",
+                    event: "mail_sent_success",
+                    message: "Mail successfully sent and label changed",
+                    messageId: message.id,
+                    threadId: message.threadId,
+                    timestamp: new Date().toISOString()
+                }));
                 Increment('mailService.responseSent');
-                changeLabel(ParsedMessage.userEmail , ParsedMessage.Id);
+                changeLabel(ParsedMessage.userEmail, ParsedMessage.Id);
             }
         } else {
-            console.error("Authorization failed.");
+            console.error(JSON.stringify({
+                level: "error",
+                service: "mail-service",
+                event: "gmail_auth_failed",
+                message: "Authorization for Gmail failed",
+                userEmail: ParsedMessage.userEmail,
+                timestamp: new Date().toISOString()
+            }));
         }
     } catch (error) {
-        console.error("Error in MailSender:", error);
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-service",
+            event: "mail_sender_error",
+            message: "Error occurred in MailSender process",
+            error: error.message,
+            stack: error.stack,
+            timestamp: new Date().toISOString()
+        }));
     }
-    return null; 
-}
+
+    return null;
+};
 
 module.exports = { MailSender };

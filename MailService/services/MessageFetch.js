@@ -9,7 +9,17 @@ const messageIdFetch = async (onMessage) => {
     const routingKey = process.env.ROUTING_KEY_PULL_NEW_MAIL;
 
     queuePull({ exchange, routingKey }, (message) => {
-        console.log("Message:", message);
+        console.log(JSON.stringify({
+            level: "info",
+            service: "mail-service",
+            event: "new_mail_id_received",
+            message: "Message ID pulled from queue",
+            exchange,
+            routingKey,
+            payload: message,
+            timestamp: new Date().toISOString()
+        }));
+
         if (onMessage) onMessage(message); 
     });
 };
@@ -23,7 +33,17 @@ const responseMailFetch = async (onMessage) => {
     const routingKey = process.env.ROUTING_KEY_PULL_MAIL_RESPONE;
 
     queuePull({ exchange, routingKey }, (responseMessage) => {
-        console.log("MessageId:", responseMessage); 
+        console.log(JSON.stringify({
+            level: "info",
+            service: "mail-service",
+            event: "response_mail_id_received",
+            message: "Response mail ID pulled from queue",
+            exchange,
+            routingKey,
+            payload: responseMessage,
+            timestamp: new Date().toISOString()
+        }));
+
         if (onMessage) onMessage(responseMessage); 
     });
 };

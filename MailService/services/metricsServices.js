@@ -1,6 +1,10 @@
 const Metrics = require("../Models/MetricsModel");
 
-const createMetricsDocument = async() => {
+/**
+ * Creates a new Metrics document with default values
+ * Initializes counters for mailCronJob, mailService, and responseService
+ */
+const createMetricsDocument = async () => {
     try {
         const newMetrics = new Metrics({
             mailCronJob: {
@@ -28,48 +32,89 @@ const createMetricsDocument = async() => {
         });
 
         const savedMetrics = await newMetrics.save();
-        console.log('New Metrics document created, at ' + Date.now());
+
+        console.log(JSON.stringify({
+            level: 'info',
+            service: 'mail-service',
+            event: 'create_metrics',
+            message: 'New Metrics document created',
+            timestamp: new Date().toISOString(),
+            documentId: savedMetrics._id
+        }));
     } catch (error) {
-        console.error('Error creating new Metrics document:', error);
+        console.error(JSON.stringify({
+            level: 'error',
+            service: 'mail-service',
+            event: 'create_metrics_error',
+            message: 'Error creating new Metrics document',
+            error: error.message,
+            timestamp: new Date().toISOString()
+        }));
     }
-}
+};
 
-
+/**
+ * Increments a nested field in the most recent Metrics document
+ * @param {string} serviceMetrics - The dot-notated path to the metric to increment (e.g., 'mailService.mailsFetched')
+ */
 const Increment = async (serviceMetrics) => {
-    try { 
-        const result = await Metrics.findOneAndUpdate(
-            {}, 
-            { $inc: { [serviceMetrics] : 1 } }, 
-            { sort: { createdAt: -1 }, new: true } 
-        );
-
-        if (result) {
-            console.log('Most recent document Incremented.');
-        } else {
-            console.log('No document found to update.');
-        }
-    } catch (error) {
-        console.error('Error updating the most recent document:', error);
-    }
-}
-
-const Decrement = async (serviceMetrics) => {
     try {
         const result = await Metrics.findOneAndUpdate(
-            {}, 
-            { $inc: { [serviceMetrics] : -1 } }, 
+            {},
+            { $inc: { [serviceMetrics]: 1 } },
             { sort: { createdAt: -1 }, new: true }
         );
 
-        if (result) {
-            console.log('Most recent document Decremented.');
-        } else {
-            console.log('No document found to update.');
-        }
+        console.log(JSON.stringify({
+            level: 'info',
+            service: 'mail-service',
+            event: 'increment_metric',
+            metric: serviceMetrics,
+            success: !!result,
+            timestamp: new Date().toISOString()
+        }));
     } catch (error) {
-        console.error('Error updating the most recent document:', error);
+        console.error(JSON.stringify({
+            level: 'error',
+            service: 'mail-service',
+            event: 'increment_metric_error',
+            metric: serviceMetrics,
+            message: error.message,
+            timestamp: new Date().toISOString()
+        }));
     }
-}
+};
 
+/**
+ * Decrements a nested field in the most recent Metrics document
+ * @param {string} serviceMetrics - The dot-notated path to the metric to decrement (e.g., 'responseService.responsePushed')
+ */
+const Decrement = async (serviceMetrics) => {
+    try {
+        const result = await Metrics.findOneAndUpdate(
+            {},
+            { $inc: { [serviceMetrics]: -1 } },
+            { sort: { createdAt: -1 }, new: true }
+        );
 
-module.exports = {createMetricsDocument , Increment  , Decrement}
+        console.log(JSON.stringify({
+            level: 'info',
+            service: 'mail-service',
+            event: 'decrement_metric',
+            metric: serviceMetrics,
+            success: !!result,
+            timestamp: new Date().toISOString()
+        }));
+    } catch (error) {
+        console.error(JSON.stringify({
+            level: 'error',
+            service: 'mail-service',
+            event: 'decrement_metric_error',
+            metric: serviceMetrics,
+            message: error.message,
+            timestamp: new Date().toISOString()
+        }));
+    }
+};
+
+module.exports = { createMetricsDocument, Increment, Decrement };

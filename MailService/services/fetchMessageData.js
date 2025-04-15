@@ -17,10 +17,18 @@ const fetchMessageDetails = async (messageId, auth) => {
             'userId': 'me',
             'id': messageId,
         });
-        return response.data; 
+        return response.data;
     } catch (err) {
-        console.error("Error fetching message details:", err);
-        return null; 
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-service",
+            event: "message_fetch_error",
+            message: `Failed to fetch message details for messageId ${messageId}`,
+            error: err.message,
+            stack: err.stack,
+            timestamp: new Date().toISOString()
+        }));
+        return null;
     }
 };
 
@@ -34,15 +42,21 @@ const getSenderDetails = (headers) => {
     const fromHeader = headers.find(header => header.name.toLowerCase() === 'from');
     if (fromHeader) {
         const fromValue = fromHeader.value.trim();
-        console.log("HELLOOOOO " + fromValue);
+        console.log(JSON.stringify({
+            level: "info",
+            service: "mail-service",
+            event: "sender_parsed",
+            message: "Parsed sender details successfully",
+            sender: fromValue,
+            timestamp: new Date().toISOString()
+        }));
 
-        // Check if the value contains angle brackets
         if (fromValue.includes('<') && fromValue.includes('>')) {
             const namePart = fromValue.split('<')[0].trim().replace(/^"|"$/g, '');
             const emailPart = fromValue.split('<')[1].split('>')[0].trim();
             return { name: namePart, email: emailPart };
         } else {
-            // If there's no name, just return the email as both
+
             return { name: fromValue, email: fromValue };
         }
     }
@@ -55,30 +69,67 @@ const getSenderDetails = (headers) => {
  */
 const Mailpreprocessor = async (messageObject) => {
     try {
-        console.log("Processing message ID:", messageObject);
         const email = messageObject.email;
-        const auth = await authorize(email); 
+        const auth = await authorize(email);
         if (auth) {
-            console.log('Authorized successfully');
-            console.log(messageObject.id);
-            const message = await fetchMessageDetails(messageObject.id, auth); 
+            console.log(JSON.stringify({
+                level: "info",
+                service: "mail-service",
+                event: "message_authorized",
+                message: `Successfully authorized email: ${email}`,
+                timestamp: new Date().toISOString()
+            }));
+            const message = await fetchMessageDetails(messageObject.id, auth);
             if (message) {
                 Increment('mailService.mailsFetched');
-                const { name: senderName, email: senderEmail }= getSenderDetails(message.payload.headers); 
-                console.log(senderName , senderEmail);
-                const messageData = preProcessMessage(message); 
+                const { name: senderName, email: senderEmail } = getSenderDetails(message.payload.headers);
+                console.log(JSON.stringify({
+                    level: "info",
+                    service: "mail-service",
+                    event: "sender_extracted",
+                    message: `Extracted sender: ${senderName} <${senderEmail}>`,
+                    senderName,
+                    senderEmail,
+                    timestamp: new Date().toISOString()
+                }));
+                const messageData = preProcessMessage(message);
+                console.log(JSON.stringify({
+                    level: "info",
+                    service: "mail-service",
+                    event: "message_processed",
+                    message: "Processed email message data successfully",
+                    senderName,
+                    senderEmail,
+                    threadId: message.threadId,
+                    messageId: message.id,
+                    timestamp: new Date().toISOString()
+                }));
                 Increment('mailService.mailsPreprocessed');
                 const threadID = message.threadId;
                 const id = message.id;
-                return { senderName, senderEmail, id ,threadID , messageData }; 
+                return { senderName, senderEmail, id, threadID, messageData };
             }
         } else {
-            console.error("Authorization failed.");
+            console.error(JSON.stringify({
+                level: "error",
+                service: "mail-service",
+                event: "authorization_failed",
+                message: `Failed to authorize email: ${email}`,
+                timestamp: new Date().toISOString()
+            }));
         }
     } catch (error) {
-        console.error("Error in Mailpreprocessor:", error);
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-service",
+            event: "message_processing_error",
+            message: `Failed to process email message with ID ${messageObject.id}`,
+            error: error.message,
+            stack: error.stack,
+            timestamp: new Date().toISOString()
+        }));
     }
-    return null; 
+    return null;
 };
 
 module.exports = { Mailpreprocessor };

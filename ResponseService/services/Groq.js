@@ -18,6 +18,11 @@ const sensitiveKeywords = [
   "mental health issues", "substance abuse", "exclusion", "violence"
 ];
 
+/**
+ * Loads context from MongoDB for the specified user.
+ * @param {string} userEmail - The email of the user.
+ * @returns {Promise<string>} - The context string.
+ */
 const loadContext = async (userEmail) => {
   try {
     const contextDoc = await Context.findOne({ email: userEmail });
@@ -32,10 +37,10 @@ const loadContext = async (userEmail) => {
       throw new Error('Context is not a valid string');
     }
 
-    console.log("✅ Context Loaded from MongoDB.");
+    console.log("Context Loaded from MongoDB.");
     return context;
   } catch (error) {
-    console.error('❌ Error loading context:', error);
+    console.error('Error loading context:', error);
     throw error;
   }
 };
@@ -64,6 +69,14 @@ const loadEmailHistory = async (userEmail) => {
   }
 };
 
+/**
+ * Generates a response for an incoming email based on user context and email history.
+ * @param {string} userEmail - The email of the user.
+ * @param {string} senderName - The name of the sender.
+ * @param {string} senderEmail - The email address of the sender.
+ * @param {string} emailContent - The content of the incoming email.
+ * @returns {Promise<object>} - The structured email response.
+ */
 const responseGenerator = async (userEmail, senderName,  senderEmail , emailContent) => {
   // console.log("ResponseGenerator" + userEmail + senderEmail + senderName + emailContent);
   const rawContext = await loadContext(userEmail);
@@ -193,7 +206,7 @@ const promptText = `
     Now write a response as Vivek:
 `;
 
-  // 🧠 Call Groq to generate response
+  // Call Groq to generate response
   const chatCompletion = await groq.chat.completions.create({
     messages: [
       {
@@ -220,45 +233,13 @@ const promptText = `
   
     finalAnswer = JSON.parse(cleaned);
   } catch (e) {
-    console.error("❌ Failed to parse JSON:", content);
+    console.error("Failed to parse JSON:", content);
     throw e;
   }
 
   return finalAnswer;
 };
 
-// ────────────────────────────
-// 🧪 Test Runner (Remove in prod)
-// (async () => {
-//   const sender = "Nemo";
-//   const input = "I am in trouble, Please Help me!!  ";
-//   const response = await responseGenerator(sender, input);
-//   console.log("🟢 Final Answer:\n", response);
-// })();
-
-
 
 module.exports = { responseGenerator }   
 
-
-// async function main() {
-//   const chatCompletion = await groq.chat.completions.create({
-//     messages: [
-//       {
-//         role: "user",
-//         content: "Hey"
-//       }
-//     ],
-//     model: "llama-3.3-70b-versatile",
-//     temperature: 1,
-//     max_tokens: 1024, 
-//     top_p: 1,
-//     stream: true
-//   });
-
-//   for await (const chunk of chatCompletion) {
-//     process.stdout.write(chunk.choices[0]?.delta?.content || '');
-//   }
-// }
-
-// main();

@@ -24,13 +24,29 @@ const changeMailLabel = async (messageID, auth) => {
             userId: "me",
             id: messageID,
             resource: {
-                removeLabelIds: ["UNREAD"]// Array of label IDs to remove
+                removeLabelIds: ["UNREAD"]
             }
         });
-        // console.log(" CHanged successfully:", response.data);
+        console.log(JSON.stringify({
+            level: "info",
+            service: "mail-service",
+            event: "label_changed",
+            message: "Label changed successfully",
+            messageID,
+            timestamp: new Date().toISOString()
+        }));
         return response.data; 
     } catch (err) {
-        console.error("Error sending email:", err);
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-service",
+            event: "label_change_failed",
+            messageID,
+            message: "Error modifying Gmail label",
+            error: err.message,
+            stack: err.stack,
+            timestamp: new Date().toISOString()
+        }));
         return null; 
     }
 };
@@ -48,22 +64,45 @@ const changeMailLabel = async (messageID, auth) => {
  * @returns {Promise<null>} Always returns `null` after processing.
  */
 const changeLabel = async (email, messageID) => {
-    console.log(email);
     try {
         console.log("Processing Response Message to change label:", messageID);
         const auth = await authorize(email); 
         if (auth) {
-            console.log('Authorized successfully');
+            console.log(JSON.stringify({
+                level: "info",
+                service: "mail-service",
+                event: "auth_success",
+                email,
+                message: "Authorization successful",
+                timestamp: new Date().toISOString()
+            }));
             const message = await changeMailLabel(messageID, auth); 
             if (message) {
                 console.log("Changed SUCCESSFULLY:", message);
                 Increment('mailService.labelsChanged');
             }
         } else {
-            console.error("Authorization failed.");
+            console.error(JSON.stringify({
+                level: "error",
+                service: "mail-service",
+                event: "auth_failed",
+                email,
+                message: "Authorization failed",
+                timestamp: new Date().toISOString()
+            }));
         }
     } catch (error) {
-        console.error("Error in Label Modification:", error);
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-service",
+            event: "label_change_error",
+            email,
+            messageID,
+            message: "Unhandled error during label modification",
+            error: error.message,
+            stack: error.stack,
+            timestamp: new Date().toISOString()
+        }));
     }
     return null; 
 }

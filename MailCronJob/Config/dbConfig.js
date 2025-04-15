@@ -1,17 +1,30 @@
-
-
 const mongoose = require("mongoose");
 
 const connectdb = async () => {
     try {
         const connect = await mongoose.connect(process.env.CONNECTION_STRING);
-        console.log("DataBase Connected with the User Service with :-", connect.connection.host, connect.connection.name);
+        console.log(JSON.stringify({
+            level: "info",
+            service: "mail-cronjob",
+            event: "mongo_connection_success",
+            message: "MongoDB connected successfully",
+            host: connect.connection.host,
+            database: connect.connection.name,
+            timestamp: new Date().toISOString()
+        }));
     }
     catch (err) {
-        console.error("Error connecting to the database in the MailCronJob Service", err);
+        console.error(JSON.stringify({
+            level: "error",
+            service: "mail-cronjob",
+            event: "mongo_connection_error",
+            message: "Error connecting to MongoDB",
+            error: err.message,
+            stack: err.stack,
+            timestamp: new Date().toISOString()
+        }));
         process.exit(1);
     }
-
 };
 
-module.exports = connectdb;
+module.exports = connectdb; 

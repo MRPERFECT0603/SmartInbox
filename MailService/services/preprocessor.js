@@ -7,12 +7,27 @@ const nodeBase64 = require('nodejs-base64-converter');
  */
 const preProcessMessage = (message) => {
     if (!message || !message.payload) {
-        console.warn("Message or payload is undefined.");
+        console.log(JSON.stringify({
+            level: "warn",
+            service: "mail-service",
+            event: "missing_payload",
+            message: "Message or payload is undefined",
+            timestamp: new Date().toISOString()
+        }));
         return null; 
     }
 
     let messageData;
     const mimeType = message.payload.mimeType; 
+
+    console.log(JSON.stringify({
+        level: "info",
+        service: "mail-service",
+        event: "mime_type_detected",
+        mimeType,
+        message: "Detected MIME type",
+        timestamp: new Date().toISOString()
+    }));
 
     // Determine how to extract message data based on MIME type
     if (mimeType === "multipart/alternative") {
@@ -22,18 +37,44 @@ const preProcessMessage = (message) => {
     } else if (mimeType === "multipart/mixed") {
         messageData = message.payload.parts[0]?.body?.data; 
     }
-
     if (messageData) {
-        const decodedData = nodeBase64.decode(messageData);
-        // Clean the decoded content
-        const cleanedContent = decodedData.split('\n')
-            .map(line => line.trim())     
-            .filter(line => line !== '')   
-            .join('\n');                  
-        return cleanedContent;
+        try {
+            const decodedData = nodeBase64.decode(messageData);
+            const cleanedContent = decodedData.split('\n')
+                .map(line => line.trim())
+                .filter(line => line !== '')
+                .join('\n');
+
+            console.log(JSON.stringify({
+                level: "info",
+                service: "mail-service",
+                event: "message_decoded",
+                message: "Message body successfully decoded and cleaned",
+                timestamp: new Date().toISOString()
+            }));
+
+            return cleanedContent;
+        } catch (error) {
+            console.error(JSON.stringify({
+                level: "error",
+                service: "mail-service",
+                event: "decode_error",
+                message: "Error decoding message content",
+                error: error.message,
+                stack: error.stack,
+                timestamp: new Date().toISOString()
+            }));
+            return null;
+        }
     } else {
-        console.warn("No data found in message body.");
-        return null; 
+        console.log(JSON.stringify({
+            level: "warn",
+            service: "mail-service",
+            event: "no_data_found",
+            message: "No data found in message body",
+            timestamp: new Date().toISOString()
+        }));
+        return null;
     }
 };
 

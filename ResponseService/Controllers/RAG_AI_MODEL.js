@@ -1,4 +1,15 @@
 
+
+
+
+
+/*
+
+THIS IS AN OLDER VERSION USING LANGCHAIN AND OLLAMA TO CREATE THE AI AGENT FOR RESPONSE AND RAG MODEL.
+
+
+
+*/
 const { ChatOllama } = require("@langchain/ollama");
 const { ChatPromptTemplate } = require("@langchain/core/prompts");
 const { Document } = require("langchain/document");

@@ -15,10 +15,26 @@ async function listNewMailIds(auth) {
             'labelIds': ['INBOX', 'UNREAD', 'CATEGORY_PERSONAL'], 
         });
 
-        // console.log(response.data);
+        console.log(JSON.stringify({
+            level: 'info',
+            service: 'gmail-service',
+            event: 'list_messages_success',
+            message: 'Successfully fetched unread personal emails',
+            messageCount: response.data.length,
+            timestamp: new Date().toISOString()
+        }));
+
         return response.data;
     } catch (err) {
-        console.error(err);
+        console.error(JSON.stringify({
+            level: 'error',
+            service: 'gmail-service',
+            event: 'list_messages_failure',
+            message: 'Failed to list Gmail messages',
+            error: err.message,
+            stack: err.stack,
+            timestamp: new Date().toISOString()
+        }));
     }
 }
 

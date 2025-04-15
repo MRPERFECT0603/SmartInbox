@@ -1,38 +1,90 @@
 const amqp = require('amqplib');
 
 /**
- * queueConnection - Function to establish a connection to the message queue
- * This function connects to the RabbitMQ server, creates a channel, and sets up an exchange and queue.
+ * queueConnection - Establishes a connection to RabbitMQ and sets up exchange and queue.
+ *
  * @param {object} params - Parameters for setting up the exchange and queue
- * @param {string} params.exchange - The name of the exchange to use for publishing messages
- * @param {string} params.routingKey - The routing key for binding the queue to the exchange
- * @returns {Promise<object>} - Returns a promise that resolves with an object containing the connection and channel
+ * @param {string} params.exchange - The name of the exchange to use
+ * @param {string} params.routingKey - The routing key for binding the queue
+ * @returns {Promise<object>} - Returns an object containing the connection and channel
  */
 const queueConnection = async ({ exchange, routingKey }) => {
-    const connection = await amqp.connect('amqp://localhost');
-    const channel = await connection.createChannel();
-    await channel.assertExchange(exchange, 'direct', { durable: true });
-    const queue = await channel.assertQueue(routingKey, { exclusive: false });
-    await channel.bindQueue(queue.queue, exchange, routingKey);
-    return { connection, channel };
+    try {
+        const connection = await amqp.connect('amqp://localhost');
+        const channel = await connection.createChannel();
+
+        await channel.assertExchange(exchange, 'direct', { durable: true });
+        const queue = await channel.assertQueue(routingKey, { exclusive: false });
+        await channel.bindQueue(queue.queue, exchange, routingKey);
+
+        console.log(JSON.stringify({
+            level: "info",
+            service: "queue-service_mailcronjob",
+            event: "queue_connection_success",
+            message: "Connected to RabbitMQ and initialized exchange and queue",
+            exchange,
+            routingKey,
+            timestamp: new Date().toISOString()
+        }));
+
+        return { connection, channel };
+    } catch (error) {
+        console.error(JSON.stringify({
+            level: "error",
+            service: "queue-service_mailcronjob",
+            event: "queue_connection_failure",
+            message: "Failed to connect to RabbitMQ or initialize exchange/queue",
+            exchange,
+            routingKey,
+            error: error.message,
+            stack: error.stack,
+            timestamp: new Date().toISOString()
+        }));
+        throw error;
+    }
 };
 
 /**
- * queuePush - Function to send a message to the specified queue via the exchange
- * This function publishes a message to the given exchange using the specified routing key.
+ * queuePush - Publishes a message to the specified RabbitMQ queue through an exchange.
+ *
  * @param {object} params - Parameters for sending the message
- * @param {string} params.exchange - The name of the exchange to publish the message to
+ * @param {string} params.exchange - The name of the exchange to publish to
  * @param {string} params.routingKey - The routing key for the message
- * @param {string} params.message - The message content to be sent
- * @returns {Promise<void>} - This function returns a promise since it involves asynchronous operations
+ * @param {string} params.message - The message content to send
+ * @returns {Promise<void>} - Returns a promise for async message publishing
  */
 const queuePush = async ({ exchange, routingKey, message }) => {
-    const { connection, channel } = await queueConnection({ exchange, routingKey });
-    channel.publish(exchange, routingKey, Buffer.from(message));
-    setTimeout(() => {
-        connection.close(); 
-    }, 500);
-};
+    try {
+        const { connection, channel } = await queueConnection({ exchange, routingKey });
+        channel.publish(exchange, routingKey, Buffer.from(message));
 
+        console.log(JSON.stringify({
+            level: "info",
+            service: "queue-service_mailcronjob",
+            event: "message_published",
+            message: "Message published from mailcronjob_service to RabbitMQ queue",
+            exchange,
+            routingKey,
+            payload: message,
+            timestamp: new Date().toISOString()
+        }));
+
+        setTimeout(() => {
+            connection.close();
+        }, 500);
+    } catch (error) {
+        console.error(JSON.stringify({
+            level: "error",
+            service: "queue-service-mailcrojob",
+            event: "message_publish_error",
+            message: "Failed to publish message from mailcronjob_service to queue",
+            exchange,
+            routingKey,
+            error: error.message,
+            stack: error.stack,
+            timestamp: new Date().toISOString()
+        }));
+    }
+};
 
 module.exports = { queuePush };

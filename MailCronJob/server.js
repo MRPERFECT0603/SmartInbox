@@ -3,25 +3,31 @@ const connectdb = require("./Config/dbConfig");
 const { createMetricsDocument } = require("./services/metricsServices");
 const { NewMailFetchJob } = require("./cronjobs/newMails");
 const { handleCallback } = require("./services/authService");
+const dotenv = require("dotenv");
 
-require("dotenv").config();
-const PORT = process.env.PORT || 8102; 
+dotenv.config();
+const PORT = process.env.PORT || 8102;
 
-
-connectdb();
 const app = express();
 
-//MiddleWare
+connectdb();
 app.use(express.json());
 
-//To Create a New Document everytime the Servers Restart.
-createMetricsDocument();
-//To Start the CronJob with the start of the server.
-NewMailFetchJob.start();
 
 
-app.get('/callback', handleCallback);
+// Routes
+app.get("/callback", handleCallback);
+
 
 app.listen(PORT, () => {
-    console.log(` MailCronJob Server is running on port ${PORT}`); 
+    console.log(`MailCronJob Server running at http://localhost:${PORT}`);
+    createMetricsDocument(); 
+    NewMailFetchJob.start(); 
+});
+
+
+process.on("SIGINT", () => {
+    console.log("Server shutting down...");
+    NewMailFetchJob.stop();
+    process.exit(0);
 });
