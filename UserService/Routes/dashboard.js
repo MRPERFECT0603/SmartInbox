@@ -9,12 +9,13 @@
 
 const express = require("express"); 
 const { emailHistory , deleteToken } = require("../Controllers/saveContext");
-const {summarizeConversations} = require("../Controllers/SummarizeController");
+const {summarizeConversations ,fetchsummarizeConversations } = require("../Controllers/SummarizeController");
 const { getDashboardStats } = require("../Controllers/dashboardcontroller");
 const router = express.Router();
 
 router.get("/contextData/:email", emailHistory);
 router.get("/summarize/:email", summarizeConversations);
+router.get("/fetchSummary/:email", fetchsummarizeConversations);
 router.get("/dashBoardMetrics", getDashboardStats);
 router.delete("/token/:email", deleteToken);
 

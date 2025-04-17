@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 /**
  * Page1 Component
- * Renders the first page of a multi-step form for collecting personal information.
+ * Renders the first page of a multi-step form for collecting personal and professional identity.
  */
 function Page1({ formData, handleNextPage, handleFormDataChange }) {
   const handleChange = (e) => {
@@ -10,98 +10,133 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg ">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 1: Personal Information</h2>
+    <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+        Part 1: User Identity & Background
+      </h2>
       <div className="space-y-4">
-        {/* Name Input Field */}
+        {/* Full Name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+          <label
+            htmlFor="fullName"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Full Name
+          </label>
           <input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+            id="fullName"
+            name="fullName"
+            value={formData.fullName}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter your name"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            placeholder="Enter your full name"
           />
         </div>
 
-        {/* Age Input Field */}
-        <div>
-          <label htmlFor="age" className="block text-sm font-medium text-gray-700">Age</label>
+         {/* age */}
+         <div>
+          <label
+            htmlFor="age"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Age
+          </label>
           <input
             type="text"
             id="age"
             name="age"
             value={formData.age}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter your age"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            placeholder="Enter Your Age"
           />
         </div>
 
-        {/* Occupation Input Field */}
+        {/* Job Title */}
         <div>
-          <label htmlFor="occupation" className="block text-sm font-medium text-gray-700">Occupation</label>
+          <label
+            htmlFor="preferredName"
+            className="block text-sm font-medium text-gray-700"
+          >
+            What is your current role or job title?
+          </label>
           <input
             type="text"
-            id="occupation"
-            name="occupation"
-            value={formData.occupation}
+            id="jobTitle"
+            name="jobTitle"
+            value={formData.jobTitle}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter your occupation"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            placeholder="Your role or designation"
           />
         </div>
 
-        {/* Email Input Field */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter your email"
-          />
-        </div>
 
-        {/* Phone Input Field */}
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Password</label>
+         {/* Communication Audience */}
+         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {" "}
+            Which organization, institute, or company are you currently
+            associated with?
+          </label>
           <input
             type="text"
-            id="password"
-            name="password"
-            value={formData.password}
+            id="organization"
+            name="organization"
+            value={formData.organization}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter your Password"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            placeholder="Enter the name of your organization"
           />
         </div>
 
-        {/* Website Input Field */}
+
+        {/* Self_Bio */}
         <div>
-          <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website</label>
-          <input
-            type="text"
-            id="website"
-            name="website"
-            value={formData.website}
+          <label
+            htmlFor="responsibilities"
+            className="block text-sm font-medium text-gray-700"
+          >
+          Please write a short bio you’d typically use when introducing yourself.
+          </label>
+          <textarea
+            id="bio"
+            name="bio"
+            value={formData.bio}
             onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter your website"
+            rows={3}
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            placeholder="Describe yourself in 1-2 sentences"
           />
+        </div>
+       
+        {/* UserType */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Choose Your User Type.
+          </label>
+          <select
+            name="userType"
+            value={formData.userType}
+            onChange={handleChange}
+            className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          >
+            <option value="">-- Select One --</option>
+            <option value="teacher">Teacher/Professor/Eductaor</option>
+            <option value="student">Student</option>
+            <option value="corporate">Corporate Professional</option>
+            <option value="sales">Sales Professional</option>
+            <option value="recruiter">Recuriter/HR Professional</option>
+            <option value="creator">Creator/Influencer</option>
+          </select>
         </div>
 
         {/* Next Button */}
         <div className="mt-6">
           <button
             onClick={handleNextPage}
-            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-800 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           >
             Next
           </button>
@@ -113,15 +148,15 @@ function Page1({ formData, handleNextPage, handleFormDataChange }) {
 
 Page1.propTypes = {
   formData: PropTypes.shape({
-    name: PropTypes.string.isRequired,      
-    age: PropTypes.string.isRequired,        
-    occupation: PropTypes.string.isRequired, 
-    email: PropTypes.string.isRequired,      
-    password: PropTypes.string.isRequired,      
-    website: PropTypes.string.isRequired,    
+    fullName: PropTypes.string.isRequired,
+    age: PropTypes.string.isRequired,
+    jobTitle: PropTypes.string.isRequired,
+    organization: PropTypes.string.isRequired,
+    bio: PropTypes.string.isRequired,
+    userType: PropTypes.string.isRequired,
   }).isRequired,
-  handleNextPage: PropTypes.func.isRequired,      
-  handleFormDataChange: PropTypes.func.isRequired 
+  handleNextPage: PropTypes.func.isRequired,
+  handleFormDataChange: PropTypes.func.isRequired,
 };
 
 export default Page1;

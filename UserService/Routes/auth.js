@@ -9,11 +9,12 @@
 
 const express = require("express"); 
 const { authorize }= require("../Controllers/authController");
-const { saveContext, login } = require("../Controllers/saveContext");
+const { saveContext, login , signup } = require("../Controllers/saveContext");
 const router = express.Router();
 
 router.post("/auth", authorize);
 router.post("/login", login);
+router.post("/signup", signup);
 router.post("/saveContext", saveContext);
 
 

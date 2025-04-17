@@ -2,30 +2,71 @@ const Groq = require('groq-sdk');
 const Context = require("../Models/ContextModel");
 const Summary = require("../Models/SummaryModel");
 
-const saveSummary = async (summaryArray , userEmail) => {
+
+const fetchsummarizeConversations = async (req, res) => {
+  const { email } = req.params;
+
   try {
+    if (!email) {
+      return res.status(400).json({ error: "Email is required in params." });
+    }
+
+    const summaries = await Summary.find({ userEmail: email }).sort({ updatedAt: -1 });
+
+    if (!summaries || summaries.length === 0) {
+      return res.status(404).json({ message: "No summaries found for this email." });
+    }
+
+    const latestSummaries = summaries.slice(0, 5);
+
+    const formattedSummaries = latestSummaries.map(summary => ({
+      id: summary._id,
+      email: summary.email,
+      sender: summary.name,
+      summary: summary.summary,
+      totalMails: summary.totalMails,
+      createdAt: summary.createdAt,
+      updatedAt: summary.updatedAt
+    }));
+
+    res.status(200).json({ summaries: formattedSummaries });
+  } catch (error) {
+    console.error("Error fetching summaries:", error);
+    res.status(500).json({ error: "Failed to fetch summarized conversations." });
+  }
+};
+
+const saveSummary = async (summaryArray, userEmail) => {
+  try {
+    const summariesToSave = [];
+
+    // Collect all summaries to save
     for (const user of summaryArray) {
       const { sender, summary, totalMails } = user;
-      console.log(sender , summary , totalMails);
+      console.log(sender, summary, totalMails);
 
       if (!sender || sender === "undefined") continue;
 
-      const name = sender.split('@')[0];
+      const name = sender.split('@')[0]; // Extract the name from the email
 
-      await Summary.findOneAndUpdate(
-        { userEmail: userEmail },
-        {
-          userEmail,
-          name,
-          email: sender,
-          totalMails,
-          summary
-        },
-        { upsert: true, new: true }
-      );
+      // Create a new summary document
+      const newSummary = {
+        userEmail, // Same user email for all summaries
+        name, // Sender's name
+        email: sender, // Sender's email
+        totalMails, // Number of emails in the conversation
+        summary, // The summary of the conversation
+      };
+
+      summariesToSave.push(newSummary); // Add to the list of summaries to save
     }
 
-    console.log("Summaries saved to MongoDB.");
+    // Insert all summaries at once using insertMany to create separate documents
+    if (summariesToSave.length > 0) {
+      await Summary.insertMany(summariesToSave);
+      console.log("Summaries saved to MongoDB.");
+    }
+
   } catch (error) {
     console.error("Error saving summaries:", error);
   }
@@ -134,7 +175,7 @@ Return the result in JSON format as an array with the following fields:
           ? summaryResponse
           : [summaryResponse];
       } catch (err2) {
-        console.error("❌ Vivek  ... Could not parse response as JSON array.");
+        console.error("Could not parse response as JSON array.");
         console.log("🪵 Raw content from LLM:", rawContent); // helpful debug
         return res.status(500).json({ error: "Failed to parse summary response." });
       }
@@ -144,9 +185,9 @@ Return the result in JSON format as an array with the following fields:
     return res.status(200).json({ summary: parsedArray });
 
   } catch (err) {
-    console.error("❌ Error summarizing conversation:", err);
+    console.error("Error summarizing conversation:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
-module.exports = { summarizeConversations };
+module.exports = { summarizeConversations , fetchsummarizeConversations};

@@ -34,7 +34,7 @@ function LandingPage() {
             </p>
             <div className="mt-6">
               <Link
-                to="/contextform"
+                to="/signuppage"
                 className="bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 mr-4">
                 Get Started for Free
               </Link>

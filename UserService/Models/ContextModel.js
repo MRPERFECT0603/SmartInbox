@@ -1,5 +1,4 @@
 
-
 const mongoose = require("mongoose");
 
 const ContextSchema = mongoose.Schema(
@@ -16,6 +15,7 @@ const ContextSchema = mongoose.Schema(
         },
         context: {
             type: String,
+            default: " " 
         },
         token: {
             type: String, 

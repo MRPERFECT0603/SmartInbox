@@ -1,56 +1,38 @@
-import PropTypes from 'prop-types';
-
+import PropTypes from "prop-types";
 
 /**
- * Review Datra Component
+ * Review Data Component
  * Renders the final page of a multi-step form for reviewing all the data the user has submitted.
  */
 function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
+  console.log(formData);
   return (
     <div className="h-screen flex flex-col bg-gray-100 max-h-[calc(100vh-200px)]">
       {/* Header Section */}
-      <header className="bg-white shadow-md p-4">
-        <h2 className="text-2xl font-semibold text-gray-800">Review Your Data</h2>
+      <header className="bg-white shadow-lg rounded p-4 no-scrollbar">
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Review Your Data
+        </h2>
       </header>
 
       {/* Scrollable Content */}
-      <main className="flex-1 overflow-y-auto p-6 ">
-        {/* Personal Information */}
+      <main className="flex-1 overflow-y-auto p-6">
         <div className="space-y-6 mb-6">
-          <h3 className="text-xl font-semibold text-gray-700">Personal Information</h3>
-          <p><strong className="text-gray-600">Name:</strong> {formData.name}</p>
-          <p><strong className="text-gray-600">Age:</strong> {formData.age}</p>
-          <p><strong className="text-gray-600">Occupation:</strong> {formData.occupation}</p>
-          <p><strong className="text-gray-600">Email:</strong> {formData.email}</p>
-          <p><strong className="text-gray-600">Password:</strong> {formData.password}</p>
-          <p><strong className="text-gray-600">Website:</strong> {formData.website}</p>
-        </div>
-
-        {/* Courses and Schedule */}
-        <div className="space-y-6 mb-6">
-          <h3 className="text-xl font-semibold text-gray-700">Courses and Schedule</h3>
-          <p><strong className="text-gray-600">Courses Taught:</strong> {formData.courses}</p>
-          <p><strong className="text-gray-600">Schedule:</strong> {formData.schedule}</p>
-          <p><strong className="text-gray-600">Course Objectives:</strong> {formData.objectives}</p>
-        </div>
-
-        {/* Class Policies */}
-        <div className="space-y-6 mb-6">
-          <h3 className="text-xl font-semibold text-gray-700">Class Policies</h3>
-          <p><strong className="text-gray-600">Attendance:</strong> {formData.attendance}</p>
-          <p><strong className="text-gray-600">Late Assignments:</strong> {formData.lateAssignments}</p>
-          <p><strong className="text-gray-600">FAQs:</strong> {formData.faqs}</p>
-        </div>
-
-        {/* Grading and Important Dates */}
-        <div className="space-y-6 mb-6">
-          <h3 className="text-xl font-semibold text-gray-700">Grading and Important Dates</h3>
-          <p><strong className="text-gray-600">Grading Breakdown:</strong> {formData.grading}</p>
-          <p><strong className="text-gray-600">Important Dates:</strong> {formData.importantDates}</p>
+          {Object.entries(formData).map(([key, value]) => (
+            <div key={key} className="">
+              <p className="text-base text-gray-800 leading-relaxed">
+                <strong className="text-gray-600">
+                  {value.label ||
+                    key
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (str) => str.toUpperCase())}
+                </strong>
+              </p>
+              <p className="text-gray-900">{value.value || value}</p>
+            </div>
+          ))}
         </div>
       </main>
-
-      {/* Fixed Footer Buttons */}
       <footer className="bg-white shadow-inner p-4 flex justify-between">
         <button
           onClick={handlePrevPage}
@@ -60,9 +42,9 @@ function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
         </button>
         <button
           onClick={handleSubmit}
-          className="bg-blue-600 text-white rounded-md px-6 py-2 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="bg-green-600 text-white rounded-md px-6 py-2 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-600"
         >
-          Submit and Save
+          Submit
         </button>
       </footer>
     </div>
@@ -70,24 +52,9 @@ function ReviewPage({ formData, handlePrevPage, handleSubmit }) {
 }
 
 ReviewPage.propTypes = {
-  formData: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    age: PropTypes.string.isRequired,
-    occupation: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    website: PropTypes.string.isRequired,
-    courses: PropTypes.string.isRequired,
-    schedule: PropTypes.string.isRequired,
-    objectives: PropTypes.string.isRequired,
-    attendance: PropTypes.string.isRequired,
-    lateAssignments: PropTypes.string.isRequired,
-    faqs: PropTypes.string.isRequired,
-    grading: PropTypes.string.isRequired,
-    importantDates: PropTypes.string.isRequired
-  }).isRequired,
+  formData: PropTypes.object.isRequired,
   handlePrevPage: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default ReviewPage;

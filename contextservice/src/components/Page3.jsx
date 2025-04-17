@@ -1,59 +1,63 @@
 import PropTypes from 'prop-types';
+import questionMap from '../assets/QuestionData.js/page3Questions';
 
+function Page3({ userType, formData, handleNextPage, handlePrevPage, handleFormDataChange }) {
+  const questions = questionMap[userType] || [];
 
-
-/**
- * Page3 Component
- * Renders the Third page of a multi-step form for collecting Class Policies and FAQS.
- */
-function Page3({ formData, handleNextPage, handlePrevPage, handleFormDataChange }) {
-  const handleChange = (e) => {
-    handleFormDataChange({ [e.target.name]: e.target.value });
+  const handleChange = (e,label) => {
+    const { name, type, value, checked } = e.target;
+    handleFormDataChange({ [name]: type === 'checkbox' ? {checked , label} : {value,label }});
   };
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 3: Class Policies and FAQs</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+        Part 3: Work Context
+      </h2>
+
       <div className="space-y-6">
-        {/* Attendence Policy Input Field */}
-        <div>
-          <label htmlFor="attendance" className="block text-sm font-medium text-gray-700">Attendance Policy</label>
-          <textarea
-            id="attendance"
-            name="attendance"
-            value={formData.attendance}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter the attendance policy"
-          />
-        </div>
-        {/* Late Assignment Input Field */}
-        <div>
-          <label htmlFor="lateAssignments" className="block text-sm font-medium text-gray-700">Late Assignment Policy</label>
-          <textarea
-            id="lateAssignments"
-            name="lateAssignments"
-            value={formData.lateAssignments}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter the late assignment policy"
-          />
-        </div>
-        {/* FAQS Input Field */}
-        <div>
-          <label htmlFor="faqs" className="block text-sm font-medium text-gray-700">FAQs</label>
-          <textarea
-            id="faqs"
-            name="faqs"
-            value={formData.faqs}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter frequently asked questions"
-          />
-        </div>
+        {questions.map((q) => (
+          <div key={q.id}>
+            <label htmlFor={q.id} className="block text-sm font-medium text-gray-700">
+              {q.label}
+            </label>
+
+            {q.type === "select" ? (
+              <select
+                id={q.id}
+                name={q.id}
+                value={formData[q.id]?.value || ""}
+                onChange={(e) => handleChange(e, q.label)} 
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+              >
+                {q.options.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            ) : q.type === "checkbox" ? (
+              <input
+                type="checkbox"
+                id={q.id}
+                name={q.id}
+                checked={formData[q.id]?.value || false}
+                onChange={(e) => handleChange(e, q.label)} 
+                className="mt-1"
+              />
+            ) : (
+              <input
+                type="text"
+                id={q.id}
+                name={q.id}
+                value={formData[q.id]?.value || ""}
+                onChange={(e) => handleChange(e, q.label)} 
+                placeholder={q.placeholder || ""}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            )}
+          </div>
+        ))}
 
         <div className="flex justify-between mt-6">
           <button
@@ -75,11 +79,8 @@ function Page3({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
 }
 
 Page3.propTypes = {
-  formData: PropTypes.shape({
-    attendance: PropTypes.string.isRequired,
-    lateAssignments: PropTypes.string.isRequired,
-    faqs: PropTypes.string.isRequired,
-  }).isRequired,
+  userType: PropTypes.string,
+  formData: PropTypes.object.isRequired,
   handleNextPage: PropTypes.func.isRequired,
   handlePrevPage: PropTypes.func.isRequired,
   handleFormDataChange: PropTypes.func.isRequired,

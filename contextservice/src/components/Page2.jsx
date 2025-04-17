@@ -1,58 +1,57 @@
 import PropTypes from 'prop-types';
+import questionMap from '../assets/QuestionData.js/page2Questions';
 
-
-/**
- * Page2 Component
- * Renders the Second page of a multi-step form for collecting Courses and Schedule.
- */
-function Page2({ formData, handleNextPage, handlePrevPage, handleFormDataChange }) {
-  const handleChange = (e) => {
-    handleFormDataChange({ [e.target.name]: e.target.value });
-  };
+function Page2({ userType , formData, handleNextPage, handlePrevPage, handleFormDataChange }) {
+  const  handleChange = (e, label) => {
+  handleFormDataChange({
+    [e.target.name]: {
+      label: label,
+      value: e.target.value,
+    },
+  });
+};
+  const questions = questionMap[userType] || [];
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg h-svc">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 2: Courses and Schedule</h2>
+    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+        Part 2: Communication Style
+      </h2>
+
       <div className="space-y-6">
-        {/* Course Taught Input Field */}
-        <div>
-          <label htmlFor="courses" className="block text-sm font-medium text-gray-700">Courses Taught</label>
-          <textarea
-            id="courses"
-            name="courses"
-            value={formData.courses}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter the courses you teach"
-          />
-        </div>
-        {/* Schedule Input Field */}
-        <div>
-          <label htmlFor="schedule" className="block text-sm font-medium text-gray-700">Schedule</label>
-          <textarea
-            id="schedule"
-            name="schedule"
-            value={formData.schedule}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter your weekly schedule"
-          />
-        </div>
-        {/* Course Objective Input Field */}
-        <div>
-          <label htmlFor="objectives" className="block text-sm font-medium text-gray-700">Course Objectives</label>
-          <textarea
-            id="objectives"
-            name="objectives"
-            value={formData.objectives}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter the course objectives"
-          />
-        </div>
+        {questions.map((q) => (
+          <div key={q.id}>
+            <label htmlFor={q.id} className="block text-sm font-medium text-gray-700">
+              {q.label}
+            </label>
+
+            {q.type === "select" ? (
+              <select
+                id={q.id}
+                name={q.id}
+                value={formData[q.id]?.value || ""}
+                onChange={(e) => handleChange(e, q.label)} 
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+              >
+                {q.options.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                id={q.id}
+                name={q.id}
+                value={formData[q.id]?.value || ""}
+                onChange={(e) => handleChange(e, q.label)} 
+                placeholder={q.placeholder || ""}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            )}
+          </div>
+        ))}
 
         <div className="flex justify-between mt-6">
           <button
@@ -74,11 +73,8 @@ function Page2({ formData, handleNextPage, handlePrevPage, handleFormDataChange 
 }
 
 Page2.propTypes = {
-  formData: PropTypes.shape({
-    courses: PropTypes.string.isRequired,
-    schedule: PropTypes.string.isRequired,
-    objectives: PropTypes.string.isRequired,
-  }).isRequired,
+  userType: PropTypes.string.isRequired,
+  formData: PropTypes.object.isRequired,
   handleNextPage: PropTypes.func.isRequired,
   handlePrevPage: PropTypes.func.isRequired,
   handleFormDataChange: PropTypes.func.isRequired,

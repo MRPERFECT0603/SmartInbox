@@ -1,46 +1,53 @@
 import PropTypes from 'prop-types';
+import questionMap from '../assets/QuestionData.js/page4Questions';
 
-
-
-/**
- * Page4 Component
- * Renders the fourth page of a multi-step form for collecting Grading and Imposrtant Dates
- */
-function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage }) {
-  const handleChange = (e) => {
-    handleFormDataChange({ [e.target.name]: e.target.value });
+function Page4({ userType, formData, handlePrevPage, handleNextPage, handleFormDataChange }) {
+  const handleChange = (e ,label) => {
+    const { name, value } = e.target;
+    handleFormDataChange({ [name]: {value , label }});
   };
 
+
+  const questions = questionMap[userType] || [];
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 4: Grading and Important Dates</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Page 4: Email Closings & Style</h2>
+
       <div className="space-y-6">
-        {/* Grading Breakdown Input Field */}
-        <div>
-          <label htmlFor="grading" className="block text-sm font-medium text-gray-700">Grading Breakdown</label>
-          <textarea
-            id="grading"
-            name="grading"
-            value={formData.grading}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter grading breakdown"
-          />
-        </div>
-        {/* Impportant Dates Input Field */}
-        <div>
-          <label htmlFor="importantDates" className="block text-sm font-medium text-gray-700">Important Dates</label>
-          <textarea
-            id="importantDates"
-            name="importantDates"
-            value={formData.importantDates}
-            onChange={handleChange}
-            rows="4"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            placeholder="Enter important dates"
-          />
-        </div>
+        {questions.map((q) => (
+          <div key={q.id}>
+            <label htmlFor={q.id} className="block text-sm font-medium text-gray-700">
+              {q.label}
+            </label>
+
+            {q.type === "select" ? (
+              <select
+                id={q.id}
+                name={q.id}
+                value={formData[q.id]?.value || ""}
+                onChange={(e) => handleChange(e, q.label)} 
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+              >
+                {q.options.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                id={q.id}
+                name={q.id}
+                value={formData[q.id]?.value || ""}
+                onChange={(e) => handleChange(e, q.label)} 
+                placeholder={q.placeholder || ""}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            )}
+          </div>
+        ))}
+
         <div className="flex justify-between mt-6">
           <button
             onClick={handlePrevPage}
@@ -50,9 +57,9 @@ function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage 
           </button>
           <button
             onClick={handleNextPage}
-            className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
-            Next
+            Review
           </button>
         </div>
       </div>
@@ -61,10 +68,8 @@ function Page4({ formData, handlePrevPage, handleFormDataChange, handleNextPage 
 }
 
 Page4.propTypes = {
-  formData: PropTypes.shape({
-    grading: PropTypes.string.isRequired,
-    importantDates: PropTypes.string.isRequired,
-  }).isRequired,
+  userType: PropTypes.string.isRequired,
+  formData: PropTypes.object.isRequired,
   handlePrevPage: PropTypes.func.isRequired,
   handleFormDataChange: PropTypes.func.isRequired,
   handleNextPage: PropTypes.func.isRequired,
