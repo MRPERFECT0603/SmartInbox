@@ -24,7 +24,7 @@
 
 ## System Architecture
 
-![Orchestration](/Documentation/Project Digrams/Orchestration.jpg)
+![Orchestration](/Documentation/Project_Digrams/Orchestration.jpg)
 
 ---
 
