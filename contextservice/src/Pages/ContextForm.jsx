@@ -10,15 +10,15 @@ import Otter from "../assets/otterhng.png";
 import Otter2 from "../assets/otter2.png";
 
 import "../App.css";
-import { useNavigate , useLocation} from 'react-router-dom';
-import {contextRequest} from "../../axios";
+import { useNavigate, useLocation } from "react-router-dom";
+import { contextRequest } from "../../axios";
 
 function ContextForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email;
   // State to manage the current page of the multi-page form
-  const [currentPage, setCurrentPage] = useState(0); 
+  const [currentPage, setCurrentPage] = useState(0);
   // State to store all form data input by the user
   const [formData, setFormData] = useState({
     fullName: "",
@@ -26,14 +26,11 @@ function ContextForm() {
     jobTitle: "",
     organization: "",
     bio: "",
-    userType: "", 
+    userType: "",
   });
-  
-
 
   // State to manage the modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   const handleFormDataChange = (newData) => {
     setFormData({ ...formData, ...newData });
@@ -41,7 +38,7 @@ function ContextForm() {
 
   const handleNextPage = () => {
     if (currentPage === 4) {
-      setCurrentPage(5); 
+      setCurrentPage(5);
     } else {
       setCurrentPage((prev) => Math.min(prev + 1, 5));
     }
@@ -53,7 +50,7 @@ function ContextForm() {
 
   const generateContextText = () => {
     let contextText = "";
-  
+
     Object.entries(formData).forEach(([key, value]) => {
       const label =
         typeof value === "object" && value.label
@@ -61,15 +58,15 @@ function ContextForm() {
           : key
               .replace(/([A-Z])/g, " $1")
               .replace(/^./, (str) => str.toUpperCase());
-  
+
       const answer =
         typeof value === "object" && value.value !== undefined
           ? value.value
           : value;
-  
+
       contextText += `${label}: ${answer}\n\n`;
     });
-  
+
     return contextText.trim();
   };
 
@@ -80,7 +77,7 @@ function ContextForm() {
     const data = {
       context: contextText,
       email: email,
-    }
+    };
     // Send the data to the backend using Axios
     try {
       const response = await contextRequest.post("/saveContext", data, {
@@ -88,7 +85,7 @@ function ContextForm() {
           "Content-Type": "application/json",
         },
       });
-  
+
       if (response.status === 200) {
         console.log("Context saved successfully");
         setIsModalOpen(true);
@@ -103,8 +100,6 @@ function ContextForm() {
   const handleAcceptDisclaimer = () => {
     setCurrentPage(1); // Move to the first form page after disclaimer acceptance
   };
-
-
 
   return (
     <div className="min-h-screen bg-custom-lightblue">
@@ -166,27 +161,30 @@ function ContextForm() {
           </div>
         )}
         <img
-      src={Otter2}
-      alt="Standing Otter"
-      className="w-64 h-100 bobbing-animation"
-      style={{
-        position: "absolute",
-        top: "60%",
-        right: "10%",
-      }}
-    />
-         {/* Modal */}
-         {isModalOpen && (
+          src={Otter2}
+          alt="Standing Otter"
+          className="w-64 h-100 bobbing-animation"
+          style={{
+            position: "absolute",
+            top: "60%",
+            right: "10%",
+          }}
+        />
+        {/* Modal */}
+        {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white rounded-lg shadow-lg p-6 w-1/2 flex flex-col">
               <h2 className="text-2xl font-semibold mb-4 text-green-600">
                 🎉 Context Saved Successfully!
               </h2>
               <p className="text-gray-700 mb-6">
-                Your context has been saved. You can now proceed to Grant Gmail Access.
+                Your context has been saved. You can now proceed to Grant Gmail
+                Access.
               </p>
               <button
-                 onClick={() => navigate('/setuppage', { state: { email: email } })}
+                onClick={() =>
+                  navigate("/setuppage", { state: { email: email } })
+                }
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
                 Proceed to Grant Access

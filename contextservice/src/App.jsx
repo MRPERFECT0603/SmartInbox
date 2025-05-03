@@ -7,19 +7,19 @@ import LoginPage from "./Pages/LoginPage";
 import SignUpPage from "./Pages/SignupPage";
 
 function App() {
-  return(
+  return (
     <div className="pt-4 min-h-screen bg-custom-lightblue">
-    <Router>
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/contextform" element={<ContextForm />} />
-      <Route path="/setuppage" element={<Steppage />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/loginpage" element={<LoginPage />} />
-      <Route path="/signUpPage" element={<SignUpPage />} />
-    </Routes>
-  </Router>
-  </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/contextform" element={<ContextForm />} />
+          <Route path="/setuppage" element={<Steppage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/loginpage" element={<LoginPage />} />
+          <Route path="/signUpPage" element={<SignUpPage />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

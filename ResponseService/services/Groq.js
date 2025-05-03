@@ -86,7 +86,7 @@ const responseGenerator = async (userEmail, senderName,  senderEmail , emailCont
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 100000,
     chunkOverlap: 0,
-  });
+  }); 
 
   const splitDocs = (await splitter.splitText(rawContext)).map(
     content => new Document({ pageContent: content })
