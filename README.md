@@ -1,9 +1,9 @@
-# SmartInbox 📬  
+# SmartInbox  
 **SmartInbox** is a full-stack, AI-powered Gmail assistant designed to intelligently manage, categorize, and reply to your emails using a custom RAG (Retrieval-Augmented Generation) model and *OLAMA + GROQ AI*. Built with scalable microservices, it integrates task scheduling with RabbitMQ and orchestrates services using Kubernetes.
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 - **Context-Aware Email Categorization**  
   Emails are analyzed and Replied using a user-specific context, allowing highly relevant responses acoording to user's tone and behaviour.
@@ -22,13 +22,13 @@
 
 ---
 
-## 🧠 System Architecture
+## System Architecture
 
-![Orchestration](Documentation/Project Digrams/Orchestration.jpg)
+![Orchestration](/Documentation/Project Digrams/Orchestration.jpg)
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer         | Tools / Frameworks                                    |
 |--------------|--------------------------------------------------------|
@@ -41,8 +41,8 @@
 
 ---
 
-## 📁 Project Structure
-
+## Project Structure
+```
 smartinbox/
 ├── contextservice/         # React frontend for user context collection
 ├── MailCronJob/            # Cron job that fetches Gmail emails periodically
@@ -51,38 +51,39 @@ smartinbox/
 ├── UserService/            # User auth, context, metrics, dashboard
 ├── Kuberenetes/            # All YAMLs for deployments, services, scaling
 ├── Documentation/          # Architecture diagrams and technical docs
-
+```
 ---
 
-## 🧩 Microservices Breakdown
+## Microservices Breakdown
 
-### 1. 📥 MailCronJob
+### 1. MailCronJob
 - Scheduled job to fetch new Gmail emails.
 - Pushes emails to RabbitMQ queues.
 
-### 2. 🗂️ MailService
+### 2. MailService
 - Preprocess emails and sents to the Response Service.
 - Applies Gmail labels and sends emails usi Gmail API.
 
-### 3. ✨ ResponseService
+### 3. ResponseService
 - Uses a RAG pipeline for reply generation.
 - Retrieves user context from MongoDB.
 - Uses Groq for low-latency text generation.
 - Uses Groq to summarize the converstions between the sender and AI.
 
-### 4. 👤 UserService
+### 4. UserService
 - Auth (signup/login), context management, and dashboards.
 - Provides email summaries and user-specific analytics.
 
-### 5. 🌐 contextservice (Frontend)
+### 5. contextservice (Frontend)
 - A 4-step form to gather user context.
 - Serves the SmartInbox user interface.
 - Provides summary views and metrics visualization.
 
 ---
 
-## 📦 Kubernetes & Deployment
+## Kubernetes & Deployment
 
+```
 Kuberenetes/
 ├── Deployments/            # Each microservice as a Deployment
 ├── Services/               # ClusterIP services to expose Deployments internally
@@ -90,10 +91,10 @@ Kuberenetes/
 ├── rabbitmq/               # Stateful RabbitMQ setup with configMaps and PVC
 
 All services are Dockerized and managed in the cluster.
-
+```
 ---
 
-## 📤 RAG AI Model Overview
+## RAG AI Model Overview
 
 - Located in `ResponseService/Controllers/RAG_AI_MODEL.js`
 - Combines:
@@ -105,7 +106,7 @@ All services are Dockerized and managed in the cluster.
 
 ---
 
-## 🧪 Development Setup
+## Development Setup
 
 ```bash
 # Start all services locally (example for MailService)
@@ -118,9 +119,9 @@ kubectl apply -f Kuberenetes/rabbitmq/
 ```
 ---
 
-## 👨‍💻 Made By
+## Made By
 
-**Vivek Shaurya** – A passionate engineer focused on merging scalable backend systems with modern AI to create intelligent, real-world solutions.  
+**Vivek Shaurya**
 🔗 GitHub: [@mrperfect0603](https://github.com/mrperfect0603)
 
 ---
