@@ -3,6 +3,13 @@
 
 ---
 
+## Project Demo
+
+[![Watch the demo](Documentation/Project_Digrams/ProjectSS.png)](Documentation/Project Demo.mp4)
+
+
+---
+
 ## Key Features
 
 - **Context-Aware Email Categorization**  
