@@ -5,7 +5,7 @@
 
 ## Project Demo
 
-[![Watch the demo](Documentation/Project_Digrams/ProjectSS.png)](Documentation/Project Demo.mp4)
+[![Watch the demo](Documentation/Project_Digrams/ProjectSS.png)](Documentation/Project_Demo.mp4)
 
 
 ---
